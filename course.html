@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses | Scolex Computer Classes</title>
+    <link rel="stylesheet" href="css/course.css">
+</head>
+<body>
+        <header class="main-header">
+            <h1 class="heading-main">Scolex Computer Classes</h1>
+            <h2 class="heading-sub">IACT (Institute for Advanced Computer Technology)</h2>
+            <h3 class="heading-location">Shanti Market, Main Road, Motipur</h3>
+            <h4 class="heading-page">Course Page</h4>
+
+            <nav class="tabs-container">
+                <a href="index.html" class="tab-btn home-tab">🏠 Home</a>
+                <button class="tab-btn" onclick="renderCourse('adca', this)">ADCA</button>
+                <button class="tab-btn" onclick="renderCourse('dca', this)">DCA</button>
+                <button class="tab-btn" onclick="renderCourse('dca-t', this)">DCA-T</button>
+                <button class="tab-btn" onclick="renderCourse('dtp', this)">DTP</button>
+                <button class="tab-btn" onclick="renderCourse('clanguage', this)">C Language</button>
+                <button class="tab-btn" onclick="renderCourse('c++', this)">C++</button>
+                <button class="tab-btn" onclick="renderCourse('java', this)">Java</button>
+                <button class="tab-btn" onclick="renderCourse('python', this)">Python</button>
+            </nav>
+        </header>
+
+    <!-- Dynamic Container Body -->
+    <main class="container" id="course-display-area"></main>
+
+    <script src="js/course.js"></script>
+</body>
+</html>

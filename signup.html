@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Registration - Scolex Computer Classes</title>
+  <link rel="stylesheet" href="css/signup.css">
+</head>
+<body>
+
+<div class="container">
+  <div class="box">
+    <h1>Scolex Computer Classes</h1>
+    <h2>Mock Test Portal</h2>
+    <h3>Student Registration</h3>
+
+    <!-- Wrapped inside a form tag -->
+    <form onsubmit="event.preventDefault(); signup();">
+      <input type="text" id="name" placeholder="Full Name" required>
+      <input type="text" id="father" placeholder="Father's Name" required>
+      <input type="tel" id="mobile" placeholder="Mobile Number" required>
+      <input type="email" id="email" placeholder="Email Address" required autocomplete="username">
+
+      <select id="course" required>
+        <option value="">Select Course</option>
+        <option>DCA</option>
+        <option>DCA-Tally</option>
+        <option>ADCA</option>
+        <option>DTP</option>
+        <option>C Language</option>
+        <option>C++</option>
+        <option>Java</option>
+        <option>Python</option>
+        <option>HTML & CSS</option>
+      </select>
+
+      <input type="password" id="password" placeholder="Password" required autocomplete="new-password">
+      <input type="password" id="confirm" placeholder="Confirm Password" required autocomplete="new-password">
+
+      <button type="submit">Create Account</button>
+    </form>
+
+    <br><br>
+    Already Registered? <a href="login.html">Login Here</a>
+
+    <!-- Back to Home Link -->
+    <div style="margin-top: 15px;">
+      <a href="index.html">← Back to Home</a>
+    </div>
+  </div>
+</div>
+
+<script src="js/signup.js"></script>
+</body>
+</html>

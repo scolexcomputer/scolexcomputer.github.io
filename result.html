@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Result & Review - Scolex Computer Classes</title>
+  <link rel="stylesheet" href="css/login.css">
+  <style>
+    .result-wrapper {
+      max-width: 800px;
+      margin: 30px auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      text-align: left;
+    }
+    .summary-box {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .btn-container {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .review-container {
+      margin-top: 30px;
+      border-top: 2px solid #e2e8f0;
+      padding-top: 20px;
+      display: none;
+    }
+    .review-card {
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e0;
+    }
+    .review-card.correct {
+      border-left: 6px solid #38a169;
+      background: #f0fff4;
+    }
+    .review-card.incorrect {
+      border-left: 6px solid #e53e3e;
+      background: #fff5f5;
+    }
+    .review-card.unattempted {
+      border-left: 6px solid #d69e2e;
+      background: #fffff0;
+    }
+    .q-title {
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 10px;
+    }
+    .opt-item {
+      font-size: 14px;
+      padding: 4px 8px;
+      margin: 4px 0;
+      border-radius: 4px;
+    }
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+      }
+      .btn-container, nav, footer {
+        display: none !important;
+      }
+      .result-wrapper {
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+        max-width: 100%;
+      }
+      .review-container {
+        display: block !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="result-wrapper">
+    <div class="summary-box">
+      <h1>Scolex Computer Classes</h1>
+      <h2>Mock Test Result & Review</h2>
+      
+      <!-- Student & Test Details Display -->
+      <div style="background: #edf2f7; padding: 12px; border-radius: 8px; margin: 15px 0; text-align: left; font-size: 14px; color: #2d3748;">
+        <p><strong>Student Name:</strong> <span id="resStudentName">-</span> &nbsp;|&nbsp; <strong>ID:</strong> <span id="resStudentId">-</span></p>
+        <p><strong>Course:</strong> <span id="resCourse">-</span></p>
+        <p><strong>Category:</strong> <span id="resTestCategory">-</span></p>
+        <p><strong>Test Name:</strong> <span id="resTestName">-</span> &nbsp;|&nbsp; <strong>Test Code:</strong> <span id="resTestIdCode" style="color: #2b6cb0; font-weight: bold;">-</span></p>
+      </div>
+
+      <h3 id="message" style="margin: 15px 0; color: #2b6cb0;"></h3>
+      <p>Total Questions: <span id="total">0</span></p>
+      <p>Correct Answers: <span id="correct">0</span></p>
+      <p>Your Score: <span id="score">0</span> Marks</p>
+
+      <div class="btn-container">
+        <button onclick="toggleReview()" id="reviewToggleBtn" style="background: #3182ce; color: white; padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">🔍 Review Answers</button>
+        <button onclick="downloadPDF()" style="background: #38a169; color: white; padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">📥 Download PDF Report</button>
+        <a href="dashboard.html">
+          <button style="background: #4a5568; color: white; padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">Dashboard</button>
+        </a>
+      </div>
+    </div>
+
+    <!-- Review Section Container -->
+    <div id="reviewSection" class="review-container">
+      <h3>Detailed Question Review</h3>
+      <p style="font-size: 13px; color: #718096; margin-bottom: 15px;">
+        <span style="color: #38a169; font-weight: bold;">■ Correct (Green)</span> | 
+        <span style="color: #e53e3e; font-weight: bold;">■ Incorrect (Red)</span> | 
+        <span style="color: #d69e2e; font-weight: bold;">■ Unattempted (Yellow)</span>
+      </p>
+      <div id="reviewListContainer"></div>
+    </div>
+  </div>
+
+  <script src="js/result.js"></script>
+</body>
+</html>

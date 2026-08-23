@@ -1,0 +1,231 @@
+/* =========================================================
+   Scolex Computer Classes - Bright 3D Multicolor Theme
+   ========================================================= */
+
+/* 1. Global Reset & Vibrant Animated Background */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Brighter, energetic multicolor gradient background */
+  background: linear-gradient(135deg, #a1c4fd, #c2e9fb, #e0c3fc, #8ec5fc);
+  background-size: 300% 300%;
+  animation: gradientBG 10s ease infinite;
+  color: #2c3e50;
+  padding: 20px;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 2. Bright Glassmorphism Container */
+.container {
+  width: 100%;
+  max-width: 450px;
+  perspective: 1000px;
+}
+
+.box {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 22px;
+  padding: 35px 28px;
+  box-shadow: 0 20px 40px rgba(31, 38, 135, 0.15),
+              0 8px 32px 0 rgba(0, 0, 0, 0.08);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Top Bright Rainbow Accent Line */
+.box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, #ff007f, #7928ca, #0070f3, #00dfd8);
+  background-size: 300% 100%;
+  animation: borderGlow 4s linear infinite;
+}
+
+@keyframes borderGlow {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 300% 0%; }
+}
+
+/* 3. Main Title (Scolex Computer Classes) */
+.box h1 {
+  font-size: 1.65rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #1e3c72, #2a5298);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+/* 4. 3D Text: Mock Test Portal (Bright Blue/Cyan 3D) */
+.box h2 {
+  font-size: 1.3rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #0072ff;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  /* Crisp Light 3D Text Shadow */
+  text-shadow: 
+    0 1px 0 #005bb5,
+    0 2px 0 #004488,
+    0 3px 0 #002d5a,
+    0 4px 6px rgba(0, 114, 255, 0.25);
+  transform: perspective(500px) rotateX(8deg);
+}
+
+/* 5. 3D Text: Student Registration (Bright Pink/Purple 3D) */
+.box h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #e60067;
+  letter-spacing: 1.5px;
+  margin-bottom: 25px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  /* Crisp Light 3D Text Shadow */
+  text-shadow: 
+    0 1px 0 #b30050,
+    0 2px 0 #800039,
+    0 3px 0 #4d0022,
+    0 4px 6px rgba(230, 0, 103, 0.25);
+  transform: perspective(500px) rotateX(8deg);
+}
+
+/* 6. Form Field Styles */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="password"],
+select {
+  width: 100%;
+  padding: 13px 16px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid #dcdfe6;
+  border-radius: 12px;
+  color: #2c3e50;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+input::placeholder {
+  color: #8c98a4;
+}
+
+/* Bright Focus State */
+input:focus,
+select:focus {
+  border-color: #0072ff;
+  background: #ffffff;
+  box-shadow: 0 0 12px rgba(0, 114, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+/* Dropdown Arrow & Options */
+select {
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230072ff'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 20px;
+}
+
+select option {
+  background-color: #ffffff;
+  color: #2c3e50;
+}
+
+/* 7. Vibrant Multicolor 3D Button */
+button[type="submit"] {
+  width: 100%;
+  margin-top: 10px;
+  padding: 14px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #00c6ff 0%, #0072ff 50%, #e60067 100%);
+  background-size: 200% 200%;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 114, 255, 0.35),
+              0 3px 0 #004488;
+  transition: all 0.3s ease;
+  transform: translateY(0);
+}
+
+button[type="submit"]:hover {
+  background-position: 100% 0%;
+  box-shadow: 0 8px 22px rgba(230, 0, 103, 0.4),
+              0 4px 0 #004488;
+  transform: translateY(-2px);
+}
+
+button[type="submit"]:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 8px rgba(0, 114, 255, 0.3),
+              0 1px 0 #004488;
+}
+
+/* 8. Footer Link */
+.box {
+  color: #4a5568;
+}
+
+.box a {
+  color: #0072ff;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.box a:hover {
+  color: #e60067;
+  text-decoration: underline;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 480px) {
+  .box {
+    padding: 28px 20px;
+  }
+  .box h1 { font-size: 1.45rem; }
+  .box h2 { font-size: 1.15rem; }
+  .box h3 { font-size: 0.95rem; }
+}

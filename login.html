@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Login - Scolex Computer Classes</title>
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+<div class="container">
+  <div class="box">
+    <h1>Scolex Computer Classes</h1>
+    <h2>Mock Test Portal</h2>
+    <h3>Student Login</h3>
+
+    <!-- Wrapped inside a form tag for accessibility and browser password saving -->
+    <form onsubmit="event.preventDefault(); login();">
+      <input type="text" id="loginId" placeholder="Mobile Number or Student ID" required autocomplete="username">
+      <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
+
+      <button type="submit" id="loginBtn">Login</button>
+    </form>
+
+    <br><br>
+    New Student? <a href="signup.html">Register Here</a>
+    
+    <!-- Back to Home Link -->
+    <div style="margin-top: 15px;">
+      <a href="index.html">← Back to Home</a>
+    </div>
+  </div>
+</div>
+
+<script src="js/login.js"></script>
+</body>
+</html>

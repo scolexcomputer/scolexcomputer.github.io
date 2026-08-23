@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scolex Online Mock Test</title>
+  <link rel="stylesheet" href="css/mocktest.css">
+</head>
+<body>
+
+  <div class="main-wrapper">
+    <!-- Quiz Main Panel -->
+    <div class="quiz-container">
+
+      <!-- Header -->
+      <div class="quiz-header">
+        <div class="test-title" id="testTitleDisplay">Loading Test...</div>
+        <div class="timer-box">
+          ⏱️ Time Left: <span id="timer">60:00</span>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <!-- Question Body -->
+      <div class="quiz-body">
+        <div class="q-meta">
+          Question <span id="currentQNum">1</span> of <span id="totalQNum">0</span>
+        </div>
+
+        <div class="question-text" id="questionText">Loading Question...</div>
+
+        <div class="options-grid">
+          <label class="option-card" onclick="selectOption(0)">
+            <input type="radio" name="quizOption">
+            <span class="option-text" id="opt0">Option 1</span>
+          </label>
+
+          <label class="option-card" onclick="selectOption(1)">
+            <input type="radio" name="quizOption">
+            <span class="option-text" id="opt1">Option 2</span>
+          </label>
+
+          <label class="option-card" onclick="selectOption(2)">
+            <input type="radio" name="quizOption">
+            <span class="option-text" id="opt2">Option 3</span>
+          </label>
+
+          <label class="option-card" onclick="selectOption(3)">
+            <input type="radio" name="quizOption">
+            <span class="option-text" id="opt3">Option 4</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Footer Actions -->
+      <div class="quiz-footer">
+        <button class="btn btn-secondary" id="prevBtn" onclick="prevQuestion()" disabled>← Previous</button>
+        <button class="btn btn-warning" id="reviewBtn" onclick="toggleMarkForReview()">🔖 Mark for Review</button>
+        <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Next →</button>
+        <button class="btn btn-submit" id="submitBtn" onclick="submitTest()" style="display:none;">Submit Test 🚀</button>
+      </div>
+
+    </div>
+
+    <!-- Question Palette Sidebar -->
+    <div class="palette-sidebar">
+      <h3>Question Palette</h3>
+      <div class="palette-legend">
+        <div><span class="dot legend-current"></span> Current</div>
+        <div><span class="dot legend-answered"></span> Answered</div>
+        <div><span class="dot legend-marked"></span> Marked</div>
+        <div><span class="dot legend-unanswered"></span> Pending</div>
+      </div>
+      <div class="question-grid" id="questionGrid"></div>
+    </div>
+  </div>
+
+  <script src="mocktest.js"></script>
+</body>
+</html>
