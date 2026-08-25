@@ -3,9 +3,6 @@
 // =====================================
 const scriptURL = "https://script.google.com/macros/s/AKfycbxdrYTNAEdHqGhVU6bz6auJ46CbzVpDMHiidPTXbs_IIOUvJDg-FtAGIcf9smc6KQ4g/exec";
 
-// =====================================
-// Multi-Step Navigation Logic
-// =====================================
 let currentStep = 1;
 const totalSteps = 5;
 
@@ -18,12 +15,45 @@ const stepTitles = [
     "Step 5 of 5: Upload Documents & Info"
 ];
 
+// Populate Date Dropdowns for Mobile Friendly Input
+function populateDateDropdowns() {
+    const daySelect = document.getElementById("dob-day");
+    const monthSelect = document.getElementById("dob-month");
+    const yearSelect = document.getElementById("dob-year");
+
+    if(!daySelect) return;
+
+    for (let i = 1; i <= 31; i++) {
+        let opt = document.createElement("option");
+        opt.value = i < 10 ? "0" + i : i;
+        opt.innerHTML = i < 10 ? "0" + i : i;
+        daySelect.appendChild(opt);
+    }
+
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    for (let i = 0; i < months.length; i++) {
+        let opt = document.createElement("option");
+        opt.value = i + 1 < 10 ? "0" + (i + 1) : i + 1;
+        opt.innerHTML = months[i];
+        monthSelect.appendChild(opt);
+    }
+
+    const currentYear = new Date().getFullYear();
+    for (let i = currentYear; i >= currentYear - 70; i--) {
+        let opt = document.createElement("option");
+        opt.value = i;
+        opt.innerHTML = i;
+        yearSelect.appendChild(opt);
+    }
+}
+populateDateDropdowns();
+
 function showStep(step) {
     document.querySelectorAll(".form-step").forEach((el, index) => {
         if (index + 1 === step) {
-            el.classList.remove("d-none");
+            el.classList.remove("hidden");
         } else {
-            el.classList.add("d-none");
+            el.classList.add("hidden");
         }
     });
     stepIndicatorText.innerText = stepTitles[step - 1];
@@ -61,148 +91,139 @@ document.querySelectorAll(".prev-btn").forEach(button => {
     });
 });
 
-// =====================================
-// Form Submission & File Handlers
-// =====================================
-const form = document.getElementById("applicationForm");
-form.addEventListener("submit", submitForm);
+// File Previews
+function setupFilePreview(inputId, imgPreviewId, pdfPreviewId = null) {
+    const inputElement = document.getElementById(inputId);
+    if (!inputElement) return;
 
-// Helper function to read files as Base64 strings
-function readFileAsBase64(file) {
-    return new Promise((resolve, reject) => {
-        if (!file) {
-            resolve({ base64: "", name: "", type: "" });
-            return;
-        }
+    inputElement.addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
         const reader = new FileReader();
-        reader.onload = () => {
-            const base64String = reader.result.split(",")[1];
-            resolve({
-                base64: base64String,
-                name: file.name,
-                type: file.type
-            });
-        };
-        reader.onerror = error => reject(error);
-        reader.readAsDataURL(file);
+        if (file.type === "application/pdf") {
+            if (imgPreviewId) document.getElementById(imgPreviewId).classList.add("hidden");
+            if (pdfPreviewId) document.getElementById(pdfPreviewId).classList.remove("hidden");
+        } else {
+            reader.onload = function(e) {
+                if (imgPreviewId) {
+                    const imgElement = document.getElementById(imgPreviewId);
+                    imgElement.src = e.target.result;
+                    imgElement.classList.remove("hidden");
+                }
+                if (pdfPreviewId) document.getElementById(pdfPreviewId).classList.add("hidden");
+            }
+            reader.readAsDataURL(file);
+        }
     });
 }
 
-async function submitForm(e) {
+setupFilePreview("photo", "photo-preview");
+setupFilePreview("signature", "signature-preview");
+setupFilePreview("marksheet", "marksheet-img-preview", "marksheet-pdf-preview");
+setupFilePreview("certificate", "aadhaar-img-preview", "aadhaar-pdf-preview");
+
+// Form Submission & Local Storage Data Saving
+const form = document.getElementById("applicationForm");
+form.addEventListener("submit", async function(e) {
     e.preventDefault();
 
-    // Get File Inputs
+    // Combine Day, Month, Year into DOB hidden field
+    const d = document.getElementById("dob-day").value;
+    const m = document.getElementById("dob-month").value;
+    const y = document.getElementById("dob-year").value;
+    document.getElementById("dob").value = `${y}-${m}-${d}`;
+
     const photoFile = document.getElementById("photo").files[0];
     const signatureFile = document.getElementById("signature").files[0];
     const marksheetFile = document.getElementById("marksheet").files[0];
-    const certificateFile = document.getElementById("certificate").files[0]; // Aadhaar upload
+    const certificateFile = document.getElementById("certificate").files[0];
 
-    // Mandatory validations
-    if (!photoFile) {
-        alert("Please upload passport size photo.");
-        return;
-    }
-    if (!signatureFile) {
-        alert("Please upload signature.");
+    if (!photoFile || !signatureFile) {
+        alert("Please upload passport photo and signature.");
         return;
     }
 
     const submitBtn = form.querySelector('button[type="submit"]');
     if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.innerHTML = "Submitting Application...";
+        submitBtn.innerHTML = "Submitting...";
     }
 
     try {
-        // Read all files concurrently
-        const photoData = await readFileAsBase64(photoFile);
-        const signatureData = await readFileAsBase64(signatureFile);
-        const marksheetData = await readFileAsBase64(marksheetFile);
-        const certificateData = await readFileAsBase64(certificateFile);
+        const readFile = file => new Promise((resolve) => {
+            if (!file) return resolve({ base64: "", name: "", type: "" });
+            const reader = new FileReader();
+            reader.onload = () => resolve({ base64: reader.result.split(",")[1], name: file.name, type: file.type });
+            reader.readAsDataURL(file);
+        });
 
-        // Map all fields together (Including Division / Grade)
+        const [photoData, signatureData, marksheetData, certificateData] = await Promise.all([
+            readFile(photoFile), readFile(signatureFile), readFile(marksheetFile), readFile(certificateFile)
+        ]);
+
         const data = {
             fullname: form.fullname.value,
             fathername: form.fathername.value,
             mobile: form.mobile.value,
             email: form.email.value,
-            dob: form.dob.value,
+            dob: document.getElementById("dob").value,
             gender: form.gender.value,
             nationality: form.nationality.value,
             category: form.category.value,
             aadharnumber: form.aadharnumber.value,
-
             education: form.education.value,
             college: form.college.value,
             board: form.board.value,
             passingyear: form.passingyear.value,
             percentage: form.percentage.value,
-            division: form.division.value, // Captured Division / Grade
+            division: form.division.value,
             subjects: form.subjects.value,
-
             courses: form.courses.value,
             batch: form.batch.value,
             learningmode: form.learningmode.value,
             contact: form.contact.value,
-
             address: form.address.value,
             pincode: form.pincode.value,
             district: form.district.value,
             state: form.state.value,
             city: form.city.value,
-
             referral: form.referral.value,
-
-            // Photo Details
             photo: photoData.base64,
             fileName: photoData.name,
             mimeType: photoData.type,
-
-            // Signature Details
             signature: signatureData.base64,
             signatureName: signatureData.name,
             signatureType: signatureData.type,
-
-            // Marksheet Details
             marksheet: marksheetData.base64,
             marksheetName: marksheetData.name,
             marksheetType: marksheetData.type,
-
-            // Aadhaar Details
             aadhaar: certificateData.base64,
             aadhaarName: certificateData.name,
             aadhaarType: certificateData.type
         };
 
-        // Send to Google Apps Script Web App
-        const response = await fetch(scriptURL, {
-            method: "POST",
-            body: new URLSearchParams(data)
-        });
-        
+        // Save submitted data locally to browser storage
+        localStorage.setItem("ScolexStudentSavedData", JSON.stringify(data));
+
+        const response = await fetch(scriptURL, { method: "POST", body: new URLSearchParams(data) });
         const result = await response.json();
 
         if (result.success === true) {
-            alert("✅ Application Submitted Successfully!\n\nApplication ID: " + result.applicationID);
-            
-            if (result.pdfUrl) {
-                window.open(result.pdfUrl, "_blank");
-            }
-
+            alert("✅ Application Submitted Successfully & Saved Locally!\n\nApplication ID: " + result.applicationID);
+            if (result.pdfUrl) window.open(result.pdfUrl, "_blank");
             form.reset();
             currentStep = 1;
             showStep(currentStep);
         } else {
             alert("⚠️ Submission Failed. Please try again.");
         }
-
     } catch (error) {
-        console.error(error);
-        alert("❌ Submission Failed.\n\n" + error);
+        alert("❌ Error: " + error);
     } finally {
         if (submitBtn) {
             submitBtn.disabled = false;
             submitBtn.innerHTML = "Submit Application";
         }
     }
-}
+});
