@@ -1,5 +1,5 @@
 // ===========================
-// DYNAMIC CINEMATIC SPLASH SCREEN LOGIC (10 SECONDS)
+// DYNAMIC CINEMATIC SPLASH SCREEN LOGIC (8 SECONDS)
 // ===========================
 document.addEventListener("DOMContentLoaded", function () {
     const hasSeenSplash = sessionStorage.getItem("scoolexSplashShown");
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 </div>
             </div>
             <div class="splash-progress-track">
-                <div class="splash-progress-bar"></div>
+                <div class="splash-progress-bar" style="animation-duration: 8s; -webkit-animation-duration: 8s;"></div>
             </div>
         `;
 
@@ -58,8 +58,8 @@ document.addEventListener("DOMContentLoaded", function () {
         // Skip button event listener
         document.getElementById("skip-splash").addEventListener("click", dismissSplash);
 
-        // Extended timing to exactly 10 seconds (10000ms) for the full cinematic experience
-        setTimeout(dismissSplash, 10000);
+        // Timed to exactly 8 seconds (8000ms) to match the progress bar
+        setTimeout(dismissSplash, 8000);
     }
 });
 
