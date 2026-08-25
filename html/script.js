@@ -1,7 +1,7 @@
 // =====================================
 // Google Apps Script Web App URL
 // =====================================
-const scriptURL = "https://script.google.com/macros/s/AKfycbw1zcxamrxV2Hj5eYONbabP9CmsVGhbaQkVVU7reIJTYRYcS9bpNcem6ekDIZqzDcMQ/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbxdrYTNAEdHqGhVU6bz6auJ46CbzVpDMHiidPTXbs_IIOUvJDg-FtAGIcf9smc6KQ4g/exec";
 
 // =====================================
 // Multi-Step Navigation Logic
