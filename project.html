@@ -6,6 +6,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Work - Scolex Computer Classes</title>
     <link rel="stylesheet" href="css/notes.css">
+    <style>
+        /* Admin/Teacher Control Styles */
+        .admin-controls {
+            display: none;
+            margin-top: 12px;
+            padding-top: 8px;
+            border-top: 1px solid #ddd;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        .admin-controls button {
+            padding: 4px 8px;
+            font-size: 11px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-edit { background: #ffc107; color: #000; }
+        .btn-delete { background: #dc3545; color: #fff; }
+        
+        .card-upload-box {
+            display: none;
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px dashed #007bff;
+        }
+
+        .add-topic-container {
+            display: none;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .btn-add-new {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
@@ -22,7 +66,7 @@
         <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="notes.html">Notes</a></li>
-            <li><a href="software.html">Software</a></li>
+            <li><a href="project.html">Project Work</a></li>
             <li><a href="index.html#contact">Contact</a></li>
             <li><a href="index.html#about">About</a></li>
         </ul>
@@ -66,135 +110,310 @@
         <!-- DCA PROJECTS -->
         <div id="dca-projects" class="notes-content">
             <h2>DCA Projects</h2>
-            <div class="feature-box">
-                <div class="card">
+            <div class="feature-box" id="box-dca-projects">
+                <div class="card" data-id="dca-proj-1">
                     <h3>Resume & Cover Letter Design</h3>
                     <p>Professional document formatting using MS Word features and tables.</p>
                     <a href="projects/dca/resume-design-project.pdf" class="download" download>Download Project</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'projects/dca', 'resume-design-project.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dca-proj-2">
                     <h3>Student Marksheet & Grade Sheet</h3>
                     <p>Automated grade calculations, SUM, AVERAGE, and IF condition functions in Excel.</p>
                     <a href="projects/dca/excel-marksheet-project.pdf" class="download" download>Download Project</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'projects/dca', 'excel-marksheet-project.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dca-proj-3">
                     <h3>Institute Seminar Presentation</h3>
                     <p>Animated presentation deck with slide transitions and custom themes.</p>
                     <a href="projects/dca/powerpoint-presentation.pdf" class="download" download>Download Project</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'projects/dca', 'powerpoint-presentation.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dca-proj-4">
                     <h3>Official Letterhead & Certificate</h3>
                     <p>Designing certificates and official shapes layouts in MS Word.</p>
                     <a href="projects/dca/certificate-design.pdf" class="download" download>Download Project</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'projects/dca', 'certificate-design.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
+            </div>
+            <div class="add-topic-container">
+                <button class="btn-add-new" onclick="addNewTopicCard('dca-projects')">+ Add New Topic to DCA Projects</button>
             </div>
         </div>
 
         <!-- DCA-T PROJECTS -->
         <div id="dcat-projects" class="notes-content">
             <h2>DCA-T Projects</h2>
-            <div class="feature-box">
-                <div class="card">
+            <div class="feature-box" id="box-dcat-projects">
+                <div class="card" data-id="dcat-proj-1">
                     <h3>Company Ledger & Voucher Entries</h3>
                     <p>Complete transaction management and ledger setup in Tally Prime.</p>
                     <a href="projects/dcat/tally-vouchers-project.pdf" class="download" download>Download Project</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'projects/dcat', 'tally-vouchers-project.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dcat-proj-2">
                     <h3>GST Invoice & Billing System</h3>
                     <p>Generating taxable sales invoices with CGST, SGST, and IGST breakdown.</p>
                     <a href="projects/dcat/gst-invoice-project.pdf" class="download" download>Download Project</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'projects/dcat', 'gst-invoice-project.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dcat-proj-3">
                     <h3>Stock & Inventory Management</h3>
                     <p>Maintaining stock items, categories, units of measure, and godown transfer.</p>
                     <a href="projects/dcat/inventory-project.pdf" class="download" download>Download Project</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'projects/dcat', 'inventory-project.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dcat-proj-4">
                     <h3>Trial Balance & Profit/Loss Report</h3>
                     <p>Generating financial balance sheets and auditing reports.</p>
                     <a href="projects/dcat/balance-sheet-project.pdf" class="download" download>Download Project</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'projects/dcat', 'balance-sheet-project.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
+            </div>
+            <div class="add-topic-container">
+                <button class="btn-add-new" onclick="addNewTopicCard('dcat-projects')">+ Add New Topic to DCA-T Projects</button>
             </div>
         </div>
 
         <!-- ADCA PROJECTS -->
         <div id="adca-projects" class="notes-content">
             <h2>ADCA Projects</h2>
-            <div class="feature-box">
-                <div class="card">
+            <div class="feature-box" id="box-adca-projects">
+                <div class="card" data-id="adca-proj-1">
                     <h3>Advanced Payroll Management System</h3>
                     <p>Excel-based payroll sheet with DA, HRA, PF calculations and VLOOKUP automation.</p>
                     <a href="projects/adca/payroll-system-excel.pdf" class="download" download>Download Project</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf,.zip" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'projects/adca', 'payroll-system-excel.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace File</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="adca-proj-2">
                     <h3>Responsive Institute Website</h3>
                     <p>HTML5, CSS3, and JavaScript layout for a multi-page education portal.</p>
                     <a href="projects/adca/institute-website-project.zip" class="download" download>Download Project</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf,.zip" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'projects/adca', 'institute-website-project.zip')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace File</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="adca-proj-3">
                     <h3>Business Branding Suite</h3>
                     <p>Complete identity set including logo design, visiting card, and flyer design.</p>
                     <a href="projects/adca/business-branding.pdf" class="download" download>Download Project</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf,.zip" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'projects/adca', 'business-branding.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace File</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="adca-proj-4">
                     <h3>Inventory Management System</h3>
                     <p>Comprehensive system setup using Excel macros and data validation tools.</p>
                     <a href="projects/adca/advanced-inventory.pdf" class="download" download>Download Project</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf,.zip" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'projects/adca', 'advanced-inventory.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace File</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
+            </div>
+            <div class="add-topic-container">
+                <button class="btn-add-new" onclick="addNewTopicCard('adca-projects')">+ Add New Topic to ADCA Projects</button>
             </div>
         </div>
 
         <!-- DTP PROJECTS -->
         <div id="dtp-projects" class="notes-content">
             <h2>DTP Projects</h2>
-            <div class="feature-box">
-                <div class="card">
+            <div class="feature-box" id="box-dtp-projects">
+                <div class="card" data-id="dtp-proj-1">
                     <h3>Photoshop Poster & Banner Design</h3>
                     <p>High-resolution marketing poster using layer masks, filters, and color correction.</p>
                     <a href="projects/dtp/photoshop-banner-project.pdf" class="download" download>Download Project</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'projects/dtp', 'photoshop-banner-project.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dtp-proj-2">
                     <h3>CorelDraw Vector Logo & Brochure</h3>
                     <p>Tri-fold corporate brochure and scalable vector logo creation.</p>
                     <a href="projects/dtp/coreldraw-brochure.pdf" class="download" download>Download Project</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'projects/dtp', 'coreldraw-brochure.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dtp-proj-3">
                     <h3>Wedding & Festival Card Design</h3>
                     <p>Custom vector motifs, typography, and layout for printing.</p>
                     <a href="projects/dtp/wedding-card-design.pdf" class="download" download>Download Project</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'projects/dtp', 'wedding-card-design.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dtp-proj-4">
                     <h3>Book Page Layout & Cover Page</h3>
                     <p>PageMaker and Photoshop page setup formatted for print publishing.</p>
                     <a href="projects/dtp/book-layout-project.pdf" class="download" download>Download Project</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'projects/dtp', 'book-layout-project.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
+            </div>
+            <div class="add-topic-container">
+                <button class="btn-add-new" onclick="addNewTopicCard('dtp-projects')">+ Add New Topic to DTP Projects</button>
             </div>
         </div>
 
         <!-- PROGRAMMING PROJECTS -->
         <div id="programming-projects" class="notes-content">
             <h2>Programming Projects</h2>
-            <div class="feature-box">
-                <div class="card">
+            <div class="feature-box" id="box-programming-projects">
+                <div class="card" data-id="prog-proj-1">
                     <h3>Bank Management System (C / C++)</h3>
                     <p>Console application managing account creation, deposit, withdrawal, and file storage.</p>
                     <a href="projects/programming/bank-system-cpp.zip" class="download" download>Download Project</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf,.zip" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'projects/programming', 'bank-system-cpp.zip')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace File</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="prog-proj-2">
                     <h3>Student Management System (Java)</h3>
                     <p>OOP-based Java application with student record creation, searching, and updates.</p>
                     <a href="projects/programming/student-system-java.zip" class="download" download>Download Project</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf,.zip" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'projects/programming', 'student-system-java.zip')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace File</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="prog-proj-3">
                     <h3>Library Management System (Python)</h3>
                     <p>Python script with database/file storage for tracking issued and returned books.</p>
                     <a href="projects/programming/library-system-python.zip" class="download" download>Download Project</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf,.zip" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'projects/programming', 'library-system-python.zip')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace File</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="prog-proj-4">
                     <h3>Calculator & Tic-Tac-Toe Game</h3>
                     <p>Interactive GUI/console mini-games demonstrating algorithm logic.</p>
                     <a href="projects/programming/mini-games-python.zip" class="download" download>Download Project</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf,.zip" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'projects/programming', 'mini-games-python.zip')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace File</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
+            </div>
+            <div class="add-topic-container">
+                <button class="btn-add-new" onclick="addNewTopicCard('programming-projects')">+ Add New Topic to Coding Projects</button>
             </div>
         </div>
 
@@ -205,7 +424,7 @@
         <p>© 2026 Scolex Computer Classes</p>
     </footer>
 
-    <!-- JavaScript File -->
+    <!-- JavaScript Files -->
     <script src="js/auth-check.js"></script>
     <script src="js/notes.js"></script>
 

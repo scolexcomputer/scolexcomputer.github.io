@@ -158,13 +158,19 @@
                 <!-- Downloads Menu with Teacher/Admin Upload Options -->
                 <li class="dropdown-parent">
                     <a href="#">Downloads ▾</a>
-                     <div class="dropdown">
+                    <div class="dropdown">
                         <ul>
+                            <!-- Regular Download Links (View Only) -->
                             <li><a href="notes.html">Notes</a></li>
                             <li><a href="project.html">Project Work</a></li>
-                            <!-- Teacher & Admin Upload Options -->
-                            <li class="teacher-admin-only" style="display: none;"><a href="#" id="uploadNotesOpt">📤 Upload Notes</a></li>
-                            <li class="teacher-admin-only" style="display: none;"><a href="#" id="uploadProjectOpt">📤 Upload Projects</a></li>
+                            
+                            <!-- Teacher & Admin Exclusive Management Links -->
+                            <li class="teacher-admin-only" style="display: none;">
+                                <a href="notes.html?mode=manage">📤 Upload Notes</a>
+                            </li>
+                            <li class="teacher-admin-only" style="display: none;">
+                                <a href="project.html?mode=manage">📤 Upload Projects</a>
+                            </li>
                         </ul>
                     </div>
                 </li>

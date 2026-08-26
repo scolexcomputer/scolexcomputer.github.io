@@ -26,16 +26,30 @@ function showNotes(courseId) {
 // Initialization, Admin Controls Display, and Live Search Filter
 document.addEventListener('DOMContentLoaded', () => {
     const userRole = localStorage.getItem("userRole");
+    const urlParams = new URLSearchParams(window.location.search);
+    const mode = urlParams.get("mode");
 
-    // If logged in as admin or teacher, reveal upload elements, edit controls, and add topic buttons
-    if (userRole === "admin" || userRole === "teacher") {
-        document.querySelectorAll(".card-upload-box").forEach(el => el.style.display = "block");
-        document.querySelectorAll(".admin-controls").forEach(el => el.style.display = "flex");
-        document.querySelectorAll(".add-topic-container").forEach(el => el.style.display = "block");
-    }
+    // Check if user opened via "Upload Notes" (?mode=manage) with proper role
+    const isManagementMode = (mode === "manage" && (userRole === "admin" || userRole === "teacher"));
 
-    // Load any saved custom changes from localStorage
+    // 1. Load any saved custom changes from localStorage first
     loadSavedNotesData();
+
+    // 2. Apply visibility rules AFTER loading data so it correctly overrides any saved inline styles
+    const uploadBoxes = document.querySelectorAll(".card-upload-box");
+    const adminControls = document.querySelectorAll(".admin-controls");
+    const addTopicContainers = document.querySelectorAll(".add-topic-container");
+
+    if (isManagementMode) {
+        uploadBoxes.forEach(el => el.style.display = "block");
+        adminControls.forEach(el => el.style.display = "flex");
+        addTopicContainers.forEach(el => el.style.display = "block");
+    } else {
+        // Forcefully hide all editing, deleting, and uploading features for regular view/students
+        uploadBoxes.forEach(el => el.style.display = "none");
+        adminControls.forEach(el => el.style.display = "none");
+        addTopicContainers.forEach(el => el.style.display = "none");
+    }
 
     const searchInput = document.getElementById('search');
 
