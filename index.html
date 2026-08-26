@@ -86,8 +86,7 @@
         <address>Shanti Market, Main Road, Motipur</address>
         <hr>
     </header>
-
-    <!-- Navigation -->
+<!-- Navigation -->
     <nav>
         <div class="nav-container">
             <a href="#" class="nav-logo">
@@ -103,47 +102,69 @@
             
             <div class="mobile-menu-btn">☰</div>
             <ul>
-                <li><a href="#">Home</a></li>
+                <li><a href="index.html">Home</a></li>
+                
+                <!-- Admission Menu with Dynamic Teacher/Admin Sub-options -->
                 <li class="dropdown-parent">
                     <a href="#">Admission ▾</a>
                     <div class="dropdown">
                         <ul>
                             <li><a href="html/page.html">Online Mode</a></li>
                             <li><a href="#">Offline Mode</a></li>
+                            <!-- Teacher & Admin Admission Options -->
+                            <li class="teacher-admin-only" style="display: none;"><a href="#" id="admissionViewOpt">📋 View Admissions</a></li>
+                            <li class="admin-only" style="display: none;"><a href="#" id="admissionEditOpt">✏️ Edit Admissions</a></li>
                         </ul>
                     </div>
                 </li>
-                    <li class="dropdown-parent">
-                        <a href="course.html?course=adca">Courses ▾</a>
-                        <div class="dropdown">
-                            <ul>
-                                <li><a href="course.html?course=dca">DCA</a></li>
-                                <li><a href="course.html?course=dca-t">DCA-T</a></li>
-                                <li><a href="course.html?course=adca">ADCA</a></li>
-                                <li><a href="course.html?course=dtp">DTP</a></li>
-                                <li class="dropdown-parent-nested">
-                                    <a href="#">Programming Language ▶</a>
-                                    <div class="dropdown2">
-                                        <ul>
-                                            <li><a href="course.html?course=clanguage">C Language</a></li>
-                                            <li><a href="course.html?course=c++">C++</a></li>
-                                            <li><a href="course.html?course=python">Python</a></li>
-                                            <li><a href="course.html?course=java">Java</a></li>
-                                        </ul>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>                
+
+                <li class="dropdown-parent">
+                    <a href="course.html?course=adca">Courses ▾</a>
+                    <div class="dropdown">
+                        <ul>
+                            <li><a href="course.html?course=dca">DCA</a></li>
+                            <li><a href="course.html?course=dca-t">DCA-T</a></li>
+                            <li><a href="course.html?course=adca">ADCA</a></li>
+                            <li><a href="course.html?course=dtp">DTP</a></li>
+                            <li class="dropdown-parent-nested">
+                                <a href="#">Programming Language ▶</a>
+                                <div class="dropdown2">
+                                    <ul>
+                                        <li><a href="course.html?course=clanguage">C Language</a></li>
+                                        <li><a href="course.html?course=c++">C++</a></li>
+                                        <li><a href="course.html?course=python">Python</a></li>
+                                        <li><a href="course.html?course=java">Java</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 <li><a href="video.html">Class Videos</a></li>
-                <li><a href="login.html">Mock Test</a></li>
+                
+                <!-- Mock Test Menu with Teacher/Admin Detailed Checker Option -->
+                <li class="dropdown-parent">
+                    <a href="dashboard.html">Mock Test ▾</a>
+                    <div class="dropdown">
+                        <ul>
+                            <li><a href="dashboard.html">Take Mock Test</a></li>
+                            <li class="teacher-admin-only" style="display: none;"><a href="#" id="mockTestDetailsOpt">📊 Check Mock Test Details</a></li>
+                        </ul>
+                    </div>
+                </li>
+
                 <li><a href="#contact">Contact</a></li>
+                
+                <!-- Downloads Menu with Teacher/Admin Upload Options -->
                 <li class="dropdown-parent">
                     <a href="#">Downloads ▾</a>
                      <div class="dropdown">
                         <ul>
                             <li><a href="notes.html">Notes</a></li>
                             <li><a href="project.html">Project Work</a></li>
+                            <!-- Teacher & Admin Upload Options -->
+                            <li class="teacher-admin-only" style="display: none;"><a href="#" id="uploadNotesOpt">📤 Upload Notes</a></li>
+                            <li class="teacher-admin-only" style="display: none;"><a href="#" id="uploadProjectOpt">📤 Upload Projects</a></li>
                         </ul>
                     </div>
                 </li>
@@ -151,6 +172,14 @@
             </ul>
         </div>
     </nav>
+    <!-- Dynamic Logged-in Profile & Logout Bar -->
+    <div id="homeProfileBar" class="scolex-session-bar" style="display: none;">
+        <div class="session-info">
+            <span class="session-user">👤 Name: <strong id="profileName"></strong></span>
+            <span class="session-role" id="profileDetails"></span>
+        </div>
+        <button onclick="scolexLogout()" class="session-logout-btn">Logout 🚪</button>
+    </div>
 
     <!-- ================= HOME SECTION ================= -->
     <section class="home">
@@ -168,6 +197,23 @@
             <div class="buttons">
                 <a href="html/page.html" class="btn">Apply Now</a>
                 <a href="#courses" class="btn btn2">View Courses</a>
+            </div>
+        </div>
+
+        <!-- Quick Portal Login Box Added on Right Side -->
+        <div class="home-portal-box">
+            <h3>🔐 Quick Portals</h3>
+            <p>Select your portal to login:</p>
+            <div class="portal-buttons">
+                <a href="login.html?role=admin" class="portal-btn admin-portal">
+                    🛡️ Admin Login
+                </a>
+                <a href="login.html?role=teacher" class="portal-btn teacher-portal">
+                    👨‍🏫 Teacher Login
+                </a>
+                <a href="login.html?role=student" class="portal-btn student-portal">
+                    🎓 Student Login
+                </a>
             </div>
         </div>
     </section>

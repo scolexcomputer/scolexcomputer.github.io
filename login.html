@@ -3,35 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Student Login - Scolex Computer Classes</title>
+  <title>Portal Login - Scolex Computer Classes</title>
   <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
 
-<div class="container">
-  <div class="box">
-    <h1>Scolex Computer Classes</h1>
-    <h2>Mock Test Portal</h2>
-    <h3>Student Login</h3>
+<div class="login-wrapper">
+  <div class="login-card">
+    
+    <!-- Institute Header Banner -->
+    <header class="header-banner">
+      <h1 class="main-title">Scolex Computer Classes</h1>
+      <h2 class="sub-title">IACT (Institute for Advanced Computer Technology)</h2>
+      <p class="location-text">📍 Shanti Market, Main Road, Motipur</p>
+    </header>
 
-    <!-- Wrapped inside a form tag for accessibility and browser password saving -->
+    <!-- Role Switcher Tabs -->
+    <div class="role-tabs">
+      <button type="button" class="role-tab active" data-role="student" id="studentTabBtn">Student Login</button>
+      <button type="button" class="role-tab" data-role="teacher" id="teacherTabBtn">Teacher Login</button>
+      <button type="button" class="role-tab" data-role="admin" id="adminTabBtn">Admin Login</button>
+    </div>
+
+    <!-- Login Form -->
     <form onsubmit="event.preventDefault(); login();">
-      <input type="text" id="loginId" placeholder="Mobile Number or Student ID" required autocomplete="username">
-      <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
+      <div class="input-group">
+        <input type="text" id="loginId" placeholder="Mobile Number or Student ID" required autocomplete="username">
+      </div>
+      <div class="input-group">
+        <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
+      </div>
 
-      <button type="submit" id="loginBtn">Login</button>
+      <button type="submit" id="loginBtn">Login as Student</button>
     </form>
 
-    <br><br>
-    New Student? <a href="signup.html">Register Here</a>
-    
-    <!-- Back to Home Link -->
-    <div style="margin-top: 15px;">
-      <a href="index.html">← Back to Home</a>
+    <!-- Footer Actions (Hidden for Admin/Teacher) -->
+    <div class="footer-actions" id="footerActions">
+      <a href="signup.html">Register Here</a>
+      <a href="forgot-password.html">Forgot Password?</a>
     </div>
+
   </div>
 </div>
 
+<script>
+  // Tab switching script synced directly with login.js role controls
+  document.querySelectorAll('.role-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.role-tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      
+      const role = this.getAttribute('data-role');
+      if (typeof switchRole === 'function') {
+        switchRole(role);
+      }
+    });
+  });
+</script>
 <script src="js/login.js"></script>
 </body>
 </html>

@@ -19,33 +19,39 @@ section {
 }
 
 /* ===========================
-   2. HEADER SECTION
+   2. HEADER SECTION (Full Width Spanning)
 =========================== */
 .header {
     background: linear-gradient(120deg, #004aad, #00c6ff, #a873ad);
     color: white;
     text-align: center;
-    padding: clamp(15px, 2.5vw, 30px);
+    padding: clamp(10px, 1.8vw, 20px) 15px;
+    width: 100%;
 }
 
 .header h1 {
-    font-size: clamp(20px, 5vw, 55px);
-    text-shadow: 3px 3px 5px black;
+    font-size: clamp(22px, 5.5vw, 65px);
+    text-shadow: 2px 2px 4px black;
+    margin-bottom: 2px;
+    width: 100%;
+    letter-spacing: 0.5px;
 }
 
 .header h2 {
-    font-size: clamp(14px, 3vw, 35px);
+    font-size: clamp(14px, 3.2vw, 36px);
     color: yellow;
     text-shadow: 1px 1px 3px black;
-    margin: clamp(4px, 1vw, 10px) 0;
+    margin: clamp(2px, 0.5vw, 6px) 0;
+    width: 100%;
 }
 
 .header address {
-    font-size: clamp(14px, 2vw, 24px);
+    font-size: clamp(13px, 2.2vw, 24px);
     font-weight: bold; 
-    margin-bottom: 10px;
+    margin-bottom: 2px;
     color: black;
     text-shadow: 1px 1px 2px red;
+    width: 100%;
 }
 
 /* ===========================
@@ -283,20 +289,68 @@ nav ul li:hover .dropdown {
 }
 
 /* ===========================
-   4. MAIN SECTIONS
+   4. MAIN SECTIONS & PROFILE BAR
 =========================== */
 
-/* Home Section */
+/* Student Session Bar Styles */
+.scolex-session-bar {
+    background-color: #0f172a;
+    color: #ffffff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    border-bottom: 2px solid #38bdf8;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    position: sticky;
+    top: 60px;
+    z-index: 998;
+}
+
+.session-info {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.session-user {
+    color: #38bdf8;
+}
+
+.session-role {
+    color: #cbd5e1;
+}
+
+.session-logout-btn {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.session-logout-btn:hover {
+    background-color: #dc2626;
+}
+
+/* Home Section - Top spacing controlled to 8px (5-10px range) */
 .home {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: clamp(20px, 4vw, 40px);
-    padding: clamp(30px, 5vw, 60px) clamp(4%, 6%, 8%);
+    padding: 8px clamp(4%, 6%, 8%) clamp(30px, 5vw, 60px);
     margin: 0 auto;
     max-width: 1350px;
     background: linear-gradient(135deg, #eef7ff, #c8e6ff);
+    margin-top: 10px;
 }
 
 .home-content {
@@ -344,6 +398,79 @@ nav ul li:hover .dropdown {
     background: #ff5722;
     transform: translateY(-4px);
     box-shadow: 0 5px 12px rgba(0,0,0,.25);
+}
+
+/* Quick Portal Login Box Styles */
+.home-portal-box {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    text-align: center;
+    border-top: 4px solid #0056b3;
+    flex-shrink: 0;
+    animation: fadeInPortal 0.8s ease-in-out;
+    margin-top: 0;
+}
+
+.home-portal-box h3 {
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 20px;
+}
+
+.home-portal-box p {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 20px;
+    text-align: center !important;
+}
+
+.portal-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.portal-btn {
+    display: block;
+    padding: 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.admin-portal {
+    background-color: #2d3748;
+    color: white;
+}
+.admin-portal:hover {
+    background-color: #1a202c;
+}
+
+.student-portal {
+    background-color: #3182ce;
+    color: white;
+}
+.student-portal:hover {
+    background-color: #2b6cb0;
+}
+
+.teacher-portal {
+    background-color: #38a169;
+    color: white;
+}
+.teacher-portal:hover {
+    background-color: #2f855a;
+}
+
+@keyframes fadeInPortal {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* Gallery Section */
@@ -603,7 +730,7 @@ button.link:active {
 }
 
 button.link.fb-btn {
-    background-color: #1877f2; /* Facebook Blue */
+    background-color: #1877f2;
 }
 
 button.link.fb-btn:hover {
@@ -611,7 +738,7 @@ button.link.fb-btn:hover {
 }
 
 button.link.yt-btn {
-    background-color: #ff0000; /* YouTube Red */
+    background-color: #ff0000;
 }
 
 button.link.yt-btn:hover {
@@ -619,7 +746,7 @@ button.link.yt-btn:hover {
 }
 
 button.link.map-btn {
-    background-color: #ea4335; /* Google Maps Red */
+    background-color: #ea4335;
 }
 
 button.link.map-btn:hover {
@@ -627,7 +754,7 @@ button.link.map-btn:hover {
 }
 
 button.link.wa-btn {
-    background-color: #25d366; /* WhatsApp Green */
+    background-color: #25d366;
     font-size: clamp(13px, 1.1vw, 15px);
 }
 
@@ -636,7 +763,7 @@ button.link.wa-btn:hover {
 }
 
 button.link.call-btn {
-    background-color: #ff9800; /* Vibrant Call Orange */
+    background-color: #ff9800;
     font-size: clamp(13px, 1.1vw, 15px);
 }
 
@@ -951,10 +1078,48 @@ button.link.call-btn:hover {
     .home-content p {
         text-align: left;
     }
+    .home-portal-box {
+        width: 100%;
+        margin-bottom: 10px;
+    }
     .contact-box {
         flex-direction: column;
     }
     .contact {
         min-height: auto;
     }
+    .scolex-session-bar {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    .session-info {
+        justify-content: center;
+    }
+}
+/* ===========================
+   STAFF & ADMIN DROPDOWN ENHANCEMENTS
+=========================== */
+.dropdown ul li.teacher-admin-only a {
+    background: rgba(56, 189, 248, 0.1);
+    color: #38bdf8;
+    font-weight: bold;
+    border-left: 3px solid #38bdf8;
+}
+
+.dropdown ul li.teacher-admin-only a:hover {
+    background: rgba(56, 189, 248, 0.25);
+    color: #ffffff;
+}
+
+.dropdown ul li.admin-only a {
+    background: rgba(250, 204, 21, 0.12);
+    color: #facc15;
+    font-weight: bold;
+    border-left: 3px solid #facc15;
+}
+
+.dropdown ul li.admin-only a:hover {
+    background: rgba(250, 204, 21, 0.25);
+    color: #ffffff;
 }

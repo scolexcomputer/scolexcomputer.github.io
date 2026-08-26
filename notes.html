@@ -6,6 +6,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notes - Scolex Computer Classes</title>
     <link rel="stylesheet" href="css/notes.css">
+    <style>
+        /* Admin/Teacher Control Styles */
+        .admin-controls {
+            display: none;
+            margin-top: 12px;
+            padding-top: 8px;
+            border-top: 1px solid #ddd;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        .admin-controls button {
+            padding: 4px 8px;
+            font-size: 11px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-edit { background: #ffc107; color: #000; }
+        .btn-delete { background: #dc3545; color: #fff; }
+        
+        .card-upload-box {
+            display: none;
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px dashed #007bff;
+        }
+
+        .add-topic-container {
+            display: none;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .btn-add-new {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
@@ -66,180 +110,700 @@
         <!-- DCA NOTES -->
         <div id="dca" class="notes-content">
             <h2>DCA Notes</h2>
-            <div class="feature-box">
-                <div class="card">
+            <div class="feature-box" id="box-dca">
+                <div class="card" data-id="dca-1">
                     <h3>Computer Fundamentals</h3>
                     <p>Basic concepts, history, and computer generations.</p>
                     <a href="notes/dca/computer-fundamentals.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dca', 'computer-fundamentals.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dca-2">
                     <h3>Windows</h3>
                     <p>Desktop elements, taskbar, files, and folder settings, Notepad, On Screen Keyboard, Character map etc.</p>
                     <a href="notes/dca/windows.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dca', 'windows.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dca-3">
                     <h3>MS Word 1</h3>
                     <p>Introduction, Features of Ms Word, Document creation, clipboard, Font, Paragraph, Editing Group and Table, Table layout, Picture, Shape, Shape Format, Header and Footer.</p>
                     <a href="notes/dca/ms-word1.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dca', 'ms-word1.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dca-4">
                     <h3>MS Word 2</h3>
                     <p>Page Number, Bookmark, Symbol, Equation, Page Color, Watermark, Page Border, Margin, Page Setup, Page Orientation, Size, Columns, Break, Line Number, Hyphenation, Word Shortcut Key, Spelling and Grammer, Thesaurous, Word Count.</p>
                     <a href="notes/dca/ms-word2.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dca', 'ms-word2.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dca-5">
                     <h3>MS Word 3</h3>
                     <p>Macros, Mail Merge, Hyperlink, View tab (View, Show, Zoom, Windows), Password, Comments.</p>
                     <a href="notes/dca/ms-word3.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dca', 'ms-word3.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dca-6">
                     <h3>MS Word Shortcut Key</h3>
                     <p>Essential keyboard shortcuts for efficient document editing in MS Word.</p>
                     <a href="notes/dca/shortcut.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dca', 'shortcut.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dca-7">
                     <h3>MS Excel 1</h3>
                     <p>What is MS-excel, How to open MS-Excel, Component of MS Excel and Features of MS Excel.</p>
                     <a href="notes/dca/ms-excel.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dca', 'ms-excel.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dca-8">
                     <h3>MS Excel 2</h3>
-                    <p>Spreadsheet layouts, formulas, charts, and data sorting.</p>
+                    <p>Spreadsheet layouts, fill Series, Format Cell.</p>
                     <a href="notes/dca/ms-excel.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dca', 'ms-excel.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dca-9">
                     <h3>MS Excel 3</h3>
                     <p>Advanced functions, logical operators, and spreadsheet management.</p>
                     <a href="notes/dca/ms-excel.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dca', 'ms-excel.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dca-10">
                     <h3>MS PowerPoint</h3>
                     <p>Slide creation, animations, transitions, and presentations.</p>
                     <a href="notes/dca/ms-powerpoint.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dca', 'ms-powerpoint.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dca-11">
                     <h3>Internet & Web Fundamentals</h3>
                     <p>Web browsers, email management, and online security.</p>
                     <a href="notes/dca/internet-fundamentals.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dca', 'internet-fundamentals.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
+            </div>
+            <div class="add-topic-container">
+                <button class="btn-add-new" onclick="addNewTopicCard('dca')">+ Add New Topic to DCA</button>
             </div>
         </div>
 
         <!-- DCA-T NOTES -->
         <div id="dcat" class="notes-content">
             <h2>DCA-T Notes</h2>
-            <div class="feature-box">
-                <div class="card">
-                    <h3>Computer Fundamentals & OS</h3>
-                    <p>Basics of hardware, operating systems, and file handling.</p>
-                    <a href="notes/dcat/fundamentals.pdf" class="download" target="_blank">Download PDF</a>
+            <div class="feature-box" id="box-dcat">
+                <div class="card" data-id="dcat-1">
+                    <h3>Computer Fundamentals</h3>
+                    <p>Basic concepts, history, and computer generations.</p>
+                    <a href="notes/dcat/computer-fundamentals.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dcat', 'computer-fundamentals.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
-                    <h3>MS Office Package</h3>
-                    <p>Practical guides for MS Word, Excel, and PowerPoint.</p>
-                    <a href="notes/dcat/ms-office.pdf" class="download" target="_blank">Download PDF</a>
+                <div class="card" data-id="dcat-2">
+                    <h3>Windows</h3>
+                    <p>Desktop elements, taskbar, files, and folder settings, Notepad, On Screen Keyboard, Character map etc.</p>
+                    <a href="notes/dcat/windows.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dcat', 'windows.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dcat-3">
+                    <h3>MS Word 1</h3>
+                    <p>Introduction, Features of Ms Word, Document creation, clipboard, Font, Paragraph, Editing Group and Table, Table layout, Picture, Shape, Shape Format, Header and Footer.</p>
+                    <a href="notes/dcat/ms-word1.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dcat', 'ms-word1.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="card" data-id="dcat-4">
+                    <h3>MS Word 2</h3>
+                    <p>Page Number, Bookmark, Symbol, Equation, Page Color, Watermark, Page Border, Margin, Page Setup, Page Orientation, Size, Columns, Break, Line Number, Hyphenation, Word Shortcut Key, Spelling and Grammer, Thesaurous, Word Count.</p>
+                    <a href="notes/dcat/ms-word2.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dcat', 'ms-word2.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="card" data-id="dcat-5">
+                    <h3>MS Word 3</h3>
+                    <p>Macros, Mail Merge, Hyperlink, View tab (View, Show, Zoom, Windows), Password, Comments.</p>
+                    <a href="notes/dcat/ms-word3.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dcat', 'ms-word3.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="card" data-id="dcat-6">
+                    <h3>MS Word Shortcut Key</h3>
+                    <p>Essential keyboard shortcuts for efficient document editing in MS Word.</p>
+                    <a href="notes/dcat/shortcut.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dcat', 'shortcut.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="card" data-id="dcat-7">
+                    <h3>MS Excel 1</h3>
+                    <p>What is MS-excel, How to open MS-Excel, Component of MS Excel and Features of MS Excel.</p>
+                    <a href="notes/dcat/ms-excel.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dcat', 'ms-excel.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="card" data-id="dcat-8">
+                    <h3>MS Excel 2</h3>
+                    <p>Spreadsheet layouts, formulas, charts, and data sorting.</p>
+                    <a href="notes/dcat/ms-excel.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dcat', 'ms-excel.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="card" data-id="dcat-9">
+                    <h3>MS Excel 3</h3>
+                    <p>Advanced functions, logical operators, and spreadsheet management.</p>
+                    <a href="notes/dcat/ms-excel.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dcat', 'ms-excel.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="card" data-id="dcat-10">
+                    <h3>MS PowerPoint</h3>
+                    <p>Slide creation, animations, transitions, and presentations.</p>
+                    <a href="notes/dcat/ms-powerpoint.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dcat', 'ms-powerpoint.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="card" data-id="dcat-11">
+                    <h3>Internet & Web Fundamentals</h3>
+                    <p>Web browsers, email management, and online security.</p>
+                    <a href="notes/dcat/internet-fundamentals.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dcat', 'internet-fundamentals.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="card" data-id="dcat-12">
                     <h3>Tally Prime Fundamentals</h3>
                     <p>Accounting principles, company creation, and vouchers.</p>
                     <a href="notes/dcat/tally-prime.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dcat', 'tally-prime.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dcat-13">
                     <h3>GST Setup & Taxation</h3>
                     <p>GST configuration, CGST/SGST/IGST, and tax returns.</p>
                     <a href="notes/dcat/gst-taxation.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dcat', 'gst-taxation.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dcat-14">
                     <h3>Inventory Management</h3>
                     <p>Stock groups, units, batch-wise details, and reorder levels.</p>
                     <a href="notes/dcat/inventory-management.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dcat', 'inventory-management.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
+            </div>
+            <div class="add-topic-container">
+                <button class="btn-add-new" onclick="addNewTopicCard('dcat')">+ Add New Topic to DCA-T</button>
             </div>
         </div>
 
         <!-- ADCA NOTES -->
         <div id="adca" class="notes-content">
             <h2>ADCA Notes</h2>
-            <div class="feature-box">
-                <div class="card">
-                    <h3>Advanced Office Automation</h3>
-                    <p>Advanced Excel formulas, VLOOKUP, pivot tables, and Word.</p>
-                    <a href="notes/adca/advanced-office.pdf" class="download" target="_blank">Download PDF</a>
+            <div class="feature-box" id="box-adca">
+                <div class="card" data-id="adca-1">
+                    <h3>Computer Fundamentals</h3>
+                    <p>Basic concepts, history, and computer generations.</p>
+                    <a href="notes/adca/computer-fundamentals.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/adca', 'computer-fundamentals.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
-                    <h3>Financial Accounting with Tally</h3>
-                    <p>Comprehensive Tally Prime, GST, payroll, and auditing.</p>
-                    <a href="notes/adca/financial-accounting.pdf" class="download" target="_blank">Download PDF</a>
+                <div class="card" data-id="adca-2">
+                    <h3>Windows</h3>
+                    <p>Desktop elements, taskbar, files, and folder settings, Notepad, On Screen Keyboard, Character map etc.</p>
+                    <a href="notes/adca/windows.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/adca', 'windows.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="adca-3">
+                    <h3>MS Word 1</h3>
+                    <p>Introduction, Features of Ms Word, Document creation, clipboard, Font, Paragraph, Editing Group and Table, Table layout, Picture, Shape, Shape Format, Header and Footer.</p>
+                    <a href="notes/adca/ms-word1.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/adca', 'ms-word1.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="card" data-id="adca-4">
+                    <h3>MS Word 2</h3>
+                    <p>Page Number, Bookmark, Symbol, Equation, Page Color, Watermark, Page Border, Margin, Page Setup, Page Orientation, Size, Columns, Break, Line Number, Hyphenation, Word Shortcut Key, Spelling and Grammer, Thesaurous, Word Count.</p>
+                    <a href="notes/adca/ms-word2.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/adca', 'ms-word2.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="card" data-id="adca-5">
+                    <h3>MS Word 3</h3>
+                    <p>Macros, Mail Merge, Hyperlink, View tab (View, Show, Zoom, Windows), Password, Comments.</p>
+                    <a href="notes/adca/ms-word3.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/adca', 'ms-word3.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="card" data-id="adca-6">
+                    <h3>MS Word Shortcut Key</h3>
+                    <p>Essential keyboard shortcuts for efficient document editing in MS Word.</p>
+                    <a href="notes/adca/shortcut.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/adca', 'shortcut.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="card" data-id="adca-7">
+                    <h3>MS Excel 1</h3>
+                    <p>What is MS-excel, How to open MS-Excel, Component of MS Excel and Features of MS Excel.</p>
+                    <a href="notes/adca/ms-excel.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/adca', 'ms-excel.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="card" data-id="adca-8">
+                    <h3>MS Excel 2</h3>
+                    <p>Spreadsheet layouts, formulas, charts, and data sorting.</p>
+                    <a href="notes/adca/ms-excel.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/adca', 'ms-excel.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="card" data-id="adca-9">
+                    <h3>MS Excel 3</h3>
+                    <p>Advanced functions, logical operators, and spreadsheet management.</p>
+                    <a href="notes/adca/ms-excel.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/adca', 'ms-excel.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="card" data-id="adca-10">
+                    <h3>MS PowerPoint</h3>
+                    <p>Slide creation, animations, transitions, and presentations.</p>
+                    <a href="notes/adca/ms-powerpoint.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/adca', 'ms-powerpoint.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="card" data-id="adca-11">
+                    <h3>Internet & Web Fundamentals</h3>
+                    <p>Web browsers, email management, and online security.</p>
+                    <a href="notes/adca/internet-fundamentals.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/adca', 'internet-fundamentals.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="card" data-id="adca-12">
+                    <h3>Tally Prime Fundamentals</h3>
+                    <p>Accounting principles, company creation, and vouchers.</p>
+                    <a href="notes/adca/tally-prime.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/adca', 'tally-prime.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="card" data-id="adca-13">
+                    <h3>GST Setup & Taxation</h3>
+                    <p>GST configuration, CGST/SGST/IGST, and tax returns.</p>
+                    <a href="notes/adca/gst-taxation.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/adca', 'gst-taxation.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="card" data-id="adca-14">
+                    <h3>Inventory Management</h3>
+                    <p>Stock groups, units, batch-wise details, and reorder levels.</p>
+                    <a href="notes/adca/inventory-management.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/adca', 'inventory-management.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="card" data-id="adca-15">
                     <h3>Graphic Designing Tools</h3>
                     <p>Vector and raster designing using CorelDraw & Photoshop.</p>
                     <a href="notes/adca/graphic-design.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/adca', 'graphic-design.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="adca-16">
                     <h3>Web Designing Essentials</h3>
                     <p>HTML5, CSS3, page layouts, and web page building.</p>
                     <a href="notes/adca/web-design.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/adca', 'web-design.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="adca-17">
                     <h3>C & Object-Oriented Programming</h3>
                     <p>Logic building, syntax, loops, and OOP concepts.</p>
                     <a href="notes/adca/programming-basics.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/adca', 'programming-basics.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
+            </div>
+            <div class="add-topic-container">
+                <button class="btn-add-new" onclick="addNewTopicCard('adca')">+ Add New Topic to ADCA</button>
             </div>
         </div>
 
         <!-- DTP NOTES -->
         <div id="dtp" class="notes-content">
             <h2>DTP Notes</h2>
-            <div class="feature-box">
-                <div class="card">
+            <div class="feature-box" id="box-dtp">
+                <div class="card" data-id="dtp-1">
                     <h3>Adobe Photoshop</h3>
                     <p>Photo editing, layers, masking, color grading, and retouching.</p>
                     <a href="notes/dtp/photoshop.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dtp', 'photoshop.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dtp-2">
                     <h3>CorelDraw</h3>
                     <p>Vector design, logo creation, vector artwork, and banners.</p>
                     <a href="notes/dtp/coreldraw.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dtp', 'coreldraw.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dtp-3">
                     <h3>Adobe PageMaker</h3>
                     <p>Document creation, book typesetting, and printing layouts.</p>
                     <a href="notes/dtp/pagemaker.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dtp', 'pagemaker.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="dtp-4">
                     <h3>Printing & Design Guidelines</h3>
                     <p>CMYK vs RGB colors, resolution setups, and export formats.</p>
                     <a href="notes/dtp/printing-setup.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/dtp', 'printing-setup.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
+            </div>
+            <div class="add-topic-container">
+                <button class="btn-add-new" onclick="addNewTopicCard('dtp')">+ Add New Topic to DTP</button>
             </div>
         </div>
 
         <!-- PROGRAMMING NOTES -->
         <div id="programming" class="notes-content">
             <h2>Programming Notes</h2>
-            <div class="feature-box">
-                <div class="card">
+            <div class="feature-box" id="box-programming">
+                <div class="card" data-id="prog-1">
                     <h3>C Programming</h3>
                     <p>Variables, control flow, functions, arrays, and pointers.</p>
                     <a href="notes/programming/c-language.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/programming', 'c-language.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="prog-2">
                     <h3>C++ Programming</h3>
                     <p>Classes, inheritance, polymorphism, and memory management.</p>
                     <a href="notes/programming/cpp-language.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/programming', 'cpp-language.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="prog-3">
                     <h3>Java Programming</h3>
                     <p>JVM architecture, Object-Oriented Concepts, and Exception Handling.</p>
                     <a href="notes/programming/java-language.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/programming', 'java-language.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
-                <div class="card">
+                <div class="card" data-id="prog-4">
                     <h3>Python Programming</h3>
                     <p>Python data structures, modules, file I/O, and scripting.</p>
                     <a href="notes/programming/python-language.pdf" class="download" target="_blank">Download PDF</a>
+                    <div class="card-upload-box">
+                        <input type="file" class="card-file-input" accept=".pdf" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
+                        <button type="button" onclick="uploadCardFile(this, 'notes/programming', 'python-language.pdf')" style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">Upload / Replace PDF</button>
+                    </div>
+                    <div class="admin-controls">
+                        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
+                        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+                    </div>
                 </div>
+            </div>
+            <div class="add-topic-container">
+                <button class="btn-add-new" onclick="addNewTopicCard('programming')">+ Add New Topic to Programming</button>
             </div>
         </div>
 

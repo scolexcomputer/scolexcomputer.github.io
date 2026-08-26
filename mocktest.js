@@ -1,10 +1,5 @@
-//====================================================
-// SCOLEX MOCK TEST PORTAL
-// FRONTEND JAVASCRIPT (mocktest.js)
-//====================================================
-
 // Google Apps Script Web App URL
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwK--zwUclmQhJd0tLD4uRQQacNLTOXSQ8KjTdDcIkIMTkrWEb_vwzp_fsL9wAMonS3sQ/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyn1cQq2-qhqKvwgfkDa4FxM0Wq9VCY_KWxIcyFqgiDEdiar2GQI0TLxIX_xFbwu0jJ/exec";
 
 let mockQuestions = [];
 let currentQuestionIndex = 0;
@@ -20,7 +15,7 @@ const currentTestId = localStorage.getItem("testId") || "FUND01";
 document.addEventListener("DOMContentLoaded", () => {
   const title = localStorage.getItem("testTitle") || "Mock Test";
   
-  // Display Test Title + Test ID code
+  // Display Test Title + Test ID code (e.g., "Fundamental Test 1 [FUND01]")
   const displayElem = document.getElementById("testTitleDisplay");
   if (displayElem) {
     displayElem.innerText = `${title} (${currentTestId})`;
@@ -29,12 +24,10 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchQuestionsFromSheet();
 });
 
-// Fetch questions from Google Apps Script
+// Fetch questions from Apps Script
 function fetchQuestionsFromSheet() {
   const questionTextElem = document.getElementById("questionText");
-  if (questionTextElem) {
-    questionTextElem.innerText = `⏳ Loading questions for ${currentTestId}...`;
-  }
+  questionTextElem.innerText = `⏳ Loading questions for ${currentTestId}...`;
 
   fetch(`${SCRIPT_URL}?action=getQuestions&testId=${currentTestId}`)
     .then(response => response.json())
@@ -44,41 +37,32 @@ function fetchQuestionsFromSheet() {
         selectedAnswers = new Array(mockQuestions.length).fill(null);
         markedForReview = new Array(mockQuestions.length).fill(false);
         
-        const totalQElem = document.getElementById("totalQNum");
-        if (totalQElem) totalQElem.innerText = mockQuestions.length;
+        document.getElementById("totalQNum").innerText = mockQuestions.length;
         
         renderQuestionPalette();
         loadQuestion();
         startTimer();
       } else {
-        if (questionTextElem) {
-          questionTextElem.innerText = `❌ No questions found for Test ID: ${currentTestId} in Google Sheet!`;
-        }
+        questionTextElem.innerText = `❌ No questions found for Test ID: ${currentTestId} in Google Sheet!`;
       }
     })
     .catch(error => {
       console.error("Error fetching questions:", error);
-      if (questionTextElem) {
-        questionTextElem.innerText = "❌ Error loading questions. Please check your network or script URL.";
-      }
+      questionTextElem.innerText = "❌ Error loading questions. Please check your network or script URL.";
     });
 }
 
-// Load current question details into DOM
+// Load current question details
 function loadQuestion() {
   if (mockQuestions.length === 0) return;
 
   const q = mockQuestions[currentQuestionIndex];
   
-  const currentQElem = document.getElementById("currentQNum");
-  if (currentQElem) currentQElem.innerText = currentQuestionIndex + 1;
-
-  const qTextElem = document.getElementById("questionText");
-  if (qTextElem) qTextElem.innerText = `${q.qno || (currentQuestionIndex + 1)}. ${q.question}`;
+  document.getElementById("currentQNum").innerText = currentQuestionIndex + 1;
+  document.getElementById("questionText").innerText = `${q.qno || (currentQuestionIndex + 1)}. ${q.question}`;
   
   for (let i = 0; i < 4; i++) {
-    const optElem = document.getElementById(`opt${i}`);
-    if (optElem) optElem.innerText = q.options[i];
+    document.getElementById(`opt${i}`).innerText = q.options[i];
   }
 
   const radioButtons = document.getElementsByName("quizOption");
@@ -86,45 +70,34 @@ function loadQuestion() {
   
   radioButtons.forEach((radio, idx) => {
     radio.checked = (selectedAnswers[currentQuestionIndex] === idx);
-    if (cards[idx]) {
-      if (selectedAnswers[currentQuestionIndex] === idx) {
-        cards[idx].classList.add("selected");
-      } else {
-        cards[idx].classList.remove("selected");
-      }
+    if (selectedAnswers[currentQuestionIndex] === idx) {
+      cards[idx].classList.add("selected");
+    } else {
+      cards[idx].classList.remove("selected");
     }
   });
 
   const reviewBtn = document.getElementById("reviewBtn");
-  if (reviewBtn) {
-    if (markedForReview[currentQuestionIndex]) {
-      reviewBtn.innerText = "🔖 Unmark Review";
-      reviewBtn.style.background = "#e65100";
-    } else {
-      reviewBtn.innerText = "🔖 Mark for Review";
-      reviewBtn.style.background = "#ff9800";
-    }
-  }
-
-  const prevBtn = document.getElementById("prevBtn");
-  if (prevBtn) prevBtn.disabled = (currentQuestionIndex === 0);
-  
-  const nextBtn = document.getElementById("nextBtn");
-  const submitBtn = document.getElementById("submitBtn");
-
-  if (currentQuestionIndex === mockQuestions.length - 1) {
-    if (nextBtn) nextBtn.style.display = "none";
-    if (submitBtn) submitBtn.style.display = "inline-block";
+  if (markedForReview[currentQuestionIndex]) {
+    reviewBtn.innerText = "🔖 Unmark Review";
+    reviewBtn.style.background = "#e65100";
   } else {
-    if (nextBtn) nextBtn.style.display = "inline-block";
-    if (submitBtn) submitBtn.style.display = "none";
+    reviewBtn.innerText = "🔖 Mark for Review";
+    reviewBtn.style.background = "#ff9800";
   }
 
-  const progressBar = document.getElementById("progressBar");
-  if (progressBar) {
-    const progressPercent = ((currentQuestionIndex + 1) / mockQuestions.length) * 100;
-    progressBar.style.width = `${progressPercent}%`;
+  document.getElementById("prevBtn").disabled = (currentQuestionIndex === 0);
+  
+  if (currentQuestionIndex === mockQuestions.length - 1) {
+    document.getElementById("nextBtn").style.display = "none";
+    document.getElementById("submitBtn").style.display = "inline-block";
+  } else {
+    document.getElementById("nextBtn").style.display = "inline-block";
+    document.getElementById("submitBtn").style.display = "none";
   }
+
+  const progressPercent = ((currentQuestionIndex + 1) / mockQuestions.length) * 100;
+  document.getElementById("progressBar").style.width = `${progressPercent}%`;
 
   updatePaletteUI();
 }
@@ -139,7 +112,7 @@ function selectOption(index) {
   cards.forEach((card, idx) => {
     if (idx === index) {
       card.classList.add("selected");
-      if (radioButtons[idx]) radioButtons[idx].checked = true;
+      radioButtons[idx].checked = true;
     } else {
       card.classList.remove("selected");
     }
@@ -157,7 +130,6 @@ function toggleMarkForReview() {
 // Render Question Palette grid buttons
 function renderQuestionPalette() {
   const grid = document.getElementById("questionGrid");
-  if (!grid) return;
   grid.innerHTML = "";
 
   mockQuestions.forEach((_, idx) => {
@@ -215,11 +187,8 @@ function startTimer() {
     let minutes = Math.floor(timeInSeconds / 60);
     let seconds = timeInSeconds % 60;
 
-    const timerElem = document.getElementById("timer");
-    if (timerElem) {
-      timerElem.innerText = 
-        `${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
-    }
+    document.getElementById("timer").innerText = 
+      `${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
 
     if (timeInSeconds <= 0) {
       clearInterval(timerInterval);
@@ -229,26 +198,16 @@ function startTimer() {
   }, 1000);
 }
 
-//====================================================
-// SUBMIT TEST & AUTO-UPLOAD PDF REPORT TO GOOGLE DRIVE
-//====================================================
-async function submitTest() {
+// Submit Test & Send Payload + Auto-Store PDF to Google Drive
+function submitTest() {
   if (confirm("Are you sure you want to submit the test?")) {
     clearInterval(timerInterval);
-
-    // Disable submit button and indicate loading status
-    const submitBtn = document.getElementById("submitBtn");
-    if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.innerText = "⏳ Saving Result & Generating PDF on Drive...";
-    }
 
     let correctCount = 0;
     let wrongCount = 0;
     let unattemptedCount = 0;
     let score = 0;
 
-    // Calculate score & detailed review array
     let detailedReview = mockQuestions.map((q, idx) => {
       const userAns = selectedAnswers[idx];
       const correctAns = q.answer; 
@@ -276,7 +235,6 @@ async function submitTest() {
       };
     });
 
-    // Load student information from local storage
     const rawData = JSON.parse(localStorage.getItem("student") || localStorage.getItem("studentData") || "{}");
     const student = rawData.student || rawData; 
 
@@ -287,47 +245,70 @@ async function submitTest() {
     const studentId = student.studentId || student.id || "N/A";
     const courseName = student.course || "N/A";
 
-    // Build payload for backend
     const payload = {
-      action: "submitTestFull",
+      action: "saveResult",
       studentName: studentName,
-      studentId: studentId,
       mobile: student.mobile || "N/A",
       course: courseName,
-      testCategory: testCategoryTitle,
-      testName: specificTestName,
       testId: currentTestId,
       total: mockQuestions.length,
       correct: correctCount,
       wrong: wrongCount,
       unattempted: unattemptedCount,
-      score: score,
-      reviews: detailedReview
+      score: score
     };
 
-    // Save locally for immediate display on result.html
-    sessionStorage.setItem("lastTestResult", JSON.stringify(payload));
+    let reviewBodyHtml = "";
+    detailedReview.forEach((item, idx) => {
+      reviewBodyHtml += `<div style="margin-bottom: 10px; padding: 8px; border: 1px solid #ccc;">` +
+        `<b>Q${idx + 1}: ${item.question}</b> [Status: ${item.status.toUpperCase()}]<br>` +
+        `<span>Your Answer Index: ${item.userAnswer !== null ? item.userAnswer : 'None'} | Correct Answer: ${item.correctAnswer}</span>` +
+        `</div>`;
+    });
 
-    try {
-      // Send request to Google Apps Script and WAIT for Drive creation
-      const response = await fetch(SCRIPT_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(payload)
-      });
+    const pdfPayload = {
+      action: "savePdfReport",
+      studentName: studentName,
+      studentId: studentId,
+      course: courseName,
+      testCategory: testCategoryTitle,
+      testName: specificTestName,
+      testId: currentTestId,
+      score: score,
+      correct: correctCount,
+      wrong: wrongCount,
+      unattempted: unattemptedCount,
+      reviewHtmlBody: reviewBodyHtml
+    };
 
-      const resData = await response.json();
-      console.log("Drive Backend Response:", resData);
+    const resultData = {
+      total: mockQuestions.length,
+      correct: correctCount,
+      wrong: wrongCount,
+      unattempted: unattemptedCount,
+      score: score,
+      testCategory: testCategoryTitle,
+      testName: specificTestName,
+      testId: currentTestId,
+      studentName: studentName,
+      studentId: studentId,
+      course: courseName,
+      reviews: detailedReview
+    };
+    sessionStorage.setItem("lastTestResult", JSON.stringify(resultData));
 
-      if (resData.status !== "success") {
-        alert("Google Drive Status Notice: " + resData.message);
-      }
-    } catch (err) {
-      console.error("Submission Error:", err);
-      alert("Submission Connection Error: " + err.toString());
-    }
+    fetch(SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    }).catch(err => console.error("Error saving result:", err));
 
-    // Redirect ONLY after backend network call completes
+    fetch(SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(pdfPayload)
+    }).catch(err => console.error("Error auto-saving PDF to Drive:", err));
+
     window.location.href = "result.html";
   }
 }

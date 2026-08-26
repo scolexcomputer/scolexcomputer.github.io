@@ -107,14 +107,13 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // Auto-hide menu when clicking final menu options (items that don't have sub-menus)
+    // Auto-hide menu when clicking final menu options
     const allNavLinks = document.querySelectorAll("nav ul li a");
     allNavLinks.forEach(function (link) {
         link.addEventListener("click", function () {
             const parentLi = this.parentElement;
             const hasSubmenu = parentLi.classList.contains("dropdown-parent") || parentLi.classList.contains("dropdown-parent-nested");
 
-            // Only auto-hide if it's a final option (no submenu attached)
             if (!hasSubmenu) {
                 if (ul) ul.classList.remove("nav-active");
                 document.querySelectorAll(".dropdown, .dropdown2").forEach(menu => {
@@ -133,6 +132,157 @@ document.addEventListener("DOMContentLoaded", function () {
             if (ul) {
                 ul.classList.remove("nav-active");
             }
+        }
+    });
+});
+
+
+// ===========================
+// DYNAMIC HOME PROFILE & LOGOUT SESSION LOGIC
+// ===========================
+document.addEventListener("DOMContentLoaded", function () {
+    const userRole = localStorage.getItem("userRole");
+    const studentDataStr = localStorage.getItem("student");
+    const profileBar = document.getElementById("homeProfileBar");
+
+    if (userRole && studentDataStr && profileBar) {
+        try {
+            const userData = JSON.parse(studentDataStr);
+            
+            // 1. Display User Name
+            const studentName = userData.name || userData.studentName || userData.username || "User";
+            document.getElementById("profileName").textContent = studentName;
+            
+            let detailsText = "";
+            if (userRole === "admin") {
+                detailsText = "(Role: Administrator)";
+            } else if (userRole === "teacher") {
+                detailsText = `(Post: ${userData.course || "Faculty Member"})`;
+            } else {
+                const studentId = userData.studentId || userData.id || userData.rollNo || "N/A";
+                const courseName = userData.course || userData.selectedCourse || "N/A";
+                const studentEmail = userData.email || userData.studentEmail || "N/A";
+                
+                detailsText = `| Student ID: ${studentId} | Course: ${courseName} | E-mail: ${studentEmail}`;
+            }
+            
+            document.getElementById("profileDetails").textContent = detailsText;
+            profileBar.style.display = "flex";
+        } catch (err) {
+            console.error("Error parsing user profile data:", err);
+        }
+    }
+});
+
+// Global Logout Function (Redirects back to index.html)
+function scolexLogout() {
+    if (confirm("Are you sure you want to log out?")) {
+        localStorage.removeItem("userRole");
+        localStorage.removeItem("student");
+        window.location.href = "index.html";
+    }
+}
+
+
+// ===========================
+// TEACHER & ADMIN NAV PERMISSIONS EXTENSION
+// ===========================
+document.addEventListener("DOMContentLoaded", function () {
+    const userRole = localStorage.getItem("userRole"); // "teacher", "admin", or student/null
+
+    if (userRole === "teacher" || userRole === "admin") {
+        // Reveal elements meant for both teachers and admins (View Admissions, Mock Test Details, Uploads)
+        document.querySelectorAll(".teacher-admin-only").forEach(el => {
+            el.style.display = "block";
+        });
+    }
+
+    if (userRole === "admin") {
+        // Reveal elements meant exclusively for the admin (Edit Admissions)
+        document.querySelectorAll(".admin-only").forEach(el => {
+            el.style.display = "block";
+        });
+    }
+
+    // Optional event bindings for these dynamic menu triggers
+    const viewAdmBtn = document.getElementById("admissionViewOpt");
+    if (viewAdmBtn) {
+        viewAdmBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            alert("📋 Opening Admission Records View Panel...");
+        });
+    }
+
+    const editAdmBtn = document.getElementById("admissionEditOpt");
+    if (editAdmBtn) {
+        editAdmBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            alert("✏️ Opening Admission Records Edit Panel (Admin Privilege)...");
+        });
+    }
+
+    const mockTestDetailsBtn = document.getElementById("mockTestDetailsOpt");
+    if (mockTestDetailsBtn) {
+        mockTestDetailsBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            alert("📊 Opening Question-wise Student Mock Test Analytics...");
+        });
+    }
+
+    const uploadNotesBtn = document.getElementById("uploadNotesOpt");
+    if (uploadNotesBtn) {
+        uploadNotesBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            alert("📤 Opening Notes Upload Utility...");
+        });
+    }
+
+    const uploadProjBtn = document.getElementById("uploadProjectOpt");
+    if (uploadProjBtn) {
+        uploadProjBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            alert("📤 Opening Project Work Upload Utility...");
+        });
+    }
+});
+
+
+// ===========================
+// PROTECTED PAGES & FEATURES ACCESS CONTROL
+// ===========================
+document.addEventListener("DOMContentLoaded", function () {
+    const userRole = localStorage.getItem("userRole");
+    
+    // Add any filename here that you want to restrict behind login
+    const protectedPages = [
+        "dashboard.html",   
+        "notes.html",       
+        "project.html",
+        "mocktest.html"
+    ];
+
+    const currentPath = window.location.pathname;
+    const isProtectedPage = protectedPages.some(page => currentPath.includes(page));
+
+    // If the user tries to load a protected page directly without a session
+    if (isProtectedPage && !userRole) {
+        alert("⚠️ Access Denied! Please log in first to access this portal feature.");
+        window.location.href = "login.html";
+        return;
+    }
+
+    // Intercept navigation link clicks across the site
+    const navLinks = document.querySelectorAll("nav ul li a");
+    navLinks.forEach(link => {
+        const href = link.getAttribute("href");
+        if (href && protectedPages.some(page => href.includes(page))) {
+            link.addEventListener("click", function (e) {
+                if (!localStorage.getItem("userRole")) {
+                    e.preventDefault();
+                    alert("⚠️ Restricted Area! Please log in with your credentials to view this section.");
+                    window.location.href = "login.html";
+                }
+            });
         }
     });
 });
