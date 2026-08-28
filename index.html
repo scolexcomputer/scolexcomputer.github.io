@@ -86,7 +86,8 @@
         <address>Shanti Market, Main Road, Motipur</address>
         <hr>
     </header>
-<!-- Navigation -->
+
+    <!-- Navigation -->
     <nav>
         <div class="nav-container">
             <a href="#" class="nav-logo">
@@ -104,16 +105,20 @@
             <ul>
                 <li><a href="index.html">Home</a></li>
                 
-                <!-- Admission Menu with Dynamic Teacher/Admin Sub-options -->
+                <!-- Admission Menu with ERP Dynamic Options -->
                 <li class="dropdown-parent">
                     <a href="#">Admission ▾</a>
                     <div class="dropdown">
                         <ul>
-                            <li><a href="html/page.html">Online Mode</a></li>
+                            <li><a href="html/admission.html">Online Mode</a></li>
                             <li><a href="#">Offline Mode</a></li>
-                            <!-- Teacher & Admin Admission Options -->
-                            <li class="teacher-admin-only" style="display: none;"><a href="#" id="admissionViewOpt">📋 View Admissions</a></li>
-                            <li class="admin-only" style="display: none;"><a href="#" id="admissionEditOpt">✏️ Edit Admissions</a></li>
+                            <!-- Teacher & Admin Admission Links -->
+                            <li class="teacher-admin-only" style="display: none;">
+                                <a href="admission-manage.html" id="admissionViewOpt">📋 View Admissions ERP</a>
+                            </li>
+                            <li class="admin-only" style="display: none;">
+                                <a href="admission-manage.html" id="admissionEditOpt">✏️ Edit Admissions ERP</a>
+                            </li>
                         </ul>
                     </div>
                 </li>
@@ -142,7 +147,7 @@
                 </li>
                 <li><a href="video.html">Class Videos</a></li>
                 
-                <!-- Mock Test Menu with Teacher/Admin Detailed Checker Option -->
+                <!-- Mock Test Menu -->
                 <li class="dropdown-parent">
                     <a href="dashboard.html">Mock Test ▾</a>
                     <div class="dropdown">
@@ -155,16 +160,13 @@
 
                 <li><a href="#contact">Contact</a></li>
                 
-                <!-- Downloads Menu with Teacher/Admin Upload Options -->
+                <!-- Downloads Menu -->
                 <li class="dropdown-parent">
                     <a href="#">Downloads ▾</a>
                     <div class="dropdown">
                         <ul>
-                            <!-- Regular Download Links (View Only) -->
                             <li><a href="notes.html">Notes</a></li>
                             <li><a href="project.html">Project Work</a></li>
-                            
-                            <!-- Teacher & Admin Exclusive Management Links -->
                             <li class="teacher-admin-only" style="display: none;">
                                 <a href="notes.html?mode=manage">📤 Upload Notes</a>
                             </li>
@@ -178,6 +180,7 @@
             </ul>
         </div>
     </nav>
+
     <!-- Dynamic Logged-in Profile & Logout Bar -->
     <div id="homeProfileBar" class="scolex-session-bar" style="display: none;">
         <div class="session-info">
@@ -206,7 +209,7 @@
             </div>
         </div>
 
-        <!-- Quick Portal Login Box Added on Right Side -->
+        <!-- Quick Portal Login Box -->
         <div class="home-portal-box">
             <h3>🔐 Quick Portals</h3>
             <p>Select your portal to login:</p>
@@ -361,7 +364,6 @@
                 <h3>📧 Email</h3>
                 <p>sarfaraz.faijee96@gmail.com</p>
 
-                <!-- ================= SOCIAL MEDIA & MAP BUTTONS ================= -->
                 <div class="social-buttons-container">
                     <div class="map-follow-container">
                         <b>Follow on Google Maps and Social Media</b>
@@ -385,12 +387,10 @@
                     <textarea name="message" rows="5" placeholder="Your Message"></textarea>
                     <button type="submit" id="submitBtn">Send Message</button>
                     
-                    <!-- WhatsApp Button -->
                     <a href="https://wa.me/qr/LX7TE4TQFLJWL1" target="_blank" class="social-link-wrapper">
                         <button type="button" class="link wa-btn">💬 Chat on WhatsApp</button>
                     </a>
 
-                    <!-- Call Me Now Button Added Below WhatsApp -->
                     <a href="tel:+917549656240" class="social-link-wrapper">
                         <button type="button" class="link call-btn">📞 Call Me Now</button>
                     </a>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Form - Scolex Computer Classes</title>
+    <!-- External CSS File Link -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="form-wrapper">
+        <div class="form-card">
+            
+            <!-- Custom Header Banner -->
+            <div class="header-banner">
+                <div class="heading-text">
+                    <h1>Scolex Computer Classes</h1>
+                    <h2>IACT (Institute for Advanced Computer Technology)</h2>
+                    <p class="location-text">Shanti Market, Main Road, Motipur</p>
+                </div>
+            </div>
+
+            <!-- Progress Indicator -->
+            <div class="step-indicator">
+                <span id="stepIndicatorText">Step 1 of 5: Personal Information</span>
+            </div>
+
+            <form id="applicationForm">
+
+                <!-- PART 1: Personal Information -->
+                <div class="form-step" id="step-1">
+                    <h5 class="section-title">👤 Personal Information</h5>
+                    <div class="grid-row">
+                        <div class="input-group">
+                            <label>Full Name *</label>
+                            <input type="text" placeholder="Enter Your Full Name" name="fullname" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Father's Name *</label>
+                            <input type="text" placeholder="Enter Your Father's Name" name="fathername" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Mobile Number *</label>
+                            <input type="tel" placeholder="Enter your Mobile number" name="mobile" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Email Address</label>
+                            <input type="email" placeholder="Enter Your Email Address" name="email">
+                        </div>
+                        <div class="input-group">
+                            <label>Date of Birth * (DD / MM / YYYY)</label>
+                            <div class="date-container">
+                                <select id="dob-day" required class="date-select"><option value="">DD</option></select>
+                                <select id="dob-month" required class="date-select"><option value="">MM</option></select>
+                                <select id="dob-year" required class="date-select"><option value="">YYYY</option></select>
+                                <input type="hidden" name="dob" id="dob">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Gender *</label>
+                            <select name="gender" required>
+                                <option value="">Select Gender</option>
+                                <option>Male</option>
+                                <option>Female</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Nationality</label>
+                            <select name="nationality">
+                                <option value="">Select Nationality</option>
+                                <option>Indian</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Category</label>
+                            <select name="category">
+                                <option value="">Select Category</option>
+                                <option>General</option>
+                                <option>OBC</option>
+                                <option>SC</option>
+                                <option>ST</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Aadhaar Number</label>
+                            <input type="text" name="aadharnumber" maxlength="12" placeholder="Enter Aadhaar Number">
+                        </div>
+                    </div>
+                    <div class="btn-container right">
+                        <button type="button" class="custom-btn next-btn">Save & Next ➔</button>
+                    </div>
+                </div>
+
+                <!-- PART 2: Educational Details -->
+                <div class="form-step hidden" id="step-2">
+                    <h5 class="section-title">🎓 Educational Details</h5>
+                    <div class="grid-row">
+                        <div class="input-group">
+                            <label>Highest Education *</label>
+                            <select name="education" required>
+                                <option value="">Select Education</option>
+                                <option>10th</option>
+                                <option>12th</option>
+                                <option>Graduate</option>
+                                <option>Post Graduate</option>
+                                <option>Diploma</option>
+                                <option>ITI</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>School / College Name *</label>
+                            <input type="text" name="college" placeholder="Enter School / College Name" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Board / University *</label>
+                            <input type="text" name="board" placeholder="Enter Board / University" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Passing Year *</label>
+                            <input type="number" name="passingyear" placeholder="2026" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Percentage / CGPA *</label>
+                            <input type="text" name="percentage" placeholder="Enter Percentage or CGPA" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Division / Grade</label>
+                            <select name="division">
+                                <option value="">Select Division / Grade</option>
+                                <option>First Division</option>
+                                <option>Second Division</option>
+                                <option>Third Division</option>
+                                <option>Distinction</option>
+                                <option>A+</option>
+                            </select>
+                        </div>      
+                        <div class="input-group">
+                            <label>Subjects / Stream</label>
+                            <input type="text" name="subjects" placeholder="Enter Subjects / Stream">
+                        </div>
+                    </div>
+                    <div class="btn-container between">
+                        <button type="button" class="custom-btn secondary prev-btn">⬅ Back</button>
+                        <button type="button" class="custom-btn next-btn">Save & Next ➔</button>
+                    </div>
+                </div>
+
+                <!-- PART 3: Course Details -->
+                <div class="form-step hidden" id="step-3">
+                    <h5 class="section-title">💻 Course Details</h5>
+                    <div class="grid-row">
+                        <div class="input-group">
+                            <label>Course Interested In *</label>
+                            <select name="courses" required>
+                                <option value="">Select Course</option>
+                                <option>DCA</option>
+                                <option>ADCA</option>
+                                <option>DTP</option>
+                                <option>TALLY WITH GST</option>
+                                <option>Python</option>
+                                <option>HTML & CSS</option>
+                                <option>Advanced Excel</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Batch Timing *</label>
+                            <select name="batch" required>
+                                <option value="">Select Batch</option>
+                                <option>Morning (7 AM - 9 AM)</option>
+                                <option>Morning (9 AM - 11 AM)</option>
+                                <option>Afternoon (12 PM - 2 PM)</option>
+                                <option>Evening (3 PM - 5 PM)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Learning Mode *</label>
+                            <select name="learningmode" required>
+                                <option value="">Select Mode</option>
+                                <option>Offline</option>
+                                <option>Online</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Preferred Contact</label>
+                            <select name="contact">
+                                <option>Email</option>
+                                <option>Phone</option>
+                                <option>WhatsApp</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="btn-container between">
+                        <button type="button" class="custom-btn secondary prev-btn">⬅ Back</button>
+                        <button type="button" class="custom-btn next-btn">Save & Next ➔</button>
+                    </div>
+                </div>
+
+                <!-- PART 4: Address Details -->
+                <div class="form-step hidden" id="step-4">
+                    <h5 class="section-title">📍 Address Details</h5>
+                    <div class="grid-row">
+                        <div class="input-group full-width">
+                            <label>Complete Address *</label>
+                            <textarea rows="3" name="address" placeholder="Enter Your Complete Address" required></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label>Pin Code *</label>
+                            <input type="text" name="pincode" maxlength="6" placeholder="Enter Pin Code" required>
+                        </div>
+                        <div class="input-group">
+                            <label>District *</label>
+                            <input type="text" name="district" placeholder="Enter District" required>
+                        </div>
+                        <div class="input-group">
+                            <label>State *</label>
+                            <input type="text" name="state" placeholder="Enter State" required>
+                        </div>
+                        <div class="input-group">
+                            <label>City / Town *</label>
+                            <input type="text" name="city" placeholder="Enter City / Town" required>
+                        </div>
+                    </div>
+                    <div class="btn-container between">
+                        <button type="button" class="custom-btn secondary prev-btn">⬅ Back</button>
+                        <button type="button" class="custom-btn next-btn">Save & Next ➔</button>
+                    </div>
+                </div>
+
+                <!-- PART 5: Upload Documents & Info -->
+                <div class="form-step hidden" id="step-5">
+                    <h5 class="section-title">📁 Upload Documents & Info</h5>
+                    <div class="grid-row">
+                        <div class="input-group">
+                            <label>Passport Size Photo *</label>
+                            <input type="file" name="photo" id="photo" accept="image/*" required>
+                            <div class="preview-box"><img id="photo-preview" class="preview-img hidden" alt="Preview"></div>
+                        </div>
+                        <div class="input-group">
+                            <label>Signature *</label>
+                            <input type="file" name="signature" id="signature" accept="image/*" required>
+                            <div class="preview-box"><img id="signature-preview" class="preview-img hidden" alt="Preview"></div>
+                        </div>
+                        <div class="input-group">
+                            <label>Marksheet</label>
+                            <input type="file" name="marksheet" id="marksheet" accept="image/*,.pdf">
+                            <div class="preview-box">
+                                <img id="marksheet-img-preview" class="preview-img hidden" alt="Preview">
+                                <span id="marksheet-pdf-preview" class="pdf-text hidden">📄 PDF Attached</span>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Aadhaar</label>
+                            <input type="file" name="certificate" id="certificate" accept="image/*,.pdf">
+                            <div class="preview-box">
+                                <img id="aadhaar-img-preview" class="preview-img hidden" alt="Preview">
+                                <span id="aadhaar-pdf-preview" class="pdf-text hidden">📄 PDF Attached</span>
+                            </div>
+                        </div>
+                        <div class="input-group full-width">
+                            <label>How did you hear about us? *</label>
+                            <select name="referral" required>
+                                <option value="">Select Option</option>
+                                <option>Social Media</option>
+                                <option>Friend / Family</option>
+                                <option>Pamphlet</option>
+                                <option>Walk-in</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="input-group full-width checkbox-group">
+                            <input type="checkbox" id="declaration" required>
+                            <label for="declaration">I hereby declare that the above information is true to the best of my knowledge.</label>
+                        </div>
+                    </div>
+                    <div class="btn-container between">
+                        <button type="button" class="custom-btn secondary prev-btn">⬅ Back</button>
+                        <button type="submit" class="custom-btn submit-btn">Submit Application</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <script src="admission.js"></script>
+</body>
+</html>

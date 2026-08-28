@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
             const userData = JSON.parse(studentDataStr);
             
-            // 1. Display User Name
+            // Display User Name
             const studentName = userData.name || userData.studentName || userData.username || "User";
             document.getElementById("profileName").textContent = studentName;
             
@@ -204,20 +204,18 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Optional event bindings for these dynamic menu triggers
+    // Direct redirection handlers for Admission ERP pages
     const viewAdmBtn = document.getElementById("admissionViewOpt");
     if (viewAdmBtn) {
-        viewAdmBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            alert("📋 Opening Admission Records View Panel...");
+        viewAdmBtn.addEventListener("click", () => {
+            window.location.href = "admission-manage.html";
         });
     }
 
     const editAdmBtn = document.getElementById("admissionEditOpt");
     if (editAdmBtn) {
-        editAdmBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            alert("✏️ Opening Admission Records Edit Panel (Admin Privilege)...");
+        editAdmBtn.addEventListener("click", () => {
+            window.location.href = "admission-manage.html";
         });
     }
 
@@ -226,22 +224,6 @@ document.addEventListener("DOMContentLoaded", function () {
         mockTestDetailsBtn.addEventListener("click", (e) => {
             e.preventDefault();
             alert("📊 Opening Question-wise Student Mock Test Analytics...");
-        });
-    }
-
-    const uploadNotesBtn = document.getElementById("uploadNotesOpt");
-    if (uploadNotesBtn) {
-        uploadNotesBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            alert("📤 Opening Notes Upload Utility...");
-        });
-    }
-
-    const uploadProjBtn = document.getElementById("uploadProjectOpt");
-    if (uploadProjBtn) {
-        uploadProjBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            alert("📤 Opening Project Work Upload Utility...");
         });
     }
 });
@@ -253,25 +235,26 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
     const userRole = localStorage.getItem("userRole");
     
-    // Add any filename here that you want to restrict behind login
+    // Restrict access behind login
     const protectedPages = [
         "dashboard.html",   
         "notes.html",       
         "project.html",
-        "mocktest.html"
+        "mocktest.html",
+        "admission-manage.html"
     ];
 
     const currentPath = window.location.pathname;
     const isProtectedPage = protectedPages.some(page => currentPath.includes(page));
 
-    // If the user tries to load a protected page directly without a session
+    // If attempting to load a protected page directly without authorization
     if (isProtectedPage && !userRole) {
         alert("⚠️ Access Denied! Please log in first to access this portal feature.");
         window.location.href = "login.html";
         return;
     }
 
-    // Intercept navigation link clicks across the site
+    // Intercept navigation links
     const navLinks = document.querySelectorAll("nav ul li a");
     navLinks.forEach(link => {
         const href = link.getAttribute("href");
