@@ -49,16 +49,13 @@ function scolexLogout() {
 async function fetchAdmissionData() {
     showTableLoading("⌛ Fetching live admission records from Google Sheets...");
 
-    // Check if the URL is configured
     if (GOOGLE_SCRIPT_URL && !GOOGLE_SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT")) {
         try {
-            // Using acts = read to fetch full ERP data
             const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=read`);
             const result = await response.json();
 
             if (result.success && Array.isArray(result.data)) {
-                admissionsList = result.data;
-                // Sync to local storage as offline backup
+                admissionsList = result.data.map(item => normalizeAdmissionRecord(item));
                 localStorage.setItem("scolexAdmissions", JSON.stringify(admissionsList));
                 renderTable(admissionsList);
                 updateStats();
@@ -69,7 +66,6 @@ async function fetchAdmissionData() {
         }
     }
 
-    // Fallback to LocalStorage or Mock Data if API fails or isn't configured
     loadLocalFallbackData();
 }
 
@@ -77,15 +73,37 @@ function fetchSheetAdmissions() {
     fetchAdmissionData();
 }
 
+// Normalize record: Determines Admission Mode based on entry origin/role rules
+// - Public / Student Portal / No Login = "Online"
+// - Admin / Teacher Login Entry = "Offline"
+function normalizeAdmissionRecord(item) {
+    let computedAdmissionMode = item.admissionMode;
+    
+    if (!computedAdmissionMode) {
+        // If submitted by teacher or admin login, count as Offline admission
+        if (item.source === "Admin" || item.source === "Teacher" || item.role === "admin" || item.role === "teacher") {
+            computedAdmissionMode = "Offline";
+        } else {
+            // Default public / student submissions count as Online admission
+            computedAdmissionMode = "Online";
+        }
+    }
+
+    return {
+        ...item,
+        learningmode: item.learningmode || "Offline",
+        admissionMode: computedAdmissionMode
+    };
+}
+
 function loadLocalFallbackData() {
     const storedData = localStorage.getItem("scolexAdmissions");
     
     if (storedData) {
-        admissionsList = JSON.parse(storedData);
+        admissionsList = JSON.parse(storedData).map(item => normalizeAdmissionRecord(item));
     } else {
-        // Fallback Default Mock Admissions for Scolex ERP using the data format requested
         admissionsList = [
-            {
+            normalizeAdmissionRecord({
                 rowId: 2,
                 timestamp: "2026-08-25T10:50:52.034Z",
                 appId: "SCC20260825162044",
@@ -97,7 +115,7 @@ function loadLocalFallbackData() {
                 gender: "Male",
                 nationality: "Indian",
                 category: "General",
-                aadharnumber: "********678", // Example masked number for fallback
+                aadharnumber: "********678",
                 education: "12th",
                 college: "NITISHWAR COLLEGE MUZAFFARPUR",
                 board: "BSEB, PATNA",
@@ -107,7 +125,8 @@ function loadLocalFallbackData() {
                 subjects: "SCIENCE",
                 courses: "ADCA",
                 batch: "Morning (7 AM - 9 AM)",
-                learningmode: "Offline",
+                learningmode: "Offline", // Study mode preference
+                admissionMode: "Online", // Submitted via public online portal
                 preferredcontact: "Phone",
                 address: "PREMI CHHARPA, BISHUNPUR MAHANAND, KANTI",
                 pincode: "843109",
@@ -115,13 +134,12 @@ function loadLocalFallbackData() {
                 state: "BIHAR",
                 city: "MUZAFFARPUR",
                 referral: "Friend / Family",
-                // Valid drive view links for testing parser
                 photoURL: "https://drive.google.com/file/d/1WSQh3hZTpxPNjg8gC_Gi1lZmozanpgfp/view?usp=drivesdk",
                 signURL: "https://drive.google.com/file/d/1ItRVOVD1CxU1MLTVywwF0UbGV8uPZWG5/view?usp=drivesdk",
                 marksheetURL: "https://drive.google.com/file/d/1dQS_xSYrmdrwl7nwZl_QHCUtASGSNojk/view?usp=drivesdk",
                 aadhaarURL: "https://drive.google.com/file/d/1vJVSC7_7rGTIyMvzvAj3Oe0Slk8ettqd/view?usp=drivesdk",
                 status: "Pending"
-            }
+            })
         ];
         localStorage.setItem("scolexAdmissions", JSON.stringify(admissionsList));
     }
@@ -134,20 +152,35 @@ function loadLocalFallbackData() {
 // 3. Update Dashboard Stats
 // ==========================================
 function updateStats() {
-    const totalEl = document.getElementById("totalStudentsCount") || document.getElementById("totalAppsCount");
-    const offlineEl = document.getElementById("offlineCount");
-    const onlineEl = document.getElementById("onlineCount");
+    const totalEl = document.getElementById("totalStudentsCount");
+    const approvedEl = document.getElementById("approvedCount");
+    const pendingEl = document.getElementById("pendingCount");
+    const rejectedEl = document.getElementById("rejectedCount");
 
     if (totalEl) totalEl.innerText = admissionsList.length;
-    if (offlineEl) offlineEl.innerText = admissionsList.filter(a => a.learningmode === "Offline").length;
-    if (onlineEl) onlineEl.innerText = admissionsList.filter(a => a.learningmode === "Online").length;
+    if (approvedEl) approvedEl.innerText = admissionsList.filter(a => a.status === 'Approved').length;
+    if (pendingEl) pendingEl.innerText = admissionsList.filter(a => (!a.status || a.status === 'Pending')).length;
+    if (rejectedEl) rejectedEl.innerText = admissionsList.filter(a => a.status === 'Rejected').length;
 }
 
 // ==========================================
-// 4. Render Table UI (Matching 7-Column Layout)
+// 4. ERP Tab Switching Functionality
+// ==========================================
+function switchErpTab(tabName) {
+    document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+    const targetPane = document.getElementById(`tab-${tabName}`);
+    if (targetPane) targetPane.classList.add('active');
+
+    event.currentTarget.classList.add('active');
+}
+
+// ==========================================
+// 5. Render Table UI
 // ==========================================
 function renderTable(data) {
-    const tbody = document.getElementById("studentTableBody") || document.getElementById("erpTableBody");
+    const tbody = document.getElementById("studentTableBody");
     if (!tbody) return;
 
     tbody.innerHTML = "";
@@ -160,22 +193,21 @@ function renderTable(data) {
 
     data.forEach((student, index) => {
         const tr = document.createElement("tr");
-        // Handle potential differences in ID field naming between Sheets and fallback
         const appId = student.appId || student.studentId || `SCC-${index + 1}`;
+        const admissionMode = student.admissionMode || "Online";
 
         tr.innerHTML = `
             <td><strong>${appId}</strong></td>
             <td>${student.fullname || ''}</td>
             <td>${student.courses || ''}</td>
             <td>${student.mobile || ''}</td>
-            <td><span class="badge">${student.learningmode || ''}</span></td>
+            <td><span class="badge">${admissionMode}</span></td>
             <td>${student.batch || ''}</td>
             <td>
                 <button class="action-btn btn-view" onclick="viewStudentDetails(${index})">👁️ View</button>
                 ${userRole === "admin" ? `
                     <button class="action-btn btn-edit" onclick="editStudentDetails(${index})">✏️ Edit</button>
                 ` : ''}
-                <!-- ERP Quick Status Update -->
                 <select class="action-select" style="margin-left:5px; padding:4px;" onchange="updateApplicationStatus(${index}, this.value)">
                     <option value="Pending" ${(student.status || 'Pending') === 'Pending' ? 'selected' : ''}>Pending</option>
                     <option value="Approved" ${student.status === 'Approved' ? 'selected' : ''}>Approved</option>
@@ -188,14 +220,14 @@ function renderTable(data) {
 }
 
 function showTableLoading(message) {
-    const tbody = document.getElementById("studentTableBody") || document.getElementById("erpTableBody");
+    const tbody = document.getElementById("studentTableBody");
     if (tbody) {
         tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 20px;">${message}</td></tr>`;
     }
 }
 
 // ==========================================
-// 5. Dynamic Search and Filtering
+// 6. Dynamic Search and Filtering (Mode Filter checks Admission Mode)
 // ==========================================
 function filterRecords() {
     const searchVal = (document.getElementById("searchInput")?.value || "").toLowerCase().trim();
@@ -203,7 +235,6 @@ function filterRecords() {
     const modeVal = document.getElementById("modeFilter")?.value || "";
 
     const filtered = admissionsList.filter(item => {
-        // Safety checks for undefined data
         const idStr = (item.appId || item.studentId || "").toLowerCase();
         const nameStr = (item.fullname || "").toLowerCase();
         const mobileStr = (item.mobile || "").toString();
@@ -214,7 +245,9 @@ function filterRecords() {
             mobileStr.includes(searchVal);
 
         const matchesCourse = courseVal === "" || item.courses === courseVal;
-        const matchesMode = modeVal === "" || item.learningmode === modeVal;
+        
+        // Mode filter works strictly on Admission Mode as requested
+        const matchesMode = modeVal === "" || (item.admissionMode || "").toLowerCase() === modeVal.toLowerCase();
 
         return matchesSearch && matchesCourse && matchesMode;
     });
@@ -223,43 +256,31 @@ function filterRecords() {
 }
 
 // ==========================================
-// 6. View & Edit Student Details Panel
+// 7. View & Edit Student Details Panel
 // ==========================================
 function setFieldValue(id, val) {
     const el = document.getElementById(id);
     if (el) el.value = val || "";
 }
 
-// ==============================================================================
-// FIX: Enhanced Google Drive Direct Image URL Extractor
-// Ensures compatibility with '<img>' tags by creating direct-download links
-// ==============================================================================
 function getDriveDirectUrl(url) {
     if (!url) return "";
-    
     let fileId = "";
-    
-    // Pattern 1: Standard view URL - drive.google.com/file/d/FILE_ID/view...
     const matchD = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
     if (matchD && matchD[1]) {
         fileId = matchD[1];
-    } 
-    // Pattern 2: Download/legacy URL - drive.google.com/open?id=FILE_ID
-    else {
+    } else {
         const matchId = url.match(/id=([a-zA-Z0-9_-]+)/);
         if (matchId && matchId[1]) {
             fileId = matchId[1];
         }
     }
-
     if (fileId) {
         return `https://lh3.googleusercontent.com/d/${fileId}=s1000`;
     }
-    
     return url;
 }
 
-// Format ISO date string (e.g., from Sheet) into readable date
 function formatReadableDate(dateStr) {
     if (!dateStr) return "";
     try {
@@ -272,8 +293,6 @@ function formatReadableDate(dateStr) {
 
 function populateForm(student, index) {
     setFieldValue("recordIndex", index);
-    setFieldValue("rowId", student.rowId);
-
     renderRightSideMedia(student);
 
     setFieldValue("timestamp", student.timestamp);
@@ -287,8 +306,6 @@ function populateForm(student, index) {
     setFieldValue("nationality", student.nationality || "Indian");
     setFieldValue("category", student.category || "General");
     
-    setFieldValue("aadharnumber", student.aadharnumber);
-    
     setFieldValue("education", student.education);
     setFieldValue("college", student.college);
     setFieldValue("board", student.board);
@@ -300,6 +317,7 @@ function populateForm(student, index) {
     setFieldValue("courses", student.courses || "ADCA");
     setFieldValue("batch", student.batch || "Morning (7 AM - 9 AM)");
     setFieldValue("learningmode", student.learningmode || "Offline");
+    setFieldValue("admissionMode", student.admissionMode || "Online");
     setFieldValue("preferredcontact", student.preferredcontact || "Phone");
     setFieldValue("referral", student.referral);
 
@@ -321,18 +339,14 @@ function renderRightSideMedia(student) {
     const photoSrc = getDriveDirectUrl(student.photoURL);
     const signSrc = getDriveDirectUrl(student.signURL);
 
-    if (photoImg) {
-        photoImg.src = photoSrc || "https://via.placeholder.com/150?text=No+Photo";
-    }
+    if (photoImg) photoImg.src = photoSrc || "https://via.placeholder.com/150?text=No+Photo";
     if (photoLinkBox) {
         photoLinkBox.innerHTML = student.photoURL 
             ? `<a href="${student.photoURL}" target="_blank" class="btn-doc-link" style="display:inline-block; font-size:11px; padding:4px 8px;">Open Full Photo</a>` 
             : '<span style="color:#94a3b8; font-size:11px;">Not Uploaded</span>';
     }
 
-    if (signImg) {
-        signImg.src = signSrc || "https://via.placeholder.com/150?text=No+Signature";
-    }
+    if (signImg) signImg.src = signSrc || "https://via.placeholder.com/150?text=No+Signature";
     if (signLinkBox) {
         signLinkBox.innerHTML = student.signURL 
             ? `<a href="${student.signURL}" target="_blank" class="btn-doc-link" style="display:inline-block; font-size:11px; padding:4px 8px;">Open Full Sign</a>` 
@@ -363,7 +377,13 @@ function viewStudentDetails(index) {
     if (!student) return;
 
     populateForm(student, index);
+    switchErpTab('admission');
     
+    document.querySelectorAll('.tab-btn').forEach((b, idx) => {
+        if(idx === 0) b.classList.add('active');
+        else b.classList.remove('active');
+    });
+
     const panelTitle = document.getElementById("panelTitle");
     if (panelTitle) {
         panelTitle.innerText = `📋 Viewing ERP Record: ${student.fullname || ''} (${student.appId || student.studentId || ''})`;
@@ -414,7 +434,7 @@ function toggleFormInputs(readOnlyState) {
     const selects = document.querySelectorAll("#erpRecordForm select");
 
     inputs.forEach(input => {
-        if (input.id !== "studentId" && input.id !== "timestamp" && input.id !== "aadharnumber") {
+        if (input.id !== "studentId" && input.id !== "timestamp") {
             input.readOnly = readOnlyState;
         }
     });
@@ -427,7 +447,7 @@ function closeDetailPanel() {
 }
 
 // ==========================================
-// 7. Save Record Updates (ERP & Sheets)
+// 8. Save Record Updates
 // ==========================================
 function getFieldValue(id) {
     const el = document.getElementById(id);
@@ -458,6 +478,7 @@ async function saveAdmissionRecord() {
         courses: getFieldValue("courses"),
         batch: getFieldValue("batch"),
         learningmode: getFieldValue("learningmode"),
+        admissionMode: getFieldValue("admissionMode"),
         preferredcontact: getFieldValue("preferredcontact"),
         referral: getFieldValue("referral"),
         address: getFieldValue("address"),
@@ -481,6 +502,7 @@ async function updateApplicationStatus(index, newStatus) {
 
     student.status = newStatus;
     localStorage.setItem("scolexAdmissions", JSON.stringify(admissionsList));
+    updateStats();
 
     if (student.rowId && GOOGLE_SCRIPT_URL && !GOOGLE_SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT")) {
         try {

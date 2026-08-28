@@ -5,227 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admission Management ERP - Scolex Computer Classes</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .erp-container {
-            max-width: 1250px;
-            margin: 20px auto;
-            padding: 20px;
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        .erp-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #004085;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        .stat-card {
-            background: #f8f9fa;
-            border-left: 4px solid #004085;
-            padding: 15px;
-            border-radius: 4px;
-        }
-        .stat-card h4 { margin: 0 0 5px 0; color: #555; }
-        .stat-card span { font-size: 22px; font-weight: bold; color: #004085; }
-        
-        .toolbar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .toolbar input, .toolbar select {
-            padding: 8px 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            flex: 1;
-            min-width: 200px;
-        }
-        
-        .erp-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        .erp-table th, .erp-table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-            font-size: 14px;
-        }
-        .erp-table th {
-            background-color: #004085;
-            color: white;
-        }
-        .erp-table tr:nth-child(even) { background-color: #f9f9f9; }
-        .erp-table tr:hover { background-color: #f1f1f1; }
-        
-        .action-btn {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            margin-right: 5px;
-        }
-        .btn-view { background: #17a2b8; color: white; }
-        .btn-edit { background: #ffc107; color: black; }
-        .btn-save { background: #28a745; color: white; }
-        .btn-cancel { background: #dc3545; color: white; }
-
-        /* Full One-Page ERP Detail Layout */
-        .record-card {
-            background: #fff;
-            border: 1px solid #004085;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-        .record-card h3 {
-            margin-top: 0;
-            color: #004085;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 8px;
-        }
-
-        /* Two Column Layout: Left Form (Flex) | Right Photo + Signature Side Panel */
-        .erp-details-wrapper {
-            display: flex;
-            gap: 20px;
-            align-items: flex-start;
-            margin-top: 15px;
-        }
-        .erp-form-content {
-            flex: 1;
-            min-width: 0;
-        }
-        .erp-photo-sidebar {
-            width: 220px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            padding: 15px;
-            border-radius: 8px;
-        }
-        .sidebar-box {
-            background: #ffffff;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            padding: 10px;
-            text-align: center;
-        }
-        .sidebar-box label {
-            font-size: 12px;
-            font-weight: bold;
-            color: #004085;
-            display: block;
-            margin-bottom: 8px;
-        }
-        .sidebar-box img {
-            width: 100%;
-            height: 150px;
-            object-fit: contain;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            background: #f1f5f9;
-        }
-
-        .section-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-        .form-field {
-            display: flex;
-            flex-direction: column;
-        }
-        .form-field label {
-            font-weight: bold;
-            font-size: 12px;
-            color: #555;
-            margin-bottom: 3px;
-        }
-        .form-field input, .form-field select {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .form-field input[readonly], .form-field select[disabled] {
-            background-color: #e9ecef;
-        }
-
-        /* Bottom Documents Section */
-        .bottom-docs-section {
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 2px dashed #004085;
-        }
-        .docs-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
-            margin-top: 10px;
-        }
-        .doc-card {
-            background: #f8fafc;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .doc-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .doc-icon {
-            font-size: 32px;
-        }
-        .doc-title {
-            font-size: 14px;
-            font-weight: bold;
-            color: #1e293b;
-        }
-        .btn-doc-link {
-            padding: 6px 14px;
-            background-color: #004085;
-            color: #ffffff;
-            font-size: 12px;
-            text-decoration: none;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-        .btn-doc-link:hover {
-            background-color: #002752;
-        }
-
-        @media (max-width: 850px) {
-            .erp-details-wrapper {
-                flex-direction: column-reverse;
-            }
-            .erp-photo-sidebar {
-                width: 100%;
-                flex-direction: row;
-            }
-            .sidebar-box {
-                flex: 1;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/erp-details.css">
 </head>
 <body>
 
@@ -245,16 +25,20 @@
         <!-- Quick Statistics -->
         <div class="stats-grid">
             <div class="stat-card">
-                <h4>Total Admissions</h4>
+                <h4>Total Admission</h4>
                 <span id="totalStudentsCount">0</span>
             </div>
-            <div class="stat-card">
-                <h4>Offline Mode</h4>
-                <span id="offlineCount">0</span>
+            <div class="stat-card" style="border-left-color: #28a745;">
+                <h4>Approved</h4>
+                <span id="approvedCount">0</span>
             </div>
-            <div class="stat-card">
-                <h4>Online Mode</h4>
-                <span id="onlineCount">0</span>
+            <div class="stat-card" style="border-left-color: #ffc107;">
+                <h4>Pending</h4>
+                <span id="pendingCount">0</span>
+            </div>
+            <div class="stat-card" style="border-left-color: #dc3545;">
+                <h4>Rejected</h4>
+                <span id="rejectedCount">0</span>
             </div>
         </div>
 
@@ -287,7 +71,7 @@
                         <th>Full Name</th>
                         <th>Course</th>
                         <th>Mobile</th>
-                        <th>Mode</th>
+                        <th>Admission Mode</th>
                         <th>Batch</th>
                         <th>Actions</th>
                     </tr>
@@ -308,211 +92,266 @@
                 </div>
             </div>
 
+            <!-- Tab Navigation Bar -->
+            <div class="erp-tabs">
+                <button type="button" class="tab-btn active" onclick="switchErpTab('admission')">Admission Details</button>
+                <button type="button" class="tab-btn" onclick="switchErpTab('fee')">Fee Details</button>
+                <button type="button" class="tab-btn" onclick="switchErpTab('status')">Course Status and Certification</button>
+            </div>
+
             <form id="erpRecordForm" onsubmit="event.preventDefault(); saveAdmissionRecord();">
                 <!-- Hidden Index Tracker -->
                 <input type="hidden" id="recordIndex">
 
-                <div class="erp-details-wrapper">
-                    <!-- Left Column: Student Details Form -->
-                    <div class="erp-form-content">
-                        <!-- 👤 Personal Information -->
-                        <h4 style="color: #004085; margin-top: 10px;">👤 Personal Details</h4>
-                        <div class="section-grid">
-                            <div class="form-field">
-                                <label>Application ID</label>
-                                <input type="text" id="studentId" readonly>
+                <!-- TAB 1: Admission Details -->
+                <div id="tab-admission" class="tab-pane active">
+                    <div class="erp-details-wrapper">
+                        <!-- Left Column: Student Details Form -->
+                        <div class="erp-form-content">
+                            <!-- 👤 Personal Information -->
+                            <h4 style="color: #004085; margin-top: 10px;">👤 Personal Details</h4>
+                            <div class="section-grid">
+                                <div class="form-field">
+                                    <label>Application ID</label>
+                                    <input type="text" id="studentId" readonly>
+                                </div>
+                                <div class="form-field">
+                                    <label>Submission Timestamp</label>
+                                    <input type="text" id="timestamp" readonly>
+                                </div>
+                                <div class="form-field">
+                                    <label>Full Name</label>
+                                    <input type="text" id="fullname" readonly required>
+                                </div>
+                                <div class="form-field">
+                                    <label>Father's Name</label>
+                                    <input type="text" id="fathername" readonly required>
+                                </div>
+                                <div class="form-field">
+                                    <label>Mobile Number</label>
+                                    <input type="tel" id="mobile" readonly required>
+                                </div>
+                                <div class="form-field">
+                                    <label>Email Address</label>
+                                    <input type="email" id="email" readonly>
+                                </div>
+                                <div class="form-field">
+                                    <label>Date of Birth</label>
+                                    <input type="text" id="dob" readonly>
+                                </div>
+                                <div class="form-field">
+                                    <label>Gender</label>
+                                    <select id="gender" disabled required>
+                                        <option>Male</option>
+                                        <option>Female</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-field">
+                                    <label>Nationality</label>
+                                    <input type="text" id="nationality" readonly>
+                                </div>
+                                <div class="form-field">
+                                    <label>Category</label>
+                                    <select id="category" disabled>
+                                        <option>General</option>
+                                        <option>OBC</option>
+                                        <option>SC</option>
+                                        <option>ST</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="form-field">
-                                <label>Submission Timestamp</label>
-                                <input type="text" id="timestamp" readonly>
+
+                            <!-- 🎓 Educational Details -->
+                            <h4 style="color: #004085; margin-top: 15px;">🎓 Educational Background</h4>
+                            <div class="section-grid">
+                                <div class="form-field">
+                                    <label>Highest Qualification</label>
+                                    <input type="text" id="education" readonly>
+                                </div>
+                                <div class="form-field">
+                                    <label>School / College</label>
+                                    <input type="text" id="college" readonly>
+                                </div>
+                                <div class="form-field">
+                                    <label>Board / University</label>
+                                    <input type="text" id="board" readonly>
+                                </div>
+                                <div class="form-field">
+                                    <label>Passing Year</label>
+                                    <input type="text" id="passingyear" readonly>
+                                </div>
+                                <div class="form-field">
+                                    <label>Percentage / CGPA</label>
+                                    <input type="text" id="percentage" readonly>
+                                </div>
+                                <div class="form-field">
+                                    <label>Division / Grade</label>
+                                    <input type="text" id="division" readonly>
+                                </div>
+                                <div class="form-field">
+                                    <label>Subjects / Stream</label>
+                                    <input type="text" id="subjects" readonly>
+                                </div>
                             </div>
-                            <div class="form-field">
-                                <label>Full Name</label>
-                                <input type="text" id="fullname" readonly required>
+
+                            <!-- 💻 Course & Preference Details -->
+                            <h4 style="color: #004085; margin-top: 15px;">💻 Course Enrollment & Preferences</h4>
+                            <div class="section-grid">
+                                <div class="form-field">
+                                    <label>Enrolled Course</label>
+                                    <select id="courses" disabled required>
+                                        <option>DCA</option>
+                                        <option>ADCA</option>
+                                        <option>DTP</option>
+                                        <option>TALLY WITH GST</option>
+                                        <option>Python</option>
+                                        <option>HTML & CSS</option>
+                                    </select>
+                                </div>
+                                <div class="form-field">
+                                    <label>Batch Timing</label>
+                                    <select id="batch" disabled required>
+                                        <option>Morning (7 AM - 9 AM)</option>
+                                        <option>Morning (9 AM - 11 AM)</option>
+                                        <option>Afternoon (12 PM - 2 PM)</option>
+                                        <option>Evening (3 PM - 5 PM)</option>
+                                    </select>
+                                </div>
+                                <div class="form-field">
+                                    <label>Learning Mode</label>
+                                    <select id="learningmode" disabled required>
+                                        <option>Online</option>
+                                        <option>Offline</option>
+                                    </select>
+                                </div>
+                                <div class="form-field">
+                                    <label>Admission Mode</label>
+                                    <select id="admissionMode" disabled required>
+                                        <option>Online</option>
+                                        <option>Offline</option>
+                                    </select>
+                                </div>
+                                <div class="form-field">
+                                    <label>Preferred Contact</label>
+                                    <input type="text" id="preferredcontact" readonly>
+                                </div>
+                                <div class="form-field">
+                                    <label>Referral Source</label>
+                                    <input type="text" id="referral" readonly>
+                                </div>
                             </div>
-                            <div class="form-field">
-                                <label>Father's Name</label>
-                                <input type="text" id="fathername" readonly required>
-                            </div>
-                            <div class="form-field">
-                                <label>Mobile Number</label>
-                                <input type="tel" id="mobile" readonly required>
-                            </div>
-                            <div class="form-field">
-                                <label>Email Address</label>
-                                <input type="email" id="email" readonly>
-                            </div>
-                            <div class="form-field">
-                                <label>Date of Birth</label>
-                                <input type="text" id="dob" readonly>
-                            </div>
-                            <div class="form-field">
-                                <label>Gender</label>
-                                <select id="gender" disabled required>
-                                    <option>Male</option>
-                                    <option>Female</option>
-                                    <option>Other</option>
-                                </select>
-                            </div>
-                            <div class="form-field">
-                                <label>Nationality</label>
-                                <input type="text" id="nationality" readonly>
-                            </div>
-                            <div class="form-field">
-                                <label>Category</label>
-                                <select id="category" disabled>
-                                    <option>General</option>
-                                    <option>OBC</option>
-                                    <option>SC</option>
-                                    <option>ST</option>
-                                </select>
+
+                            <!-- 📍 Address Details -->
+                            <h4 style="color: #004085; margin-top: 15px;">📍 Address Information</h4>
+                            <div class="section-grid">
+                                <div class="form-field" style="grid-column: span 2;">
+                                    <label>Complete Address</label>
+                                    <input type="text" id="address" readonly>
+                                </div>
+                                <div class="form-field">
+                                    <label>City / Town</label>
+                                    <input type="text" id="city" readonly>
+                                </div>
+                                <div class="form-field">
+                                    <label>District</label>
+                                    <input type="text" id="district" readonly>
+                                </div>
+                                <div class="form-field">
+                                    <label>State</label>
+                                    <input type="text" id="state" readonly>
+                                </div>
+                                <div class="form-field">
+                                    <label>Pin Code</label>
+                                    <input type="text" id="pincode" readonly>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- 🎓 Educational Details -->
-                        <h4 style="color: #004085; margin-top: 15px;">🎓 Educational Background</h4>
-                        <div class="section-grid">
-                            <div class="form-field">
-                                <label>Highest Qualification</label>
-                                <input type="text" id="education" readonly>
+                        <!-- Right Column: Profile Photo & Signature Side Panel -->
+                        <div class="erp-photo-sidebar">
+                            <div class="sidebar-box">
+                                <label>📷 Profile Photo</label>
+                                <img id="studentPhotoImg" src="https://via.placeholder.com/150?text=No+Photo" alt="Student Photo" onerror="this.src='https://via.placeholder.com/150?text=Photo+Unavailable'">
+                                <div id="photoLinkBox" style="margin-top: 8px;"></div>
                             </div>
-                            <div class="form-field">
-                                <label>School / College</label>
-                                <input type="text" id="college" readonly>
-                            </div>
-                            <div class="form-field">
-                                <label>Board / University</label>
-                                <input type="text" id="board" readonly>
-                            </div>
-                            <div class="form-field">
-                                <label>Passing Year</label>
-                                <input type="text" id="passingyear" readonly>
-                            </div>
-                            <div class="form-field">
-                                <label>Percentage / CGPA</label>
-                                <input type="text" id="percentage" readonly>
-                            </div>
-                            <div class="form-field">
-                                <label>Division / Grade</label>
-                                <input type="text" id="division" readonly>
-                            </div>
-                            <div class="form-field">
-                                <label>Subjects / Stream</label>
-                                <input type="text" id="subjects" readonly>
-                            </div>
-                        </div>
-
-                        <!-- 💻 Course & Preference Details -->
-                        <h4 style="color: #004085; margin-top: 15px;">💻 Course Enrollment & Preferences</h4>
-                        <div class="section-grid">
-                            <div class="form-field">
-                                <label>Enrolled Course</label>
-                                <select id="courses" disabled required>
-                                    <option>DCA</option>
-                                    <option>ADCA</option>
-                                    <option>DTP</option>
-                                    <option>TALLY WITH GST</option>
-                                    <option>Python</option>
-                                    <option>HTML & CSS</option>
-                                </select>
-                            </div>
-                            <div class="form-field">
-                                <label>Batch Timing</label>
-                                <select id="batch" disabled required>
-                                    <option>Morning (7 AM - 9 AM)</option>
-                                    <option>Morning (9 AM - 11 AM)</option>
-                                    <option>Afternoon (12 PM - 2 PM)</option>
-                                    <option>Evening (3 PM - 5 PM)</option>
-                                </select>
-                            </div>
-                            <div class="form-field">
-                                <label>Learning Mode</label>
-                                <select id="learningmode" disabled required>
-                                    <option>Online</option>
-                                    <option>Offline</option>
-                                </select>
-                            </div>
-                            <div class="form-field">
-                                <label>Preferred Contact</label>
-                                <input type="text" id="preferredcontact" readonly>
-                            </div>
-                            <div class="form-field">
-                                <label>Referral Source</label>
-                                <input type="text" id="referral" readonly>
-                            </div>
-                        </div>
-
-                        <!-- 📍 Address Details -->
-                        <h4 style="color: #004085; margin-top: 15px;">📍 Address Information</h4>
-                        <div class="section-grid">
-                            <div class="form-field" style="grid-column: span 2;">
-                                <label>Complete Address</label>
-                                <input type="text" id="address" readonly>
-                            </div>
-                            <div class="form-field">
-                                <label>City / Town</label>
-                                <input type="text" id="city" readonly>
-                            </div>
-                            <div class="form-field">
-                                <label>District</label>
-                                <input type="text" id="district" readonly>
-                            </div>
-                            <div class="form-field">
-                                <label>State</label>
-                                <input type="text" id="state" readonly>
-                            </div>
-                            <div class="form-field">
-                                <label>Pin Code</label>
-                                <input type="text" id="pincode" readonly>
+                            <div class="sidebar-box">
+                                <label>✍️ Student Signature</label>
+                                <img id="studentSignImg" src="https://via.placeholder.com/150?text=No+Signature" alt="Signature" style="object-fit: contain; background: #fff; height: 90px;" onerror="this.src='https://via.placeholder.com/150?text=Sign+Unavailable'">
+                                <div id="signLinkBox" style="margin-top: 8px;"></div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Right Column: Profile Photo & Signature Side Panel -->
-                    <div class="erp-photo-sidebar">
-                        <div class="sidebar-box">
-                            <label>📷 Profile Photo</label>
-                            <img id="studentPhotoImg" src="https://via.placeholder.com/150?text=No+Photo" alt="Student Photo" onerror="this.src='https://via.placeholder.com/150?text=Photo+Unavailable'">
-                            <div id="photoLinkBox" style="margin-top: 8px;"></div>
-                        </div>
-                        <div class="sidebar-box">
-                            <label>✍️ Student Signature</label>
-                            <img id="studentSignImg" src="https://via.placeholder.com/150?text=No+Signature" alt="Signature" style="object-fit: contain; background: #fff; height: 90px;" onerror="this.src='https://via.placeholder.com/150?text=Sign+Unavailable'">
-                            <div id="signLinkBox" style="margin-top: 8px;"></div>
+                    <!-- Bottom Documents Section -->
+                    <div class="bottom-docs-section">
+                        <h4 style="color: #004085; margin: 0 0 10px 0;">📑 Student Documents & Certificates</h4>
+                        <div class="docs-grid">
+                            <div class="doc-card">
+                                <div class="doc-info">
+                                    <div class="doc-icon">📄</div>
+                                    <div>
+                                        <div class="doc-title">Educational Marksheet</div>
+                                        <span style="font-size:12px; color:#64748b;">Board / Final Marksheet</span>
+                                    </div>
+                                </div>
+                                <div id="marksheetActionBox">
+                                    <span style="color:#94a3b8; font-size:12px;">Not Available</span>
+                                </div>
+                            </div>
+
+                            <div class="doc-card">
+                                <div class="doc-info">
+                                    <div class="doc-icon">🪪</div>
+                                    <div>
+                                        <div class="doc-title">ID Proof Document</div>
+                                        <span style="font-size:12px; color:#64748b;">Verification Document</span>
+                                    </div>
+                                </div>
+                                <div id="aadhaarActionBox">
+                                    <span style="color:#94a3b8; font-size:12px;">Not Available</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Bottom Documents Section -->
-                <div class="bottom-docs-section">
-                    <h4 style="color: #004085; margin: 0 0 10px 0;">📑 Student Documents & Certificates</h4>
-                    <div class="docs-grid">
-                        <!-- Marksheet Document Box -->
-                        <div class="doc-card">
-                            <div class="doc-info">
-                                <div class="doc-icon">📄</div>
-                                <div>
-                                    <div class="doc-title">Educational Marksheet</div>
-                                    <span style="font-size:12px; color:#64748b;">Board / Final Marksheet</span>
-                                </div>
-                            </div>
-                            <div id="marksheetActionBox">
-                                <span style="color:#94a3b8; font-size:12px;">Not Available</span>
-                            </div>
+                <!-- TAB 2: Fee Details -->
+                <div id="tab-fee" class="tab-pane">
+                    <h4 style="color: #004085;">💳 Fee Ledger & Payment Tracking</h4>
+                    <p style="color: #64748b; font-size: 14px;">Fee payment records and installment tracking will appear here.</p>
+                    <div class="section-grid" style="margin-top: 15px;">
+                        <div class="form-field">
+                            <label>Total Course Fee</label>
+                            <input type="text" value="₹ 5,500" readonly>
                         </div>
+                        <div class="form-field">
+                            <label>Paid Amount</label>
+                            <input type="text" value="₹ 2,000" readonly>
+                        </div>
+                        <div class="form-field">
+                            <label>Due Balance</label>
+                            <input type="text" value="₹ 3,500" readonly style="color: #dc3545; font-weight: bold;">
+                        </div>
+                    </div>
+                </div>
 
-                        <!-- Identification Document Box -->
-                        <div class="doc-card">
-                            <div class="doc-info">
-                                <div class="doc-icon">🪪</div>
-                                <div>
-                                    <div class="doc-title">ID Proof Document</div>
-                                    <span style="font-size:12px; color:#64748b;">Verification Document</span>
-                                </div>
-                            </div>
-                            <div id="aadhaarActionBox">
-                                <span style="color:#94a3b8; font-size:12px;">Not Available</span>
-                            </div>
+                <!-- TAB 3: Course Status and Certification -->
+                <div id="tab-status" class="tab-pane">
+                    <h4 style="color: #004085;">🏆 Course Progress & Certification Status</h4>
+                    <p style="color: #64748b; font-size: 14px;">Track module completion, exam results, and certificate generation status.</p>
+                    <div class="section-grid" style="margin-top: 15px;">
+                        <div class="form-field">
+                            <label>Current Status</label>
+                            <input type="text" value="Active / Ongoing" readonly>
+                        </div>
+                        <div class="form-field">
+                            <label>Exam Assessment</label>
+                            <input type="text" value="Pending" readonly>
+                        </div>
+                        <div class="form-field">
+                            <label>Certificate Issued</label>
+                            <input type="text" value="No" readonly>
                         </div>
                     </div>
                 </div>
