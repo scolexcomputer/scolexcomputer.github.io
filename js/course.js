@@ -246,7 +246,7 @@ function renderCourse(courseKey, element) {
         </div>
 
         <div class="footer">
-            <a href="../html/page.html" class="btn">Apply for Admission</a>
+            <a href="../html/admission.html" class="btn">Apply for Admission</a>
         </div>
     `;
 }

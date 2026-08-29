@@ -1,7 +1,7 @@
 // =====================================
 // Google Apps Script Web App URL
 // =====================================
-const scriptURL = "https://script.google.com/macros/s/AKfycbzN1aHBLQIz2-KJhFZvOa02LTw_jdLQrtNi0_BbwxRq5mds-sQ6ezP22b3xGRkLLXT0/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbzK1ngZb-H6GtaS4fpcXAQFuT23faj2-bcvOAb5x6nnlinZw3Qdwvyuylylwi06FcP2/exec";
 
 let currentStep = 1;
 const totalSteps = 5;

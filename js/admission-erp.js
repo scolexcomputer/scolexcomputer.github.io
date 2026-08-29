@@ -78,21 +78,36 @@ function fetchSheetAdmissions() {
 // - Admin / Teacher Login Entry = "Offline"
 function normalizeAdmissionRecord(item) {
     let computedAdmissionMode = item.admissionMode;
-    
-    if (!computedAdmissionMode) {
-        // If submitted by teacher or admin login, count as Offline admission
-        if (item.source === "Admin" || item.source === "Teacher" || item.role === "admin" || item.role === "teacher") {
-            computedAdmissionMode = "Offline";
-        } else {
-            // Default public / student submissions count as Online admission
-            computedAdmissionMode = "Online";
-        }
+
+    // Clear admissionMode if it accidentally received application status strings
+    if (computedAdmissionMode === "Approved" || computedAdmissionMode === "Pending" || computedAdmissionMode === "Rejected") {
+        computedAdmissionMode = null;
+    }
+
+    const role = (item.role || "").toLowerCase();
+    const source = (item.source || "").toLowerCase();
+
+    // Check if entry was created by Admin or Teacher session
+    if (
+        role === "admin" || 
+        role === "teacher" || 
+        role === "staff" ||
+        source.includes("admin") || 
+        source.includes("teacher") || 
+        source.includes("staff") ||
+        source.includes("offline")
+    ) {
+        computedAdmissionMode = "Offline";
+    } else if (!computedAdmissionMode) {
+        // Default public / student submissions count as Online admission
+        computedAdmissionMode = "Online";
     }
 
     return {
         ...item,
         learningmode: item.learningmode || "Offline",
-        admissionMode: computedAdmissionMode
+        admissionMode: computedAdmissionMode,
+        status: item.status || "Pending" // Keep approval status strictly in the status field
     };
 }
 
@@ -186,7 +201,7 @@ function renderTable(data) {
     tbody.innerHTML = "";
     const userRole = localStorage.getItem("userRole");
 
-    if (data.length === 0) {
+    if (!data || data.length === 0) {
         tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 20px;">No student admission records found.</td></tr>`;
         return;
     }
@@ -194,14 +209,16 @@ function renderTable(data) {
     data.forEach((student, index) => {
         const tr = document.createElement("tr");
         const appId = student.appId || student.studentId || `SCC-${index + 1}`;
-        const admissionMode = student.admissionMode || "Online";
+        
+        // Strict mapping: display only "Offline" or "Online" in the Mode column
+        const displayMode = (student.admissionMode === "Offline") ? "Offline" : "Online";
 
         tr.innerHTML = `
             <td><strong>${appId}</strong></td>
             <td>${student.fullname || ''}</td>
             <td>${student.courses || ''}</td>
             <td>${student.mobile || ''}</td>
-            <td><span class="badge">${admissionMode}</span></td>
+            <td><span class="badge">${displayMode}</span></td>
             <td>${student.batch || ''}</td>
             <td>
                 <button class="action-btn btn-view" onclick="viewStudentDetails(${index})">👁️ View</button>
