@@ -162,6 +162,13 @@ form.addEventListener("submit", async function(e) {
             readFile(photoFile), readFile(signatureFile), readFile(marksheetFile), readFile(certificateFile)
         ]);
 
+        // Dynamic Role & Admission Mode Detection
+        const currentUserRole = (localStorage.getItem("userRole") || "student").toLowerCase();
+        const currentUserName = localStorage.getItem("userName") || "Public Student";
+        const computedAdmissionMode = (currentUserRole === "admin" || currentUserRole === "teacher" || currentUserRole === "staff")
+            ? "Offline"
+            : "Online";
+
         const data = {
             fullname: form.fullname.value,
             fathername: form.fathername.value,
@@ -182,6 +189,13 @@ form.addEventListener("submit", async function(e) {
             courses: form.courses.value,
             batch: form.batch.value,
             learningmode: form.learningmode.value,
+            
+            // Admission origin tracking
+            admissionMode: computedAdmissionMode,
+            role: currentUserRole,
+            submittedBy: currentUserName,
+            source: (currentUserRole === "admin" || currentUserRole === "teacher" || currentUserRole === "staff") ? "Staff Entry" : "Online Form",
+
             contact: form.contact.value,
             address: form.address.value,
             pincode: form.pincode.value,
@@ -205,6 +219,11 @@ form.addEventListener("submit", async function(e) {
 
         // Save submitted data locally to browser storage
         localStorage.setItem("ScolexStudentSavedData", JSON.stringify(data));
+
+        // Sync with existing ERP storage list
+        const existingErpData = JSON.parse(localStorage.getItem("scolexAdmissions") || "[]");
+        existingErpData.push(data);
+        localStorage.setItem("scolexAdmissions", JSON.stringify(existingErpData));
 
         const response = await fetch(scriptURL, { method: "POST", body: new URLSearchParams(data) });
         const result = await response.json();
