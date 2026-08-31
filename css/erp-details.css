@@ -249,3 +249,882 @@
         flex: 1;
     }
 }
+/* ==========================================================================
+   FEE DETAILS & RECEIPT MODULE STYLES
+   ========================================================================== */
+
+/* --- Container & Layout --- */
+.fee-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    margin-top: 15px;
+}
+
+.fee-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+}
+
+.fee-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #0f172a;
+    font-weight: 700;
+}
+
+/* --- Fee Overview Cards --- */
+.fee-summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.fee-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+}
+
+.fee-card .card-label {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.fee-card .card-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.fee-card.highlight-paid .card-value { color: #166534; }
+.fee-card.highlight-pending .card-value { color: #b45309; }
+
+/* --- 5-Installment Tabs --- */
+.installment-tabs {
+    display: flex;
+    gap: 10px;
+    border-bottom: 2px solid #e2e8f0;
+    margin-bottom: 24px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+}
+
+.installment-tab {
+    padding: 10px 18px;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #475569;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.installment-tab:hover {
+    background: #e2e8f0;
+}
+
+.installment-tab.active {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+}
+
+.installment-tab.paid {
+    border-top: 3px solid #22c55e;
+}
+
+/* --- Active Installment Details Box --- */
+.installment-details-box {
+    background-color: #fafafa;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.inst-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.inst-info-item label {
+    font-size: 0.8rem;
+    color: #64748b;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.inst-info-item span {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #1e293b;
+}
+
+/* --- Status Pills --- */
+.status-pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-pill.paid {
+    background-color: #dcfce7;
+    color: #15803d;
+}
+
+.status-pill.pending {
+    background-color: #fef3c7;
+    color: #b45309;
+}
+
+/* --- Payment Form Controls --- */
+.fee-form-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    align-items: end;
+    margin-top: 16px;
+}
+
+.fee-form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.fee-form-group input,
+.fee-form-group select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+
+.radio-group {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding-top: 8px;
+}
+
+.radio-group label {
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 0;
+}
+
+/* --- Action Buttons --- */
+.fee-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.btn-fee-pay {
+    background-color: #16a34a;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-fee-pay:hover { background-color: #15803d; }
+
+.btn-fee-print {
+    background-color: #0284c7;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-fee-print:hover { background-color: #0369a1; }
+
+/* --- Previous Payments Table --- */
+.previous-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+.previous-table th, 
+.previous-table td {
+    padding: 10px 12px;
+    border: 1px solid #e2e8f0;
+    text-align: left;
+}
+
+.previous-table th {
+    background-color: #f8fafc;
+    color: #475569;
+    font-weight: 600;
+}
+
+.previous-total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    padding: 10px 12px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-top: none;
+}
+
+.no-payment {
+    color: #94a3b8;
+    font-style: italic;
+    font-size: 0.875rem;
+    padding: 8px 0;
+}
+
+/* --- Official Receipt Card --- */
+.fee-receipt-card {
+    display: none;
+    background: #ffffff;
+    border: 2px dashed #94a3b8;
+    border-radius: 8px;
+    padding: 24px;
+    margin-top: 30px;
+}
+
+.fee-receipt-card.show {
+    display: block;
+}
+
+.receipt-header {
+    text-align: center;
+    border-bottom: 2px solid #0f172a;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+}
+
+.receipt-header h2 {
+    margin: 0;
+    font-size: 1.4rem;
+    color: #0f172a;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.receipt-header p {
+    margin: 4px 0 0 0;
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.receipt-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+}
+
+.receipt-grid div strong {
+    color: #334155;
+}
+
+/* --- Print Stylesheet Override --- */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #feeReceiptCard, #feeReceiptCard * {
+        visibility: visible;
+    }
+    #feeReceiptCard {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        border: 1px solid #000;
+        box-shadow: none;
+    }
+}
+
+/* Container & Fee Overview Cards */
+.fee-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    margin-top: 15px;
+}
+.fee-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+}
+.fee-summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+.fee-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+}
+.fee-card .card-label { font-size: 0.85rem; color: #64748b; font-weight: 500; margin-bottom: 6px; }
+.fee-card .card-value { font-size: 1.15rem; font-weight: 700; color: #0f172a; }
+.fee-card.highlight-paid .card-value { color: #166534; }
+.fee-card.highlight-pending .card-value { color: #b45309; }
+
+/* Dynamic Installment Tabs */
+.installment-tabs {
+    display: flex;
+    gap: 10px;
+    border-bottom: 2px solid #e2e8f0;
+    margin-bottom: 24px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+}
+.installment-tab {
+    padding: 10px 18px;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #475569;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+.installment-tab:hover { background: #e2e8f0; }
+.installment-tab.active { background: #004085; color: #ffffff; border-color: #004085; }
+.installment-tab.paid { border-top: 3px solid #22c55e; }
+
+/* Installment Info & Controls */
+.installment-details-box {
+    background-color: #fafafa;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+.inst-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 12px;
+}
+.inst-info-item label { font-size: 0.8rem; color: #64748b; display: block; margin-bottom: 4px; }
+.inst-info-item span { font-weight: 600; font-size: 1rem; color: #1e293b; }
+
+.status-pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.status-pill.paid { background-color: #dcfce7; color: #15803d; }
+.status-pill.pending { background-color: #fef3c7; color: #b45309; }
+
+.fee-form-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    align-items: end;
+    margin-top: 16px;
+}
+.fee-form-group label { font-size: 0.85rem; font-weight: 600; color: #334155; margin-bottom: 6px; display: block; }
+.fee-form-group input, .fee-form-group select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+
+.fee-actions { display: flex; gap: 12px; margin-top: 20px; }
+.btn-fee-pay {
+    background-color: #16a34a;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.btn-fee-pay:hover { background-color: #15803d; }
+.btn-fee-print {
+    background-color: #0284c7;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.btn-fee-print:hover { background-color: #0369a1; }
+
+.previous-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
+.previous-table th, .previous-table td { padding: 10px 12px; border: 1px solid #e2e8f0; text-align: left; }
+.previous-table th { background-color: #f8fafc; color: #475569; font-weight: 600; }
+
+/* Printable Receipt Component */
+.fee-receipt-card { display: none; background: #ffffff; border: 2px dashed #94a3b8; border-radius: 8px; padding: 24px; margin-top: 30px; }
+.receipt-header { text-align: center; border-bottom: 2px solid #0f172a; padding-bottom: 12px; margin-bottom: 16px; }
+.receipt-header h2 { margin: 0; font-size: 1.4rem; color: #0f172a; text-transform: uppercase; }
+.receipt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.9rem; margin-bottom: 16px; }
+
+@media print {
+    body * { visibility: hidden; }
+    #feeReceiptCard, #feeReceiptCard * { visibility: visible; }
+    #feeReceiptCard { position: absolute; left: 0; top: 0; width: 100%; border: 1px solid #000; display: block !important; }
+}
+/* Scolex ERP Payment Module Theme */
+.scolex-fee-wrapper {
+    background-color: #f1f5f9;
+    padding: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #1e293b;
+}
+
+/* Header Banner */
+.scolex-brand-header {
+    background: linear-gradient(135deg, #0b2545 0%, #134074 100%);
+    color: #ffffff;
+    padding: 15px 20px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.scolex-brand-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.scolex-logo-badge {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    border: 2px dashed #fbbf24;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #001219;
+}
+.logo-inner {
+    color: #fbbf24;
+    font-size: 10px;
+    font-weight: 900;
+}
+.scolex-brand-info h2 {
+    margin: 0;
+    font-size: 1.3rem;
+    letter-spacing: 0.5px;
+}
+.sub-lead {
+    margin: 2px 0;
+    font-size: 0.82rem;
+    color: #cbd5e1;
+}
+.scolex-contact-line {
+    margin: 0;
+    font-size: 0.78rem;
+    color: #94a3b8;
+}
+.scolex-user-pill {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.user-avatar { font-size: 1.5rem; }
+.user-details { display: flex; flex-direction: column; }
+.u-label { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; }
+.u-id { font-size: 0.8rem; font-family: monospace; color: #93c5fd; }
+
+/* 3 Column Grid */
+.scolex-erp-grid {
+    display: grid;
+    grid-template-columns: 240px 1fr 340px;
+    gap: 15px;
+}
+@media (max-width: 1200px) {
+    .scolex-erp-grid { grid-template-columns: 1fr; }
+}
+
+/* Generic Panels */
+.scolex-panel {
+    background: #ffffff;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    overflow: hidden;
+}
+.panel-header {
+    background: #0f172a;
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 8px 12px;
+    letter-spacing: 0.5px;
+}
+.panel-header.dark-blue { background: #0b2545; }
+.text-center-header { text-align: center; }
+
+.panel-subhead {
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 8px 12px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+.panel-subhead.green-text { color: #15803d; }
+.panel-subhead.blue-text { color: #1d4ed8; }
+.panel-subhead.dark-blue-text { color: #0b2545; }
+
+.panel-body { padding: 12px; }
+.panel-body.compact { padding: 8px; }
+
+.lbl-small { font-size: 0.75rem; color: #64748b; }
+.txt-course-title { margin: 2px 0 10px 0; color: #0f172a; }
+.summary-line { display: flex; justify-content: space-between; font-size: 0.85rem; margin-top: 6px; }
+.txt-xl { font-size: 1.2rem; color: #0f172a; }
+.words-note { font-size: 0.7rem; color: #64748b; font-style: italic; }
+.divider { border: 0; border-top: 1px solid #e2e8f0; margin: 8px 0; }
+
+.metric-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 8px;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    margin-top: 6px;
+}
+.metric-row.green { background: #f0fdf4; color: #166534; }
+.metric-row.red { background: #fef2f2; color: #991b1b; }
+.metric-row.orange { background: #fffbebfb; color: #b45309; }
+
+.margin-top { margin-top: 12px; }
+.info-footer-note {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1e40af;
+    font-size: 0.73rem;
+    padding: 8px;
+    border-radius: 4px;
+    margin-top: 12px;
+}
+
+/* Overview List */
+.overview-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.8rem;
+}
+.overview-item:last-child { border-bottom: none; }
+.ov-title { font-weight: 600; display: block; }
+.ov-date { font-size: 0.7rem; color: #64748b; }
+
+.badge-pill {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-weight: bold;
+}
+.badge-pill.paid { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+.badge-pill.pending { background: #dbeafe; color: #1d4ed8; border: 1px solid #93c5fd; }
+
+/* Stepper Navigation */
+.stepper-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+    padding: 10px 0;
+}
+.stepper-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1;
+}
+.step-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #94a3b8;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+.stepper-step.active .step-circle { background: #1d4ed8; }
+.stepper-step.paid .step-circle { background: #16a34a; }
+
+.step-name { font-size: 0.73rem; font-weight: 600; margin-top: 4px; }
+.step-amount { font-size: 0.75rem; color: #334155; }
+
+/* Center Action Details */
+.install-sub-header {
+    background: #0b2545;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.twin-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.light-green-bg { background: #f0fdf4; }
+.light-blue-bg { background: #f0f9ff; }
+
+.mini-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+.mini-table th, .mini-table td { padding: 4px 6px; text-align: left; border-bottom: 1px solid #cbd5e1; }
+.total-prev-bar { display: flex; justify-content: space-between; font-size: 0.85rem; padding-top: 6px; color: #15803d; }
+
+.kv-line { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px; }
+.highlight-pay-box {
+    background: #e0f2fe;
+    border: 1px solid #7dd3fc;
+    padding: 8px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    color: #0369a1;
+    margin-top: 8px;
+}
+
+/* Method Selector */
+.method-selector-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin: 6px 0 12px 0;
+}
+.method-btn {
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    padding: 8px 4px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    font-weight: 600;
+}
+.method-btn.active {
+    background: #e0f2fe;
+    border-color: #0284c7;
+    color: #0369a1;
+}
+
+.form-inputs-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+}
+.input-cell { display: flex; flex-direction: column; }
+.input-cell label { font-size: 0.73rem; color: #475569; margin-bottom: 3px; }
+.input-cell input {
+    padding: 6px 8px;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+.action-alert-bar {
+    background: #fffbeba0;
+    border: 1px solid #fde68a;
+    padding: 8px;
+    font-size: 0.75rem;
+    color: #b45309;
+    border-radius: 4px;
+    margin: 12px 0;
+}
+
+.btn-primary-scolex {
+    width: 100%;
+    background: #1d4ed8;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+.btn-primary-scolex:hover { background: #1e40af; }
+
+/* Right Printable Receipt */
+.receipt-paper {
+    background: #fff;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 15px;
+    font-size: 0.78rem;
+    position: relative;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+.receipt-top-banner {
+    background: #0b2545;
+    color: #fff;
+    text-align: center;
+    font-weight: bold;
+    padding: 4px;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    margin: -15px -15px 10px -15px;
+}
+.receipt-header-center { text-align: center; margin-bottom: 10px; }
+.receipt-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px dashed #0b2545;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: bold;
+}
+.receipt-header-center h3 { margin: 4px 0 2px 0; font-size: 0.95rem; color: #0b2545; }
+.receipt-sub { margin: 0; font-size: 0.68rem; color: #475569; }
+
+.receipt-meta-line {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 5px 0;
+    margin-bottom: 8px;
+}
+.meta-lbl { font-size: 0.65rem; color: #64748b; display: block; }
+.rec-red-text { color: #b91c1c; font-family: monospace; }
+
+.receipt-sec-header {
+    background: #0b2545;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 3px 6px;
+}
+.receipt-grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    padding: 6px;
+    border: 1px solid #e2e8f0;
+    border-top: none;
+}
+.rec-field-label { font-size: 0.65rem; color: #64748b; }
+.rec-field-val { font-size: 0.73rem; font-weight: 600; }
+
+.receipt-kv-table { border: 1px solid #e2e8f0; border-top: none; }
+.r-row { display: flex; justify-content: space-between; padding: 4px 6px; border-bottom: 1px solid #f1f5f9; }
+.r-row.highlight { background: #f8fafc; font-weight: bold; }
+
+.receipt-amount-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+.words-italic { font-style: italic; font-size: 0.7rem; color: #475569; }
+.amount-box-right {
+    border: 2px solid #0b2545;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: #0b2545;
+}
+
+.receipt-signature-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 15px;
+}
+.seal-circle {
+    width: 45px;
+    height: 45px;
+    border: 2px solid #0284c7;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0284c7;
+    font-size: 8px;
+    transform: rotate(-15deg);
+}
+.sig-block { text-align: right; }
+.sig-handwritten { font-family: 'Brush Script MT', cursive; font-size: 1.2rem; color: #1e3a8a; }
+.sig-title { font-size: 0.65rem; font-weight: bold; }
+.sig-company { font-size: 0.6rem; color: #64748b; }
+
+.receipt-footer-bar {
+    background: #0b2545;
+    color: #fff;
+    text-align: center;
+    font-size: 0.65rem;
+    padding: 6px;
+    margin: 10px -15px -15px -15px;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+.receipt-footer-bar p { margin: 0 0 2px 0; }
