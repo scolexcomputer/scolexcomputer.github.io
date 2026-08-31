@@ -71,11 +71,11 @@ nav {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    gap: clamp(10px, 2vw, 30px);
+    gap: clamp(6px, 1vw, 15px);
     max-width: 1350px;
-    width: clamp(300px, 95vw, 1350px);
+    width: 100%;
     margin: 0 auto;
-    padding: 0 clamp(10px, 1.5vw, 20px);
+    padding: 0 4px 0 10px; /* Decreased right padding here */
     flex-wrap: nowrap;
 }
 
@@ -85,16 +85,17 @@ nav {
     text-decoration: none;
     padding: 4px 0;
     flex-shrink: 0;
+    margin-right: 0px; /* Decreased right margin here */
 }
 
 .badge-logo {
     background: linear-gradient(145deg, #0284c7, #0369a1);
-    border: 2px solid #38bdf8;
-    border-radius: 30px;
-    padding: 5px clamp(10px, 1.2vw, 16px);
-    min-width: clamp(140px, 15vw, 175px);
+    border: 1.5px solid #38bdf8;
+    border-radius: 20px;
+    padding: 3px clamp(6px, 1vw, 10px);
+    min-width: clamp(120px, 12vw, 145px);
     text-align: center;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.4), inset 0 1px 3px rgba(255,255,255,0.4);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4), inset 0 1px 3px rgba(255,255,255,0.4);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -106,45 +107,45 @@ nav {
 }
 
 .badge-top-arc {
-    font-size: 8px;
+    font-size: 7px;
     font-weight: 800;
     color: #e0f2fe;
-    letter-spacing: 0.8px;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
 }
 
 .badge-main-banner {
     background: linear-gradient(90deg, #0f172a, #1e3a8a);
-    padding: 2px 10px;
-    border-radius: 4px;
-    margin: 2px 0;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin: 1px 0;
     border: 1px solid rgba(255,255,255,0.2);
     width: 100%;
 }
 
 .logo-s {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 900;
     color: #38bdf8;
 }
 
 .logo-colex {
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 900;
     color: #ffffff;
-    letter-spacing: 1px;
+    letter-spacing: 0.8px;
 }
 
 .badge-sub-text {
-    font-size: 8px;
+    font-size: 7px;
     font-weight: 900;
     color: #facc15;
-    letter-spacing: 1px;
+    letter-spacing: 0.8px;
     text-transform: uppercase;
 }
 
 .badge-teacher-text {
-    font-size: 7.5px;
+    font-size: 6.5px;
     font-weight: 700;
     color: #f5f1f1;
     font-style: italic;
@@ -170,7 +171,7 @@ nav ul {
     margin: 0;
     padding: 0;
     flex-wrap: nowrap;
-    gap: clamp(2px, 1.2vw, 24px);
+    gap: clamp(2px, 0.6vw, 12px);
 }
 
 nav ul li {
@@ -181,8 +182,8 @@ nav ul li a {
     display: block;
     color: #fff;
     text-decoration: none;
-    padding: clamp(4px, 1vw, 12px) clamp(4px, 0.8vw, 12px);
-    font-size: clamp(15px, 1.2vw, 20px);
+    padding: clamp(4px, 0.8vw, 10px) clamp(4px, 0.5vw, 8px);
+    font-size: clamp(15px, 1.2vw, 26px); /* Increased text size of tabs */
     font-weight: bold;
     white-space: nowrap;
     transition: all 0.25s ease;

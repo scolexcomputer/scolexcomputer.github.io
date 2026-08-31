@@ -316,25 +316,366 @@
                     </div>
                 </div>
 
-                <!-- TAB 2: Fee Details -->
-                <div id="tab-fee" class="tab-pane">
-                    <h4 style="color: #004085;">💳 Fee Ledger & Payment Tracking</h4>
-                    <p style="color: #64748b; font-size: 14px;">Fee payment records and installment tracking will appear here.</p>
-                    <div class="section-grid" style="margin-top: 15px;">
-                        <div class="form-field">
-                            <label>Total Course Fee</label>
-                            <input type="text" value="₹ 5,500" readonly>
+                <!-- TAB 2: Dynamic Fee Details & Live Receipt UI -->
+<div id="tab-fee" class="tab-pane">
+    <div class="scolex-fee-wrapper">
+        
+        <!-- TOP BRANDING HEADER -->
+        <header class="scolex-brand-header">
+            <div class="scolex-brand-info">
+                <div class="scolex-logo-badge">
+                    <div class="logo-inner">SCOLEX</div>
+                </div>
+                <div>
+                    <h2>SCOLEX COMPUTER CLASSES</h2>
+                    <p class="sub-lead">(A Unit of IACT Education Pvt. Ltd.)</p>
+                    <p class="scolex-contact-line">
+                        📍 Shanti Market, Main Road, Near Bank of India, Muzaffarpur, Bihar &nbsp;|&nbsp; 
+                        📞 7549656240 &nbsp;|&nbsp; ✉️ scolexclasses@gmail.com
+                    </p>
+                </div>
+            </div>
+            <div class="scolex-user-pill">
+                <div class="user-avatar">👤</div>
+                <div class="user-details">
+                    <span class="u-label">Student Name</span>
+                    <strong id="feeStudentName">MD SHAHNAWAZ</strong>
+                    <span class="u-label" style="margin-top: 4px;">Student ID</span>
+                    <span class="u-id" id="feeStudentIdDisplay">SCC20260829125146</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN THREE-COLUMN ERP GRID -->
+        <div class="scolex-erp-grid">
+            
+            <!-- COLUMN 1: LEFT SUMMARY & OVERVIEW -->
+            <div class="scolex-col-left">
+                <!-- Course & Fee Summary Card -->
+                <div class="scolex-panel">
+                    <div class="panel-header dark-blue">COURSE & FEE SUMMARY</div>
+                    <div class="panel-body">
+                        <label class="lbl-small">Course</label>
+                        <h3 id="feeCourseDisplay" class="txt-course-title">DTP</h3>
+
+                        <div class="summary-line">
+                            <span>Total Course Fee</span>
+                            <strong id="feeTotalAmount" class="txt-xl">₹ 5,500</strong>
                         </div>
-                        <div class="form-field">
-                            <label>Paid Amount</label>
-                            <input type="text" value="₹ 2,000" readonly>
+                        <div class="words-note" id="feeTotalWords">(Five Thousand Five Hundred Rupees Only)</div>
+
+                        <hr class="divider">
+
+                        <div class="summary-line">
+                            <span>Total Installments</span>
+                            <strong id="feeInstallmentsCount">5</strong>
                         </div>
-                        <div class="form-field">
-                            <label>Due Balance</label>
-                            <input type="text" value="₹ 3,500" readonly style="color: #dc3545; font-weight: bold;">
+
+                        <div class="metric-row green">
+                            <span>💵 Total Paid</span>
+                            <strong id="feePaidAmount">₹ 2,200</strong>
+                        </div>
+
+                        <div class="metric-row red">
+                            <span>🚫 Pending Amount</span>
+                            <strong id="feeDueAmount">₹ 3,300</strong>
+                        </div>
+
+                        <div class="metric-row orange">
+                            <span>⏳ Next Due</span>
+                            <strong id="feeNextDue">₹ 1,100</strong>
+                        </div>
+
+                        <div class="summary-line margin-top">
+                            <span>📅 Last Date</span>
+                            <strong id="feeLastDate">30 Sep 2026</strong>
                         </div>
                     </div>
                 </div>
+
+
+<!-- Insert this inside #tab-fee right after the .scolex-erp-grid closing </div> -->
+
+        <!-- PAYMENT HISTORY TABLE (Google Sheet Columns) -->
+        <div class="scolex-panel margin-top" style="width: 100%; margin-top: 20px;">
+            <div class="panel-header dark-blue">📊 ALL TRANSACTION HISTORY (GOOGLE SHEET SYNCED)</div>
+            <div class="panel-body" style="overflow-x: auto;">
+                <table class="erp-table" style="width: 100%; font-size: 12px; white-space: nowrap;">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Receipt No</th>
+                            <th>App ID</th>
+                            <th>Student Name</th>
+                            <th>Course</th>
+                            <th>Amount Paid</th>
+                            <th>Payment Mode</th>
+                            <th>Payment Date</th>
+                            <th>Status</th>
+                            <th>Installment No</th>
+                            <th>Total Course Fee</th>
+                            <th>Total Paid To Date</th>
+                            <th>Remaining Balance</th>
+                            <th>Transaction Ref</th>
+                            <th>Entry By</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paymentHistoryTableBody">
+                        <!-- Populated dynamically via JavaScript matching sheet columns -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+                <!-- Installment Overview Card -->
+                <div class="scolex-panel margin-top">
+                    <div class="panel-header dark-blue">INSTALLMENT OVERVIEW</div>
+                    <div class="panel-body compact" id="installmentOverviewList">
+                        <!-- Rendered Dynamically by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="info-footer-note">
+                    ℹ️ Note: Please pay each installment before the due date to avoid late fee.
+                </div>
+            </div>
+
+            <!-- COLUMN 2: CENTER PAYMENT ACTION -->
+            <div class="scolex-col-center">
+                
+                <!-- Installment Stepper Navigation Bar -->
+                <div class="scolex-panel">
+                    <div class="panel-header text-center-header">INSTALLMENT PAYMENT</div>
+                    <div class="panel-body">
+                        <div class="stepper-container" id="stepperTabsContainer">
+                            <!-- Rendered Dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selected Installment Title Bar -->
+                <div class="install-sub-header">
+                    <span id="activeInstallmentTitle">INSTALLMENT 2 OF 5</span>
+                    <span class="due-badge">📅 Due Date: <span id="instDueDate">30 Sep 2026</span></span>
+                </div>
+
+                <!-- Side-by-Side Details Cards -->
+                <div class="twin-cards-grid">
+                    <!-- Left: Previous Payment Details -->
+                    <div class="scolex-panel light-green-bg">
+                        <div class="panel-subhead green-text">PREVIOUS PAYMENT DETAILS</div>
+                        <div class="panel-body compact">
+                            <table class="mini-table">
+                                <thead>
+                                    <tr>
+                                        <th>Installment</th>
+                                        <th>Date</th>
+                                        <th>Amount (₹)</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="prevPaymentTableBody">
+                                    <!-- Rendered dynamically -->
+                                </tbody>
+                            </table>
+                            <div class="total-prev-bar">
+                                <span>Total Previous Payment</span>
+                                <strong id="totalPrevPaidText">₹ 1,100</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Current Installment Details -->
+                    <div class="scolex-panel light-blue-bg">
+                        <div class="panel-subhead blue-text">CURRENT INSTALLMENT DETAILS</div>
+                        <div class="panel-body">
+                            <div class="kv-line">
+                                <span>Installment No.</span>
+                                <strong id="curInstNo">2nd Installment</strong>
+                            </div>
+                            <div class="kv-line">
+                                <span>Installment Amount</span>
+                                <strong id="curInstAmount">₹ 1,100</strong>
+                            </div>
+                            <div class="kv-line">
+                                <span>Due Date</span>
+                                <span id="curInstDueDate">30 Sep 2026</span>
+                            </div>
+                            <div class="kv-line">
+                                <span>Status</span>
+                                <span class="badge-pill pending" id="curInstStatusBadge">PENDING</span>
+                            </div>
+                            <div class="highlight-pay-box">
+                                <span>Amount to be Paid Now</span>
+                                <strong id="curInstToPay">₹ 1,100</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Form Inputs Box -->
+                <div class="scolex-panel margin-top">
+                    <div class="panel-subhead dark-blue-text">PAYMENT INFORMATION</div>
+                    <div class="panel-body">
+                        <label class="lbl-small">Payment Method</label>
+                        <div class="method-selector-grid">
+                            <button type="button" class="method-btn active" data-method="Cash" onclick="selectPaymentMethod(this, 'Cash')">
+                                💵 Cash
+                            </button>
+                            <button type="button" class="method-btn" data-method="UPI / QR Code" onclick="selectPaymentMethod(this, 'UPI / QR Code')">
+                                📱 UPI / QR Code
+                            </button>
+                            <button type="button" class="method-btn" data-method="Bank Transfer" onclick="selectPaymentMethod(this, 'Bank Transfer')">
+                                🏛️ Bank Transfer
+                            </button>
+                            <button type="button" class="method-btn" data-method="Other" onclick="selectPaymentMethod(this, 'Other')">
+                                💳 Other
+                            </button>
+                        </div>
+
+                        <div class="form-inputs-row">
+                            <div class="input-cell">
+                                <label>Payment Date</label>
+                                <input type="date" id="payDateInput">
+                            </div>
+                            <div class="input-cell">
+                                <label>Transaction / Receipt No.</label>
+                                <input type="text" id="payTxnIdInput" placeholder="Enter receipt no.">
+                            </div>
+                            <div class="input-cell">
+                                <label>Amount Paid (₹)</label>
+                                <input type="number" id="payAmountInput" placeholder="1100">
+                            </div>
+                        </div>
+
+                        <div class="action-alert-bar">
+                            💡 <strong>Note:</strong> After payment, click on "Mark as Paid" button.
+                        </div>
+
+                        <button type="button" class="btn-primary-scolex" onclick="processInstallmentPayment()">
+                            ✓ MARK AS PAID & GENERATE RECEIPT
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COLUMN 3: RIGHT PRINTABLE RECEIPT CARD -->
+            <div class="scolex-col-right">
+                <div class="receipt-paper" id="feeReceiptCard">
+                    <div class="receipt-top-banner">PAYMENT RECEIPT</div>
+                    
+                    <div class="receipt-header-center">
+                        <div class="receipt-logo">SCOLEX</div>
+                        <h3>SCOLEX COMPUTER CLASSES</h3>
+                        <p class="receipt-sub">(A Unit of IACT Education Pvt. Ltd.)</p>
+                        <p class="receipt-sub">Shanti Market, Main Road, Near Bank of India</p>
+                        <p class="receipt-sub">Muzaffarpur, Bihar</p>
+                        <p class="receipt-sub"><strong>Mob: 7549656240</strong></p>
+                    </div>
+
+                    <div class="receipt-meta-line">
+                        <div>
+                            <span class="meta-lbl">RECEIPT NO.</span>
+                            <strong id="recReceiptNo" class="rec-red-text">SCC/REC/2026-27/00025</strong>
+                        </div>
+                        <div style="text-align: right;">
+                            <span class="meta-lbl">DATE:</span>
+                            <strong id="recDate">29 Aug 2026</strong>
+                        </div>
+                    </div>
+
+                    <div class="receipt-sec-header">STUDENT DETAILS</div>
+                    <div class="receipt-grid-2col">
+                        <div>
+                            <span class="rec-field-label">Student Name</span>
+                            <div id="recStudentName" class="rec-field-val">MD SHAHNAWAZ</div>
+                        </div>
+                        <div>
+                            <span class="rec-field-label">Student ID</span>
+                            <div id="recStudentId" class="rec-field-val">SCC20260829125146</div>
+                        </div>
+                        <div>
+                            <span class="rec-field-label">Father's Name</span>
+                            <div id="recFatherName" class="rec-field-val">MD MERAJUDDIN</div>
+                        </div>
+                        <div>
+                            <span class="rec-field-label">Course</span>
+                            <div id="recCourse" class="rec-field-val">DTP</div>
+                        </div>
+                        <div>
+                            <span class="rec-field-label">Mobile No.</span>
+                            <div id="recMobile" class="rec-field-val">8298952044</div>
+                        </div>
+                        <div>
+                            <span class="rec-field-label">Address</span>
+                            <div id="recAddress" class="rec-field-val">PREMI CHHARPA, BISHUNPUR MAHANAND, KANTI, MUZAFFARPUR, BIHAR</div>
+                        </div>
+                    </div>
+
+                    <div class="receipt-sec-header margin-top">RECEIPT DETAILS</div>
+                    <div class="receipt-kv-table">
+                        <div class="r-row">
+                            <span>Installment No.</span>
+                            <span id="recInstNo">2nd Installment (of 5)</span>
+                        </div>
+                        <div class="r-row">
+                            <span>Installment Amount</span>
+                            <span id="recInstAmount">₹ 1,100</span>
+                        </div>
+                        <div class="r-row">
+                            <span>Previous Payment</span>
+                            <span id="recPrevPayment">₹ 1,100</span>
+                        </div>
+                        <div class="r-row highlight">
+                            <span>Total Paid Till Now</span>
+                            <strong id="recTotalPaidNow">₹ 2,200</strong>
+                        </div>
+                        <div class="r-row">
+                            <span>Payment Date</span>
+                            <span id="recPayDate">29 Aug 2026</span>
+                        </div>
+                        <div class="r-row">
+                            <span>Payment Mode</span>
+                            <span id="recPayMode">CASH</span>
+                        </div>
+                        <div class="r-row">
+                            <span>Transaction / Receipt No.</span>
+                            <span id="recTxnNo">CASH/0829/025</span>
+                        </div>
+                    </div>
+
+                    <div class="receipt-amount-block">
+                        <div class="amount-words-left">
+                            <span class="rec-field-label">AMOUNT RECEIVED</span>
+                            <div id="recAmountWords" class="words-italic">(Rupees One Thousand One Hundred Only)</div>
+                        </div>
+                        <div class="amount-box-right" id="recAmountPaidBox">
+                            ₹ 1,100
+                        </div>
+                    </div>
+
+                    <div class="receipt-signature-area">
+                        <div class="seal-circle">
+                            <div class="seal-inner">SCOLEX</div>
+                        </div>
+                        <div class="sig-block">
+                            <div class="sig-handwritten">SHahNawaz</div>
+                            <div class="sig-title">Authorised Signatory</div>
+                            <div class="sig-company">Scolex Computer Classes</div>
+                        </div>
+                    </div>
+
+                    <div class="receipt-footer-bar">
+                        <p>🔒 This is a computer generated receipt and does not require any signature.</p>
+                        <strong>Thank You For Your Payment!</strong>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
 
                 <!-- TAB 3: Course Status and Certification -->
                 <div id="tab-status" class="tab-pane">

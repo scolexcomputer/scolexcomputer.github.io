@@ -1,9 +1,21 @@
 // ==========================================
 // Google Apps Script Web App Deployment URL
 // ==========================================
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzK1ngZb-H6GtaS4fpcXAQFuT23faj2-bcvOAb5x6nnlinZw3Qdwvyuylylwi06FcP2/exec"; 
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySTUe1nxJUiUYCVoBOFkupC2GfZiQRh9kTOh4pKbR_iqa595brY4uRxpgSc4KWA4pW/exec"; 
 
 let admissionsList = [];
+let currentSelectedInstallment = 0;
+let selectedPaymentMethod = "Cash";
+
+// Default Fee Matrix per Course
+const COURSE_FEE_STRUCTURE = {
+    "DCA": 3500,
+    "ADCA": 5500,
+    "DTP": 4000,
+    "TALLY WITH GST": 4500,
+    "Python": 6000,
+    "HTML & CSS": 3000
+};
 
 document.addEventListener("DOMContentLoaded", function () {
     checkRolePermissions();
@@ -73,13 +85,9 @@ function fetchSheetAdmissions() {
     fetchAdmissionData();
 }
 
-// Normalize record: Determines Admission Mode based on entry origin/role rules
-// - Public / Student Portal / No Login = "Online"
-// - Admin / Teacher Login Entry = "Offline"
 function normalizeAdmissionRecord(item) {
     let computedAdmissionMode = item.admissionMode;
 
-    // Clear admissionMode if it accidentally received application status strings
     if (computedAdmissionMode === "Approved" || computedAdmissionMode === "Pending" || computedAdmissionMode === "Rejected") {
         computedAdmissionMode = null;
     }
@@ -87,7 +95,6 @@ function normalizeAdmissionRecord(item) {
     const role = (item.role || "").toLowerCase();
     const source = (item.source || "").toLowerCase();
 
-    // Check if entry was created by Admin or Teacher session
     if (
         role === "admin" || 
         role === "teacher" || 
@@ -99,7 +106,6 @@ function normalizeAdmissionRecord(item) {
     ) {
         computedAdmissionMode = "Offline";
     } else if (!computedAdmissionMode) {
-        // Default public / student submissions count as Online admission
         computedAdmissionMode = "Online";
     }
 
@@ -107,7 +113,11 @@ function normalizeAdmissionRecord(item) {
         ...item,
         learningmode: item.learningmode || "Offline",
         admissionMode: computedAdmissionMode,
-        status: item.status || "Pending" // Keep approval status strictly in the status field
+        status: item.status || "Pending",
+        feePaid: item.feePaid || "",
+        totalFee: item.totalFee || "",
+        dueFee: item.dueFee || "",
+        paymentStatus: item.paymentStatus || "Pending"
     };
 }
 
@@ -140,8 +150,8 @@ function loadLocalFallbackData() {
                 subjects: "SCIENCE",
                 courses: "ADCA",
                 batch: "Morning (7 AM - 9 AM)",
-                learningmode: "Offline", // Study mode preference
-                admissionMode: "Online", // Submitted via public online portal
+                learningmode: "Offline",
+                admissionMode: "Online",
                 preferredcontact: "Phone",
                 address: "PREMI CHHARPA, BISHUNPUR MAHANAND, KANTI",
                 pincode: "843109",
@@ -153,7 +163,11 @@ function loadLocalFallbackData() {
                 signURL: "https://drive.google.com/file/d/1ItRVOVD1CxU1MLTVywwF0UbGV8uPZWG5/view?usp=drivesdk",
                 marksheetURL: "https://drive.google.com/file/d/1dQS_xSYrmdrwl7nwZl_QHCUtASGSNojk/view?usp=drivesdk",
                 aadhaarURL: "https://drive.google.com/file/d/1vJVSC7_7rGTIyMvzvAj3Oe0Slk8ettqd/view?usp=drivesdk",
-                status: "Pending"
+                status: "Pending",
+                feePaid: "2000",
+                totalFee: "5000",
+                dueFee: "3000",
+                paymentStatus: "Part Paid"
             })
         ];
         localStorage.setItem("scolexAdmissions", JSON.stringify(admissionsList));
@@ -188,7 +202,9 @@ function switchErpTab(tabName) {
     const targetPane = document.getElementById(`tab-${tabName}`);
     if (targetPane) targetPane.classList.add('active');
 
-    event.currentTarget.classList.add('active');
+    if (window.event && window.event.currentTarget) {
+        window.event.currentTarget.classList.add('active');
+    }
 }
 
 // ==========================================
@@ -209,8 +225,6 @@ function renderTable(data) {
     data.forEach((student, index) => {
         const tr = document.createElement("tr");
         const appId = student.appId || student.studentId || `SCC-${index + 1}`;
-        
-        // Strict mapping: display only "Offline" or "Online" in the Mode column
         const displayMode = (student.admissionMode === "Offline") ? "Offline" : "Online";
 
         tr.innerHTML = `
@@ -244,7 +258,7 @@ function showTableLoading(message) {
 }
 
 // ==========================================
-// 6. Dynamic Search and Filtering (Mode Filter checks Admission Mode)
+// 6. Dynamic Search and Filtering
 // ==========================================
 function filterRecords() {
     const searchVal = (document.getElementById("searchInput")?.value || "").toLowerCase().trim();
@@ -262,8 +276,6 @@ function filterRecords() {
             mobileStr.includes(searchVal);
 
         const matchesCourse = courseVal === "" || item.courses === courseVal;
-        
-        // Mode filter works strictly on Admission Mode as requested
         const matchesMode = modeVal === "" || (item.admissionMode || "").toLowerCase() === modeVal.toLowerCase();
 
         return matchesSearch && matchesCourse && matchesMode;
@@ -278,6 +290,11 @@ function filterRecords() {
 function setFieldValue(id, val) {
     const el = document.getElementById(id);
     if (el) el.value = val || "";
+}
+
+function setElementText(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.innerText = val !== undefined ? val : "-";
 }
 
 function getDriveDirectUrl(url) {
@@ -344,6 +361,11 @@ function populateForm(student, index) {
     setFieldValue("district", student.district);
     setFieldValue("state", student.state);
 
+    setFieldValue("feePaid", student.feePaid);
+    setFieldValue("totalFee", student.totalFee);
+    setFieldValue("dueFee", student.dueFee);
+    setFieldValue("paymentStatus", student.paymentStatus);
+
     renderBottomDocuments(student);
 }
 
@@ -382,7 +404,7 @@ function renderBottomDocuments(student) {
     }
 
     if (aadhaarBox) {
-        const docUrl = student.aadhaarURL || student.aadharnumber;
+        const docUrl = student.aadhaarURL;
         aadhaarBox.innerHTML = (docUrl && docUrl.startsWith("http")) 
             ? `<a href="${docUrl}" target="_blank" class="btn-doc-link">👁️ View ID Document</a>` 
             : '<span style="color:#94a3b8; font-size:12px;">Not Uploaded</span>';
@@ -393,7 +415,11 @@ function viewStudentDetails(index) {
     const student = admissionsList[index];
     if (!student) return;
 
+    const listSection = document.getElementById("studentListSection");
+    if (listSection) listSection.style.display = "none";
+
     populateForm(student, index);
+    populateFeeDetails(student);
     switchErpTab('admission');
     
     document.querySelectorAll('.tab-btn').forEach((b, idx) => {
@@ -420,6 +446,365 @@ function viewStudentDetails(index) {
         detailPanel.style.display = "block";
         detailPanel.scrollIntoView({ behavior: 'smooth' });
     }
+}
+
+function closeDetailPanel() {
+    const detailPanel = document.getElementById("detailPanel");
+    if (detailPanel) detailPanel.style.display = "none";
+
+    const listSection = document.getElementById("studentListSection");
+    if (listSection) {
+        listSection.style.display = "block";
+        listSection.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+// ==========================================
+// Dynamic Fee & Payment Engine Integration
+// ==========================================
+function getOrdinalSuffix(i) {
+    const j = i % 10, k = i % 100;
+    if (j === 1 && k !== 11) return "st";
+    if (j === 2 && k !== 12) return "nd";
+    if (j === 3 && k !== 13) return "rd";
+    return "th";
+}
+
+function populateFeeDetails(student) {
+    if (!student) return;
+
+    const baseFee = COURSE_FEE_STRUCTURE[student.courses] || Number(student.totalFee) || 5500;
+    student.totalFee = student.totalFee || baseFee;
+    student.discount = student.discount || 0;
+
+    if (!student.installments || student.installments.length === 0) {
+        const instCount = 5;
+        const netFee = student.totalFee - student.discount;
+        const perInstAmount = Math.round(netFee / instCount);
+        student.installments = [];
+        
+        const baseDueDate = new Date(2026, 7, 30);
+
+        for (let i = 1; i <= instCount; i++) {
+            const dueDate = new Date(baseDueDate);
+            dueDate.setMonth(dueDate.getMonth() + (i - 1));
+
+            student.installments.push({
+                no: i,
+                name: `${i}${getOrdinalSuffix(i)} Installment`,
+                scheduledAmount: (i === instCount) ? (netFee - (perInstAmount * (instCount - 1))) : perInstAmount,
+                paidAmount: 0,
+                status: "Pending",
+                dueDate: dueDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+            });
+        }
+    }
+
+    if (!student.paymentHistory) student.paymentHistory = [];
+
+    setElementText("feeStudentName", student.fullname || "");
+    setElementText("feeStudentIdDisplay", student.appId || student.studentId || "");
+    setElementText("feeCourseDisplay", student.courses || "");
+    setElementText("feeInstallmentsCount", student.installments.length);
+
+    const today = new Date().toISOString().split('T')[0];
+    const dateInput = document.getElementById("payDateInput");
+    if (dateInput) dateInput.value = today;
+
+    refreshScolexUI(student);
+}
+
+function refreshScolexUI(student) {
+    const totalFee = Number(student.totalFee) || 5500;
+    let totalPaid = 0;
+    student.paymentHistory.forEach(p => totalPaid += Number(p.amount || 0));
+
+    const pendingAmount = Math.max(0, totalFee - totalPaid);
+    const activeInst = student.installments[currentSelectedInstallment] || student.installments[0];
+
+    setElementText("feeTotalAmount", `₹ ${totalFee.toLocaleString('en-IN')}`);
+    setElementText("feeTotalWords", `(${numberToWords(totalFee)} Rupees Only)`);
+    setElementText("feePaidAmount", `₹ ${totalPaid.toLocaleString('en-IN')}`);
+    setElementText("feeDueAmount", `₹ ${pendingAmount.toLocaleString('en-IN')}`);
+    setElementText("feeNextDue", `₹ ${Math.max(0, activeInst.scheduledAmount - activeInst.paidAmount).toLocaleString('en-IN')}`);
+    setElementText("feeLastDate", student.installments[student.installments.length - 1].dueDate);
+
+    renderInstallmentOverviewList(student);
+    renderStepperTabs(student);
+    renderPaymentHistoryTable(student);
+    selectStepperStep(currentSelectedInstallment, student);
+}
+
+function renderInstallmentOverviewList(student) {
+    const container = document.getElementById("installmentOverviewList");
+    if (!container) return;
+
+    container.innerHTML = "";
+    student.installments.forEach(inst => {
+        const item = document.createElement("div");
+        item.className = "overview-item";
+        item.innerHTML = `
+            <div>
+                <span class="ov-title">${inst.name}</span>
+                <span class="ov-date">${inst.dueDate}</span>
+            </div>
+            <strong style="font-size:0.8rem;">₹ ${inst.scheduledAmount.toLocaleString('en-IN')}</strong>
+            <span class="badge-pill ${inst.status.toLowerCase()}">${inst.status.toUpperCase()}</span>
+        `;
+        container.appendChild(item);
+    });
+}
+
+// ==========================================
+// Google Sheet Synced Payment History Renderer
+// ==========================================
+function renderPaymentHistoryTable(student) {
+    const tbody = document.getElementById("paymentHistoryTableBody");
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+    const history = student.paymentHistory || [];
+
+    if (history.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="16" style="text-align:center; padding: 15px; color: #64748b;">No transaction history recorded yet.</td></tr>`;
+        return;
+    }
+
+    let cumulativePaid = 0;
+    const totalFee = Number(student.totalFee) || 5500;
+
+    history.forEach((tx, idx) => {
+        const amountPaid = Number(tx.amount || 0);
+        cumulativePaid += amountPaid;
+        const remainingBalance = Math.max(0, totalFee - cumulativePaid);
+
+        tbody.innerHTML += `
+            <tr>
+                <td>${tx.timestamp || student.timestamp || '-'}</td>
+                <td><strong>${tx.receiptNo || '-'}</strong></td>
+                <td>${student.appId || student.studentId || '-'}</td>
+                <td>${student.fullname || '-'}</td>
+                <td>${student.courses || '-'}</td>
+                <td>₹ ${amountPaid.toLocaleString('en-IN')}</td>
+                <td>${tx.method || 'Cash'}</td>
+                <td>${tx.date || '-'}</td>
+                <td><span class="badge-pill paid">Paid</span></td>
+                <td>${tx.installmentName || `Installment ${idx + 1}`}</td>
+                <td>₹ ${totalFee.toLocaleString('en-IN')}</td>
+                <td>₹ ${cumulativePaid.toLocaleString('en-IN')}</td>
+                <td>₹ ${remainingBalance.toLocaleString('en-IN')}</td>
+                <td>${tx.txnId || '-'}</td>
+                <td>${localStorage.getItem("userName") || 'ERP User'}</td>
+                <td>${tx.remarks || 'Installment Payment'}</td>
+            </tr>
+        `;
+    });
+}
+
+function renderStepperTabs(student) {
+    const container = document.getElementById("stepperTabsContainer");
+    if (!container) return;
+
+    container.innerHTML = "";
+    student.installments.forEach((inst, idx) => {
+        const step = document.createElement("div");
+        step.className = `stepper-step ${inst.status.toLowerCase()} ${idx === currentSelectedInstallment ? 'active' : ''}`;
+        step.onclick = () => {
+            currentSelectedInstallment = idx;
+            refreshScolexUI(student);
+        };
+        step.innerHTML = `
+            <div class="step-circle">${inst.no}</div>
+            <span class="step-name">${inst.name}</span>
+            <span class="step-amount">₹ ${inst.scheduledAmount.toLocaleString('en-IN')}</span>
+            <span class="badge-pill ${inst.status.toLowerCase()}" style="margin-top:3px;">${inst.status.toUpperCase()}</span>
+        `;
+        container.appendChild(step);
+    });
+}
+
+function selectStepperStep(index, student) {
+    const inst = student.installments[index];
+    if (!inst) return;
+
+    setElementText("activeInstallmentTitle", `INSTALLMENT ${inst.no} OF ${student.installments.length}`);
+    setElementText("instDueDate", inst.dueDate);
+
+    setElementText("curInstNo", inst.name);
+    setElementText("curInstAmount", `₹ ${inst.scheduledAmount.toLocaleString('en-IN')}`);
+    setElementText("curInstDueDate", inst.dueDate);
+    
+    const statusBadge = document.getElementById("curInstStatusBadge");
+    if (statusBadge) {
+        statusBadge.innerText = inst.status.toUpperCase();
+        statusBadge.className = `badge-pill ${inst.status.toLowerCase()}`;
+    }
+
+    const dueAmount = Math.max(0, inst.scheduledAmount - inst.paidAmount);
+    setElementText("curInstToPay", `₹ ${dueAmount.toLocaleString('en-IN')}`);
+
+    const payInput = document.getElementById("payAmountInput");
+    if (payInput) payInput.value = dueAmount;
+
+    const prevTbody = document.getElementById("prevPaymentTableBody");
+    let totalPrev = 0;
+    if (prevTbody) {
+        prevTbody.innerHTML = "";
+        student.installments.slice(0, index).forEach(prevInst => {
+            if (prevInst.paidAmount > 0) {
+                totalPrev += prevInst.paidAmount;
+                prevTbody.innerHTML += `
+                    <tr>
+                        <td>${prevInst.name}</td>
+                        <td>${prevInst.paidDate || '-'}</td>
+                        <td>${prevInst.paidAmount.toLocaleString('en-IN')}</td>
+                        <td><span class="badge-pill paid">Paid</span></td>
+                    </tr>
+                `;
+            }
+        });
+        if (prevTbody.innerHTML === "") {
+            prevTbody.innerHTML = `<tr><td colspan="4" style="color:#64748b; text-align:center;">No previous payment</td></tr>`;
+        }
+    }
+    setElementText("totalPrevPaidText", `₹ ${totalPrev.toLocaleString('en-IN')}`);
+
+    updateReceiptPreview(student, inst, totalPrev);
+}
+
+function selectPaymentMethod(btn, method) {
+    document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedPaymentMethod = method;
+}
+
+async function processInstallmentPayment() {
+    const index = document.getElementById("recordIndex")?.value;
+    if (index === "" || index === undefined) return;
+
+    const student = admissionsList[index];
+    const inst = student.installments[currentSelectedInstallment];
+
+    const inputAmount = Number(document.getElementById("payAmountInput").value);
+    const dateVal = document.getElementById("payDateInput").value;
+    const txnId = document.getElementById("payTxnIdInput").value.trim() || `CASH/${Math.floor(100 + Math.random() * 900)}`;
+
+    if (isNaN(inputAmount) || inputAmount <= 0) {
+        alert("⚠️ Please enter a valid payment amount.");
+        return;
+    }
+
+    const previousDueForThisInst = inst.scheduledAmount - inst.paidAmount;
+    const difference = inputAmount - previousDueForThisInst;
+
+    inst.paidAmount += inputAmount;
+    inst.status = inst.paidAmount >= inst.scheduledAmount ? "Paid" : "Partial";
+    inst.paidDate = dateVal ? new Date(dateVal).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : inst.dueDate;
+    inst.txnId = txnId;
+
+    if (difference !== 0 && currentSelectedInstallment + 1 < student.installments.length) {
+        const nextInst = student.installments[currentSelectedInstallment + 1];
+        nextInst.scheduledAmount -= difference;
+        if (nextInst.scheduledAmount < 0) nextInst.scheduledAmount = 0;
+    }
+
+    const receiptNo = `SCC/REC/2026-27/${String(student.paymentHistory.length + 25).padStart(5, '0')}`;
+    const totalCourseFee = Number(student.totalFee) || 5500;
+    
+    let cumulativePaid = 0;
+    student.paymentHistory.forEach(p => cumulativePaid += Number(p.amount || 0));
+    cumulativePaid += inputAmount;
+    const remainingBalance = Math.max(0, totalCourseFee - cumulativePaid);
+
+    const paymentPayload = {
+        action: "addFee",
+        ReceiptNo: receiptNo,
+        AppID: student.appId || student.studentId || "",
+        StudentName: student.fullname || "",
+        Course: student.courses || "",
+        AmountPaid: inputAmount,
+        PaymentMode: selectedPaymentMethod || "Cash",
+        PaymentDate: dateVal || new Date().toISOString().split('T')[0],
+        Status: "Paid",
+        InstallmentNo: inst.no,
+        TotalCourseFee: totalCourseFee,
+        TotalPaidToDate: cumulativePaid,
+        RemainingBalance: remainingBalance,
+        TransactionID_Ref: txnId,
+        EntryBy: localStorage.getItem("userName") || "Admin",
+        Remarks: "ERP Fee Collection"
+    };
+
+    student.paymentHistory.push({
+        timestamp: new Date().toISOString(),
+        receiptNo: receiptNo,
+        installmentName: inst.name,
+        amount: inputAmount,
+        method: selectedPaymentMethod,
+        txnId: txnId,
+        date: inst.paidDate,
+        remarks: "Installment Cleared"
+    });
+
+    localStorage.setItem("scolexAdmissions", JSON.stringify(admissionsList));
+
+    // Sync payment data to Google Sheets fees sheet backend
+    if (GOOGLE_SCRIPT_URL && !GOOGLE_SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT")) {
+        try {
+            await fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(paymentPayload)
+            });
+        } catch (err) {
+            console.error("Failed to sync fee data with Google Sheets:", err);
+        }
+    }
+
+    alert(`✅ Success! Marked ${inst.name} as Paid and synced to Google Sheets.`);
+    refreshScolexUI(student);
+}
+
+function updateReceiptPreview(student, activeInst, totalPrev) {
+    const lastPayment = student.paymentHistory[student.paymentHistory.length - 1] || {};
+    const amountPaidNow = lastPayment.amount || Math.max(0, activeInst.scheduledAmount - (activeInst.paidAmount - (lastPayment.amount || 0)));
+
+    setElementText("recReceiptNo", lastPayment.receiptNo || "SCC/REC/2026-27/00025");
+    setElementText("recDate", lastPayment.date || "29 Aug 2026");
+    setElementText("recStudentName", student.fullname || "");
+    setElementText("recStudentId", student.appId || student.studentId || "");
+    setElementText("recFatherName", student.fathername || "");
+    setElementText("recCourse", student.courses || "");
+    setElementText("recMobile", student.mobile || "");
+    setElementText("recAddress", [student.address, student.city].filter(Boolean).join(", ") || "");
+
+    setElementText("recInstNo", `${activeInst.name} (of ${student.installments.length})`);
+    setElementText("recInstAmount", `₹ ${activeInst.scheduledAmount.toLocaleString('en-IN')}`);
+    setElementText("recPrevPayment", `₹ ${totalPrev.toLocaleString('en-IN')}`);
+    setElementText("recTotalPaidNow", `₹ ${(totalPrev + amountPaidNow).toLocaleString('en-IN')}`);
+    setElementText("recPayDate", lastPayment.date || "29 Aug 2026");
+    setElementText("recPayMode", (selectedPaymentMethod || "CASH").toUpperCase());
+    setElementText("recTxnNo", lastPayment.txnId || "CASH/025");
+
+    setElementText("recAmountPaidBox", `₹ ${amountPaidNow.toLocaleString('en-IN')}`);
+    setElementText("recAmountWords", `(Rupees ${numberToWords(amountPaidNow)} Only)`);
+}
+
+function numberToWords(num) {
+    const a = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+    const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+    if ((num = num.toString()).length > 9) return 'overflow';
+    let n = ('000000000' + num).slice(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+    if (!n) return ''; 
+    let str = '';
+    str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + ' Crore ' : '';
+    str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + ' Lakh ' : '';
+    str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + ' Thousand ' : '';
+    str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + ' Hundred ' : '';
+    str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) : '';
+    return str.trim();
 }
 
 function editStudentDetails(index) {
@@ -456,11 +841,6 @@ function toggleFormInputs(readOnlyState) {
         }
     });
     selects.forEach(select => select.disabled = readOnlyState);
-}
-
-function closeDetailPanel() {
-    const detailPanel = document.getElementById("detailPanel");
-    if (detailPanel) detailPanel.style.display = "none";
 }
 
 // ==========================================
@@ -502,11 +882,15 @@ async function saveAdmissionRecord() {
         pincode: getFieldValue("pincode"),
         city: getFieldValue("city"),
         district: getFieldValue("district"),
-        state: getFieldValue("state")
+        state: getFieldValue("state"),
+        feePaid: getFieldValue("feePaid"),
+        totalFee: getFieldValue("totalFee"),
+        dueFee: getFieldValue("dueFee"),
+        paymentStatus: getFieldValue("paymentStatus")
     };
 
     localStorage.setItem("scolexAdmissions", JSON.stringify(admissionsList));
-    alert("✅ ERP Student Record updated successfully!");
+    alert("✅ ERP Student Record & Fee details updated successfully!");
 
     renderTable(admissionsList);
     updateStats();
