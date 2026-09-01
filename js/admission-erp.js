@@ -9,9 +9,10 @@ let selectedPaymentMethod = "Cash";
 
 // Default Fee Matrix per Course
 const COURSE_FEE_STRUCTURE = {
-    "DCA": 3500,
-    "ADCA": 5500,
-    "DTP": 4000,
+    "DCA": 3600,
+    "ADCA": 7500,
+    "DCA-T": 5400,
+    "DTP": 5000,
     "TALLY WITH GST": 4500,
     "Python": 6000,
     "HTML & CSS": 3000
@@ -21,6 +22,8 @@ document.addEventListener("DOMContentLoaded", function () {
     checkRolePermissions();
     initializeProfileBar();
     fetchAdmissionData();
+    // Bind live receipt / course-fee inputs after DOM is ready
+    setTimeout(bindLiveReceiptSync, 400);
 });
 
 // ==========================================
@@ -79,10 +82,6 @@ async function fetchAdmissionData() {
     }
 
     loadLocalFallbackData();
-}
-
-function fetchSheetAdmissions() {
-    fetchAdmissionData();
 }
 
 function normalizeAdmissionRecord(item) {
@@ -222,7 +221,10 @@ function renderTable(data) {
         return;
     }
 
-    data.forEach((student, index) => {
+    data.forEach((student) => {
+        // Use real index in admissionsList (correct even when table is filtered)
+        const realIndex = admissionsList.indexOf(student);
+        const index = realIndex >= 0 ? realIndex : 0;
         const tr = document.createElement("tr");
         const appId = student.appId || student.studentId || `SCC-${index + 1}`;
         const displayMode = (student.admissionMode === "Offline") ? "Offline" : "Online";
@@ -515,9 +517,16 @@ function populateFeeDetails(student) {
 }
 
 function refreshScolexUI(student) {
+    // Keep totalFee in sync with sum of installments
+    const sumInst = student.installments.reduce((s, i) => s + Number(i.scheduledAmount || 0), 0);
+    if (sumInst > 0) student.totalFee = sumInst;
+
     const totalFee = Number(student.totalFee) || 5500;
     let totalPaid = 0;
     student.paymentHistory.forEach(p => totalPaid += Number(p.amount || 0));
+    if (totalPaid === 0) {
+        student.installments.forEach(i => totalPaid += Number(i.paidAmount || 0));
+    }
 
     const pendingAmount = Math.max(0, totalFee - totalPaid);
     const activeInst = student.installments[currentSelectedInstallment] || student.installments[0];
@@ -526,8 +535,14 @@ function refreshScolexUI(student) {
     setElementText("feeTotalWords", `(${numberToWords(totalFee)} Rupees Only)`);
     setElementText("feePaidAmount", `₹ ${totalPaid.toLocaleString('en-IN')}`);
     setElementText("feeDueAmount", `₹ ${pendingAmount.toLocaleString('en-IN')}`);
-    setElementText("feeNextDue", `₹ ${Math.max(0, activeInst.scheduledAmount - activeInst.paidAmount).toLocaleString('en-IN')}`);
-    setElementText("feeLastDate", student.installments[student.installments.length - 1].dueDate);
+    setElementText("feeNextDue", `₹ ${Math.max(0, (activeInst?.scheduledAmount || 0) - (activeInst?.paidAmount || 0)).toLocaleString('en-IN')}`);
+    setElementText("feeLastDate", student.installments[student.installments.length - 1]?.dueDate || "-");
+    setElementText("feeInstallmentsCount", student.installments.length);
+
+    const feeInput = document.getElementById("courseFeeFixedInput");
+    if (feeInput && document.activeElement !== feeInput) {
+        feeInput.value = totalFee;
+    }
 
     renderInstallmentOverviewList(student);
     renderStepperTabs(student);
@@ -609,18 +624,168 @@ function renderStepperTabs(student) {
     student.installments.forEach((inst, idx) => {
         const step = document.createElement("div");
         step.className = `stepper-step ${inst.status.toLowerCase()} ${idx === currentSelectedInstallment ? 'active' : ''}`;
-        step.onclick = () => {
+
+        step.addEventListener("click", (e) => {
+            if (e.target.tagName === "INPUT" || e.target.closest(".step-actions")) return;
             currentSelectedInstallment = idx;
             refreshScolexUI(student);
-        };
+        });
+
         step.innerHTML = `
             <div class="step-circle">${inst.no}</div>
             <span class="step-name">${inst.name}</span>
-            <span class="step-amount">₹ ${inst.scheduledAmount.toLocaleString('en-IN')}</span>
+            <div class="step-amount-edit">
+                <input type="number" class="inst-amount-input"
+                       data-idx="${idx}"
+                       value="${inst.scheduledAmount}"
+                       min="0" step="50"
+                       title="Edit installment amount – updates receipt live">
+                <span class="amount-label">Amount</span>
+            </div>
             <span class="badge-pill ${inst.status.toLowerCase()}" style="margin-top:3px;">${inst.status.toUpperCase()}</span>
+            <div class="step-actions">
+                <button type="button" class="btn-select-step" data-idx="${idx}">Select</button>
+                <button type="button" class="btn-remove-step" data-idx="${idx}" ${student.installments.length <= 1 ? 'disabled' : ''}>Remove</button>
+            </div>
         `;
         container.appendChild(step);
     });
+
+    const addBtn = document.createElement("button");
+    addBtn.type = "button";
+    addBtn.className = "btn-add-installment";
+    addBtn.innerHTML = "+ ADD INSTALLMENT";
+    addBtn.onclick = () => addNewInstallment(student);
+    container.appendChild(addBtn);
+
+    container.querySelectorAll(".inst-amount-input").forEach(input => {
+        input.addEventListener("change", (e) => {
+            const idx = Number(e.target.dataset.idx);
+            updateInstallmentAmount(student, idx, Number(e.target.value));
+        });
+        input.addEventListener("click", (e) => e.stopPropagation());
+        input.addEventListener("keydown", (e) => {
+            e.stopPropagation();
+            if (e.key === "Enter") e.target.blur();
+        });
+    });
+
+    container.querySelectorAll(".btn-select-step").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            currentSelectedInstallment = Number(btn.dataset.idx);
+            refreshScolexUI(student);
+        });
+    });
+    container.querySelectorAll(".btn-remove-step").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            removeInstallment(student, Number(btn.dataset.idx));
+        });
+    });
+}
+
+/** Edit one installment amount → total fee + receipt update */
+function updateInstallmentAmount(student, idx, newAmount) {
+    if (!student || !student.installments[idx]) return;
+
+    const amount = Math.max(0, Math.round(Number(newAmount) || 0));
+    student.installments[idx].scheduledAmount = amount;
+    student.totalFee = student.installments.reduce((s, i) => s + Number(i.scheduledAmount || 0), 0);
+
+    const inst = student.installments[idx];
+    if (inst.paidAmount > amount) {
+        inst.paidAmount = amount;
+        inst.status = amount > 0 ? "Paid" : "Pending";
+    } else if (inst.paidAmount >= amount && amount > 0) {
+        inst.status = "Paid";
+    } else if (inst.paidAmount > 0) {
+        inst.status = "Partial";
+    } else {
+        inst.status = "Pending";
+    }
+
+    localStorage.setItem("scolexAdmissions", JSON.stringify(admissionsList));
+
+    const feeInput = document.getElementById("courseFeeFixedInput");
+    if (feeInput) feeInput.value = student.totalFee;
+
+    refreshScolexUI(student);
+}
+
+/** Set overall course fee and redistribute among pending installments */
+function updateCourseFeeFixed(student, newFee) {
+    if (!student) return;
+    const fee = Math.max(0, Math.round(Number(newFee) || 0));
+    student.totalFee = fee;
+
+    const paidList = student.installments.filter(i => i.status === "Paid");
+    const pendingList = student.installments.filter(i => i.status !== "Paid");
+
+    let alreadyPaid = 0;
+    paidList.forEach(i => alreadyPaid += Number(i.scheduledAmount || 0));
+
+    const remaining = Math.max(0, fee - alreadyPaid);
+    const count = pendingList.length || 1;
+    const per = Math.round(remaining / count);
+
+    pendingList.forEach((inst, i) => {
+        inst.scheduledAmount = (i === pendingList.length - 1)
+            ? remaining - (per * (count - 1))
+            : per;
+        if (inst.paidAmount >= inst.scheduledAmount && inst.scheduledAmount > 0) {
+            inst.status = "Paid";
+        } else if (inst.paidAmount > 0) {
+            inst.status = "Partial";
+        }
+    });
+
+    localStorage.setItem("scolexAdmissions", JSON.stringify(admissionsList));
+    refreshScolexUI(student);
+}
+
+function addNewInstallment(student) {
+    if (!student) return;
+    const nextNo = student.installments.length + 1;
+    const last = student.installments[student.installments.length - 1];
+    const lastDue = last ? new Date(last.dueDate) : new Date(2026, 7, 30);
+    const dueDate = new Date(lastDue);
+    dueDate.setMonth(dueDate.getMonth() + 1);
+
+    student.installments.push({
+        no: nextNo,
+        name: `${nextNo}${getOrdinalSuffix(nextNo)} Installment`,
+        scheduledAmount: 0,
+        paidAmount: 0,
+        status: "Pending",
+        dueDate: dueDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+    });
+
+    student.totalFee = student.installments.reduce((s, i) => s + Number(i.scheduledAmount || 0), 0);
+    localStorage.setItem("scolexAdmissions", JSON.stringify(admissionsList));
+    currentSelectedInstallment = student.installments.length - 1;
+    refreshScolexUI(student);
+}
+
+function removeInstallment(student, idx) {
+    if (!student || student.installments.length <= 1) {
+        alert("At least one installment is required.");
+        return;
+    }
+    if (student.installments[idx].paidAmount > 0) {
+        if (!confirm("This installment has payments. Remove anyway?")) return;
+    }
+    student.installments.splice(idx, 1);
+    student.installments.forEach((inst, i) => {
+        inst.no = i + 1;
+        inst.name = `${i + 1}${getOrdinalSuffix(i + 1)} Installment`;
+    });
+    student.totalFee = student.installments.reduce((s, i) => s + Number(i.scheduledAmount || 0), 0);
+    if (currentSelectedInstallment >= student.installments.length) {
+        currentSelectedInstallment = student.installments.length - 1;
+    }
+    localStorage.setItem("scolexAdmissions", JSON.stringify(admissionsList));
+    refreshScolexUI(student);
 }
 
 function selectStepperStep(index, student) {
@@ -631,7 +796,7 @@ function selectStepperStep(index, student) {
     setElementText("instDueDate", inst.dueDate);
 
     setElementText("curInstNo", inst.name);
-    setElementText("curInstAmount", `₹ ${inst.scheduledAmount.toLocaleString('en-IN')}`);
+    setElementText("curInstAmount", `₹ ${Number(inst.scheduledAmount).toLocaleString('en-IN')}`);
     setElementText("curInstDueDate", inst.dueDate);
     
     const statusBadge = document.getElementById("curInstStatusBadge");
@@ -640,11 +805,14 @@ function selectStepperStep(index, student) {
         statusBadge.className = `badge-pill ${inst.status.toLowerCase()}`;
     }
 
-    const dueAmount = Math.max(0, inst.scheduledAmount - inst.paidAmount);
+    const dueAmount = Math.max(0, Number(inst.scheduledAmount) - Number(inst.paidAmount || 0));
     setElementText("curInstToPay", `₹ ${dueAmount.toLocaleString('en-IN')}`);
 
     const payInput = document.getElementById("payAmountInput");
-    if (payInput) payInput.value = dueAmount;
+    // Don't overwrite while user is typing in Amount Paid
+    if (payInput && document.activeElement !== payInput) {
+        payInput.value = dueAmount;
+    }
 
     const prevTbody = document.getElementById("prevPaymentTableBody");
     let totalPrev = 0;
@@ -652,12 +820,12 @@ function selectStepperStep(index, student) {
         prevTbody.innerHTML = "";
         student.installments.slice(0, index).forEach(prevInst => {
             if (prevInst.paidAmount > 0) {
-                totalPrev += prevInst.paidAmount;
+                totalPrev += Number(prevInst.paidAmount);
                 prevTbody.innerHTML += `
                     <tr>
                         <td>${prevInst.name}</td>
                         <td>${prevInst.paidDate || '-'}</td>
-                        <td>${prevInst.paidAmount.toLocaleString('en-IN')}</td>
+                        <td>${Number(prevInst.paidAmount).toLocaleString('en-IN')}</td>
                         <td><span class="badge-pill paid">Paid</span></td>
                     </tr>
                 `;
@@ -748,47 +916,152 @@ async function processInstallmentPayment() {
 
     localStorage.setItem("scolexAdmissions", JSON.stringify(admissionsList));
 
-    // Sync payment data to Google Sheets fees sheet backend
+    // Sync payment data to Google Sheets "fees" sheet
+    // Apps Script + browser: form-urlencoded is most reliable with no-cors
+    // (JSON + application/json often never reaches doPost / e.postData)
+    let sheetSynced = false;
     if (GOOGLE_SCRIPT_URL && !GOOGLE_SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT")) {
         try {
+            // Convert payload to application/x-www-form-urlencoded
+            // Backend storeFeePayment() already reads e.parameter as fallback
+            const formBody = new URLSearchParams();
+            Object.keys(paymentPayload).forEach(key => {
+                const val = paymentPayload[key];
+                formBody.append(key, val === null || val === undefined ? "" : String(val));
+            });
+
             await fetch(GOOGLE_SCRIPT_URL, {
                 method: "POST",
                 mode: "no-cors",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(paymentPayload)
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: formBody.toString()
             });
+            // no-cors = opaque response; request still reaches Apps Script if deployment is correct
+            sheetSynced = true;
+            console.log("Fee payload sent to Google Apps Script (fees sheet):", paymentPayload);
         } catch (err) {
             console.error("Failed to sync fee data with Google Sheets:", err);
+            sheetSynced = false;
         }
     }
 
-    alert(`✅ Success! Marked ${inst.name} as Paid and synced to Google Sheets.`);
+    if (sheetSynced) {
+        alert(`✅ Success! Marked ${inst.name} as Paid.\nReceipt: ${receiptNo}\nSynced to Google Sheets (fees).`);
+    } else {
+        alert(`✅ Payment saved locally (Receipt: ${receiptNo}).\n⚠️ Could not reach Google Sheets – check Web App deployment.`);
+    }
     refreshScolexUI(student);
 }
 
 function updateReceiptPreview(student, activeInst, totalPrev) {
-    const lastPayment = student.paymentHistory[student.paymentHistory.length - 1] || {};
-    const amountPaidNow = lastPayment.amount || Math.max(0, activeInst.scheduledAmount - (activeInst.paidAmount - (lastPayment.amount || 0)));
+    if (!activeInst) return;
 
-    setElementText("recReceiptNo", lastPayment.receiptNo || "SCC/REC/2026-27/00025");
-    setElementText("recDate", lastPayment.date || "29 Aug 2026");
+    const lastPayment = student.paymentHistory[student.paymentHistory.length - 1] || {};
+
+    // Prefer live "Amount Paid" input if user is editing it
+    const payInputEl = document.getElementById("payAmountInput");
+    let amountPaidNow = 0;
+    if (payInputEl && document.activeElement === payInputEl) {
+        amountPaidNow = Number(payInputEl.value) || 0;
+    } else {
+        amountPaidNow = Math.max(0, Number(activeInst.scheduledAmount) - Number(activeInst.paidAmount || 0));
+        if (lastPayment.installmentName === activeInst.name && lastPayment.amount) {
+            amountPaidNow = Number(lastPayment.amount);
+        }
+    }
+
+    const projectedTotal = totalPrev + amountPaidNow;
+
+    setElementText("recReceiptNo", lastPayment.receiptNo || `SCC/REC/2026-27/${String((student.paymentHistory?.length || 0) + 25).padStart(5, '0')}`);
+
+    const dateInput = document.getElementById("payDateInput");
+    let displayDate = lastPayment.date;
+    if (!displayDate && dateInput && dateInput.value) {
+        displayDate = new Date(dateInput.value).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+    if (!displayDate) {
+        displayDate = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    setElementText("recDate", displayDate);
     setElementText("recStudentName", student.fullname || "");
     setElementText("recStudentId", student.appId || student.studentId || "");
     setElementText("recFatherName", student.fathername || "");
     setElementText("recCourse", student.courses || "");
     setElementText("recMobile", student.mobile || "");
-    setElementText("recAddress", [student.address, student.city].filter(Boolean).join(", ") || "");
+    setElementText("recAddress", [student.address, student.city, student.district, student.state].filter(Boolean).join(", ") || "");
 
     setElementText("recInstNo", `${activeInst.name} (of ${student.installments.length})`);
-    setElementText("recInstAmount", `₹ ${activeInst.scheduledAmount.toLocaleString('en-IN')}`);
+    setElementText("recInstAmount", `₹ ${Number(activeInst.scheduledAmount).toLocaleString('en-IN')}`);
     setElementText("recPrevPayment", `₹ ${totalPrev.toLocaleString('en-IN')}`);
-    setElementText("recTotalPaidNow", `₹ ${(totalPrev + amountPaidNow).toLocaleString('en-IN')}`);
-    setElementText("recPayDate", lastPayment.date || "29 Aug 2026");
+    setElementText("recTotalPaidNow", `₹ ${projectedTotal.toLocaleString('en-IN')}`);
+    setElementText("recPayDate", displayDate);
     setElementText("recPayMode", (selectedPaymentMethod || "CASH").toUpperCase());
-    setElementText("recTxnNo", lastPayment.txnId || "CASH/025");
+
+    const txnInput = document.getElementById("payTxnIdInput");
+    setElementText("recTxnNo", (txnInput && txnInput.value) ? txnInput.value : (lastPayment.txnId || "CASH/025"));
 
     setElementText("recAmountPaidBox", `₹ ${amountPaidNow.toLocaleString('en-IN')}`);
-    setElementText("recAmountWords", `(Rupees ${numberToWords(amountPaidNow)} Only)`);
+    setElementText("recAmountWords", `(Rupees ${numberToWords(amountPaidNow) || 'Zero'} Only)`);
+}
+
+/** Live-sync receipt when Amount Paid / Date / Txn / Course Fee change */
+function bindLiveReceiptSync() {
+    const amountInput = document.getElementById("payAmountInput");
+    const dateInput = document.getElementById("payDateInput");
+    const txnInput = document.getElementById("payTxnIdInput");
+
+    const sync = () => {
+        const index = document.getElementById("recordIndex")?.value;
+        if (index === "" || index === undefined) return;
+        const student = admissionsList[index];
+        if (!student) return;
+        const inst = student.installments[currentSelectedInstallment];
+        if (!inst) return;
+
+        let totalPrev = 0;
+        student.installments.slice(0, currentSelectedInstallment).forEach(p => {
+            totalPrev += Number(p.paidAmount || 0);
+        });
+        updateReceiptPreview(student, inst, totalPrev);
+    };
+
+    if (amountInput) {
+        amountInput.addEventListener("input", sync);
+        amountInput.addEventListener("change", sync);
+    }
+    if (dateInput) dateInput.addEventListener("change", sync);
+    if (txnInput) txnInput.addEventListener("input", sync);
+
+    // COURSE FEE (FIXED) apply
+    const feeInput = document.getElementById("courseFeeFixedInput");
+    const applyBtn = document.getElementById("btnApplyCourseFee");
+
+    const applyFee = () => {
+        const index = document.getElementById("recordIndex")?.value;
+        if (index === "" || index === undefined) return;
+        const student = admissionsList[index];
+        if (!student) return;
+        const newFee = Number(feeInput?.value);
+        if (isNaN(newFee) || newFee < 0) {
+            alert("Please enter a valid course fee.");
+            return;
+        }
+        updateCourseFeeFixed(student, newFee);
+        alert(`✅ Course fee set to ₹ ${newFee.toLocaleString('en-IN')}. Pending installments redistributed.`);
+    };
+
+    if (applyBtn) applyBtn.addEventListener("click", applyFee);
+    if (feeInput) {
+        feeInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                applyFee();
+            }
+        });
+    }
 }
 
 function numberToWords(num) {
@@ -912,4 +1185,144 @@ async function updateApplicationStatus(index, newStatus) {
             console.error("Failed to sync status update with Google Sheet:", err);
         }
     }
+}
+// ==========================================
+// Print Fee Receipt on A4 (single page, no blank page)
+// ==========================================
+function printFeeReceipt() {
+    const receipt = document.getElementById("feeReceiptCard");
+    if (!receipt) {
+        alert("Receipt not found. Open a student and go to Fee Details tab first.");
+        return;
+    }
+
+    // Prefer isolated print window so only 1 A4 page prints
+    const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Payment Receipt - Scolex</title>
+<style>
+  @page { size: A4 portrait; margin: 12mm; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    color: #0f172a;
+    background: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .receipt-paper {
+    width: 100%;
+    max-width: 186mm;
+    margin: 0 auto;
+    border: 2px solid #0b2545;
+    padding: 14px 16px;
+    font-size: 11pt;
+  }
+  .receipt-top-banner {
+    background: #0b2545;
+    color: #fff;
+    text-align: center;
+    font-weight: 800;
+    letter-spacing: 2px;
+    padding: 8px;
+    margin: -14px -16px 12px -16px;
+    font-size: 13pt;
+  }
+  .receipt-header-center { text-align: center; margin-bottom: 10px; }
+  .receipt-logo {
+    width: 44px; height: 44px; border-radius: 50%;
+    border: 2px dashed #0b2545; margin: 0 auto;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 800;
+  }
+  .receipt-header-center h3 { margin: 6px 0 2px; font-size: 14pt; color: #0b2545; }
+  .receipt-sub { margin: 0; font-size: 9pt; color: #475569; }
+  .receipt-meta-line {
+    display: flex; justify-content: space-between;
+    border-top: 1px solid #cbd5e1; border-bottom: 1px solid #cbd5e1;
+    padding: 6px 0; margin-bottom: 10px; font-size: 10pt;
+  }
+  .meta-lbl { font-size: 8pt; color: #64748b; display: block; }
+  .rec-red-text { color: #b91c1c; font-family: monospace; }
+  .receipt-sec-header {
+    background: #0b2545; color: #fff; font-size: 9pt;
+    font-weight: 700; padding: 5px 8px; letter-spacing: 0.5px;
+  }
+  .receipt-grid-2col {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+    padding: 8px; border: 1px solid #e2e8f0; border-top: none;
+  }
+  .rec-field-label { font-size: 8pt; color: #64748b; }
+  .rec-field-val { font-size: 10pt; font-weight: 600; }
+  .receipt-kv-table { border: 1px solid #e2e8f0; border-top: none; }
+  .r-row {
+    display: flex; justify-content: space-between;
+    padding: 5px 8px; border-bottom: 1px solid #f1f5f9; font-size: 10pt;
+  }
+  .r-row.highlight { background: #f8fafc; font-weight: bold; }
+  .receipt-amount-block {
+    display: flex; justify-content: space-between; align-items: center; margin-top: 12px;
+  }
+  .words-italic { font-style: italic; font-size: 9pt; color: #475569; }
+  .amount-box-right {
+    border: 2px solid #0b2545; border-radius: 6px;
+    padding: 8px 16px; font-size: 16pt; font-weight: 900; color: #0b2545;
+  }
+  .receipt-signature-area {
+    display: flex; justify-content: space-between; align-items: flex-end; margin-top: 18px;
+  }
+  .seal-circle {
+    width: 48px; height: 48px; border: 2px solid #0284c7; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #0284c7; font-size: 8px; transform: rotate(-15deg);
+  }
+  .sig-block { text-align: right; min-width: 160px; }
+  .sig-line {
+    height: 42px; border-bottom: 1.5px solid #000;
+    width: 160px; margin-left: auto; margin-bottom: 4px;
+  }
+  .sig-title { font-size: 9pt; font-weight: bold; }
+  .sig-company { font-size: 8pt; color: #64748b; }
+  .receipt-footer-bar {
+    background: #0b2545; color: #fff; text-align: center;
+    font-size: 9pt; padding: 8px; margin: 14px -16px -14px -16px;
+  }
+  .receipt-footer-bar p { margin: 0 0 2px; }
+  @media print {
+    body { margin: 0; }
+    .receipt-paper {
+      border: 2px solid #0b2545;
+      page-break-after: avoid;
+      page-break-inside: avoid;
+    }
+  }
+</style>
+</head>
+<body>
+  ${receipt.outerHTML}
+  <script>
+    window.onload = function () {
+      setTimeout(function () {
+        window.focus();
+        window.print();
+        window.close();
+      }, 200);
+    };
+  <\/script>
+</body>
+</html>`;
+
+    const win = window.open("", "_blank", "width=800,height=1000");
+    if (!win) {
+        // Popup blocked – fallback to page print
+        window.print();
+        return;
+    }
+    win.document.open();
+    win.document.write(html);
+    win.document.close();
 }
