@@ -1,326 +1,531 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Tutorials - Scolex Computer Classes</title>
-
-    <!-- Font Awesome Icons for Play Button -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
         body {
-            background: linear-gradient(135deg, #f44c40, #00f2fe);
-            padding: 30px 15px;
+            background: #e0f7fa;
+            padding: 20px 15px;
             min-height: 100vh;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1100px; margin: 0 auto; }
 
-        /* Card Container */
         .card {
-            background: #fff;
-            border-radius: 18px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-            padding: 35px;
+            background: #e0f7fa;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 25px;
         }
 
-        /* Header Section */
-        .heading-box {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 35px;
-            flex-wrap: wrap;
+        /* Header like index / admission form */
+        .header-banner {
+            background: linear-gradient(135deg, #0284c7, #0369a1, #0f172a);
+            padding: 24px 15px;
+            border-radius: 12px;
             text-align: center;
+            color: #fff;
+            margin-bottom: 25px;
+            border-bottom: 4px solid #38bdf8;
+            box-shadow: 0 6px 15px rgba(2, 132, 199, 0.2);
         }
 
-        .heading-text {
-            flex: 1;
+        .header-banner h1 {
+            font-size: clamp(18px, 4vw, 32px);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            text-transform: uppercase;
         }
 
-        .logo {
-            width: 90px;
-            height: 90px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 4px solid #0d6efd;
+        .header-banner h2 {
+            font-size: clamp(12px, 2.2vw, 18px);
+            font-weight: 500;
+            color: #fef08a;
+            margin-bottom: 8px;
+        }
+
+        .header-banner .location-text {
+            font-size: clamp(11px, 1.8vw, 15px);
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .page-title {
+            background: #ffffff;
+            color: #1e293b;
+            padding: 12px 16px;
+            border-left: 5px solid #0284c7;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .page-title span { color: #0284c7; }
+
+        .admin-btn {
+            background: #0284c7;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .admin-btn:hover { background: #0369a1; }
+        .admin-btn.danger { background: #dc2626; }
+        .admin-btn.danger:hover { background: #b91c1c; }
+        .admin-btn.success { background: #16a34a; }
+        .admin-btn.success:hover { background: #15803d; }
+
+        /* Admin Panel */
+        .admin-panel {
+            display: none;
             background: #fff;
-            padding: 4px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            transition: 0.3s;
+            border: 1px solid #bae6fd;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .admin-panel.open { display: block; }
+
+        .admin-panel h4 {
+            color: #0284c7;
+            margin-bottom: 15px;
+            font-size: 15px;
         }
 
-        .logo:hover {
-            transform: scale(1.1) rotate(5deg);
+        .admin-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
         }
 
-        h1 {
-            font-size: 48px;
-            font-weight: 700;
-            color: #d10e0e;
-            text-shadow: 2px 2px #0d6efd, 4px 4px rgba(0, 0, 0, .3);
+        .admin-form .full { grid-column: span 2; }
+
+        .admin-form label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #334155;
+            display: block;
+            margin-bottom: 4px;
         }
 
-        h2 {
-            font-size: 24px;
-            font-weight: 700;
-            color: #0ed11b;
-            text-shadow: 1px 1px #020407, 2px 2px rgba(0, 0, 0, .3);
+        .admin-form input, .admin-form textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+        .admin-form input:focus, .admin-form textarea:focus {
+            border-color: #0284c7;
+            box-shadow: 0 0 0 3px rgba(2,132,199,0.15);
         }
 
-        h3 {
-            display: inline-block;
-            padding: 12px 35px;
-            color: #a01919;
-            font-size: 22px;
-            font-weight: 700;
-            border-radius: 15px;
-            background: rgba(163, 10, 10, 0.18);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, .3);
-            box-shadow: 0 8px 20px rgba(180, 6, 6, 0.2);
-            margin-top: 10px;
+        .admin-form .actions {
+            grid-column: span 2;
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
         }
 
-        /* Video Grid Layout - Set to 3 columns on desktop */
+        /* Video Grid */
         .video-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-            margin-top: 20px;
+            gap: 20px;
         }
 
         .video-card {
-            background: #f9f9f9;
+            background: #fff;
             border-radius: 12px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid #e2e8f0;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            transition: transform 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
         }
-
         .video-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
 
-        /* 16:9 Aspect Ratio Box */
         .video-player-box {
             position: relative;
             width: 100%;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            padding-bottom: 56.25%;
             height: 0;
-            background: #000;
+            background: #0f172a;
             cursor: pointer;
             overflow: hidden;
         }
 
-        /* Thumbnail styling */
         .video-player-box img {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             object-fit: cover;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s;
         }
+        .video-player-box:hover img { transform: scale(1.05); }
 
-        .video-player-box:hover img {
-            transform: scale(1.05);
-        }
-
-        /* Play Button Icon */
         .play-btn {
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 55px;
-            color: rgba(255, 255, 255, 0.9);
-            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            transition: all 0.2s ease;
+            font-size: 48px;
+            color: rgba(255,255,255,0.92);
+            text-shadow: 0 4px 12px rgba(0,0,0,0.5);
             z-index: 2;
+            transition: 0.2s;
         }
-
         .video-player-box:hover .play-btn {
-            color: #ff0000;
-            transform: translate(-50%, -50%) scale(1.15);
+            color: #ef4444;
+            transform: translate(-50%, -50%) scale(1.12);
         }
 
-        /* Embedded iframe styles */
         .video-player-box iframe {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             border: 0;
         }
 
-        .video-details {
-            padding: 15px;
-        }
+        .video-details { padding: 14px; }
 
         .video-details h4 {
-            font-size: 16px;
-            color: #222;
+            font-size: 14px;
+            color: #1e293b;
             margin-bottom: 6px;
-        }
-
-        .video-details p {
-            font-size: 13px;
-            color: #666;
             line-height: 1.4;
         }
 
-        /* Responsive Design */
-        @media (max-width: 992px) {
-            .video-grid {
-                grid-template-columns: repeat(2, 1fr); /* 2 columns on tablets */
-            }
+        .video-details p {
+            font-size: 12px;
+            color: #64748b;
+            line-height: 1.45;
         }
 
-        @media (max-width: 768px) {
-            h1 { font-size: 30px; }
-            h2 { font-size: 16px; }
-            h3 { font-size: 18px; padding: 8px 20px; }
-            .heading-box { flex-direction: column; gap: 15px; }
-            .logo { width: 70px; height: 70px; }
-            .card { padding: 20px 15px; }
-            .video-grid {
-                grid-template-columns: 1fr; /* 1 column on mobile */
-            }
+        .delete-video-btn {
+            position: absolute;
+            top: 8px; right: 8px;
+            background: rgba(220,38,38,0.9);
+            color: #fff;
+            border: none;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            font-size: 12px;
+            cursor: pointer;
+            z-index: 5;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .admin-mode .delete-video-btn { display: flex; }
+        .delete-video-btn:hover { background: #b91c1c; }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+            background: #fff;
+            border-radius: 12px;
+            border: 1px dashed #cbd5e1;
+        }
+
+        @media (max-width: 992px) {
+            .video-grid { grid-template-columns: repeat(2, 1fr); }
+            .admin-form { grid-template-columns: 1fr; }
+            .admin-form .full, .admin-form .actions { grid-column: span 1; }
+        }
+        @media (max-width: 600px) {
+            .video-grid { grid-template-columns: 1fr; }
+            .card { padding: 15px 12px; }
+            body { padding: 10px; }
         }
     </style>
 </head>
-
 <body>
 
-    <div class="container">
-        <div class="card">
+<div class="container">
+    <div class="card">
 
-            <!-- Main Heading Header -->
-            <div class="heading-box">
-                <img src="html/logo.png" class="logo" alt="Logo">
-                <div class="heading-text">
-                    <h1>Scolex Computer Classes</h1>
-                    <h2>A Unit of IACT (Institute of Advanced Computer Technology)</h2>
-                    <h3>Video Tutorials</h3>
-                </div>
-                <img src="html/logo.png" class="logo" alt="Logo">
-            </div>
-
-            <!-- Video Section - 3 Columns Layout -->
-            <div class="video-grid">
-
-                <!-- Video Card 1 -->
-                <div class="video-card">
-                    <div class="video-player-box" onclick="playInWindow(this, 'a-7cXh1MEPI', 538)">
-                        <img src="https://img.youtube.com/vi/a-7cXh1MEPI/hqdefault.jpg" alt="Computer Fundamental_01 Thumbnail">
-                        <i class="fa-solid fa-circle-play play-btn"></i>
-                    </div>
-                    <div class="video-details">
-                        <h4>Computer Fundamental_01 || What is Computer? || History of computer</h4>
-                        <p>Learn computer basics, origin, definitions, and classification starting from 8:58.</p>
-                    </div>
-                </div>
-
-                <!-- Video Card 2 -->
-                <div class="video-card">
-                    <div class="video-player-box" onclick="playInWindow(this, 'a-7cXh1MEPI', 0)">
-                        <img src="https://img.youtube.com/vi/a-7cXh1MEPI/hqdefault.jpg" alt="Computer Fundamental_02 Thumbnail">
-                        <i class="fa-solid fa-circle-play play-btn"></i>
-                    </div>
-                    <div class="video-details">
-                        <h4>Computer Fundamental_02 || Components & Hardware</h4>
-                        <p>Introduction to core components, CPU, memory units, and peripheral devices.</p>
-                    </div>
-                </div>
-
-                <!-- Video Card 3 -->
-                <div class="video-card">
-                    <div class="video-player-box" onclick="playInWindow(this, 'a-7cXh1MEPI', 0)">
-                        <img src="https://img.youtube.com/vi/a-7cXh1MEPI/hqdefault.jpg" alt="Computer Fundamental_03 Thumbnail">
-                        <i class="fa-solid fa-circle-play play-btn"></i>
-                    </div>
-                    <div class="video-details">
-                        <h4>Computer Fundamental_03 || Operating Systems Overview</h4>
-                        <p>Understanding System Software, Application Software, and OS functions.</p>
-                    </div>
-                </div>
-
-                <!-- Video Card 4 -->
-                <div class="video-card">
-                    <div class="video-player-box" onclick="playInWindow(this, 'a-7cXh1MEPI', 0)">
-                        <img src="https://img.youtube.com/vi/a-7cXh1MEPI/hqdefault.jpg" alt="Computer Fundamental_04 Thumbnail">
-                        <i class="fa-solid fa-circle-play play-btn"></i>
-                    </div>
-                    <div class="video-details">
-                        <h4>Computer Fundamental_04 || Networking & Internet Basics</h4>
-                        <p>Learn LAN, WAN, IP addresses, Web Browsers, and Search Engines.</p>
-                    </div>
-                </div>
-
-                <!-- Video Card 5 -->
-                <div class="video-card">
-                    <div class="video-player-box" onclick="playInWindow(this, 'a-7cXh1MEPI', 0)">
-                        <img src="https://img.youtube.com/vi/a-7cXh1MEPI/hqdefault.jpg" alt="Computer Fundamental_05 Thumbnail">
-                        <i class="fa-solid fa-circle-play play-btn"></i>
-                    </div>
-                    <div class="video-details">
-                        <h4>Computer Fundamental_05 || Cybersecurity & Safety</h4>
-                        <p>Overview of malware, antivirus tools, password safety, and online privacy.</p>
-                    </div>
-                </div>
-
-            </div>
-
+        <!-- Header matching index / admission style -->
+        <div class="header-banner">
+            <h1>Scolex Computer Classes</h1>
+            <h2>IACT (Institute for Advanced Computer Technology)</h2>
+            <p class="location-text">📍 Shanti Market, Main Road, Motipur</p>
         </div>
+
+        <div class="page-title">
+            <div>🎬 Video Tutorials <span id="videoCount">(0)</span></div>
+            <div id="adminControls" style="display:none;">
+                <button type="button" class="admin-btn" id="toggleAdminBtn" onclick="toggleAdminPanel()">+ Add Video</button>
+            </div>
+        </div>
+
+        <!-- Admin Panel: Paste YouTube Link -->
+        <div class="admin-panel" id="adminPanel">
+            <h4>👤 Admin – Add YouTube Video</h4>
+            <div class="admin-form">
+                <div class="full">
+                    <label>YouTube Link or Video ID *</label>
+                    <input type="text" id="ytLink" placeholder="https://www.youtube.com/watch?v=xxxxx  or  just video ID">
+                </div>
+                <div>
+                    <label>Title *</label>
+                    <input type="text" id="ytTitle" placeholder="Video title">
+                </div>
+                <div>
+                    <label>Start Time (seconds, optional)</label>
+                    <input type="number" id="ytStart" placeholder="0" min="0" value="0">
+                </div>
+                <div class="full">
+                    <label>Description</label>
+                    <textarea id="ytDesc" rows="2" placeholder="Short description of the video"></textarea>
+                </div>
+                <div class="actions">
+                    <button type="button" class="admin-btn success" onclick="addVideo()">Save Video</button>
+                    <button type="button" class="admin-btn danger" onclick="toggleAdminPanel()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Video Grid -->
+        <div class="video-grid" id="videoGrid">
+            <!-- Filled by JavaScript -->
+        </div>
+
     </div>
+</div>
 
-    <!-- Error-Free JS Function -->
-    <script>
-        function playInWindow(container, videoId, startTime) {
-            if (!container || !videoId) return;
+<script>
+// ============================================
+// DEFAULT VIDEOS (shown if no saved videos)
+// ============================================
+const DEFAULT_VIDEOS = [
+    {
+        id: "a-7cXh1MEPI",
+        title: "Computer Fundamental_01 || What is Computer? || History of computer",
+        desc: "Learn computer basics, origin, definitions, and classification starting from 8:58.",
+        start: 538
+    },
+    {
+        id: "a-7cXh1MEPI",
+        title: "Computer Fundamental_02 || Components & Hardware",
+        desc: "Introduction to core components, CPU, memory units, and peripheral devices.",
+        start: 0
+    },
+    {
+        id: "a-7cXh1MEPI",
+        title: "Computer Fundamental_03 || Operating Systems Overview",
+        desc: "Understanding System Software, Application Software, and OS functions.",
+        start: 0
+    },
+    {
+        id: "a-7cXh1MEPI",
+        title: "Computer Fundamental_04 || Networking & Internet Basics",
+        desc: "Learn LAN, WAN, IP addresses, Web Browsers, and Search Engines.",
+        start: 0
+    },
+    {
+        id: "a-7cXh1MEPI",
+        title: "Computer Fundamental_05 || Cybersecurity & Safety",
+        desc: "Overview of malware, antivirus tools, password safety, and online privacy.",
+        start: 0
+    }
+];
 
-            // Using youtube-nocookie.com domain to resolve Error 153/Privacy restrictions
-            let embedUrl = 'https://www.youtube-nocookie.com/embed/' + videoId + '?autoplay=1&rel=0';
-            if (startTime) {
-                embedUrl += '&start=' + startTime;
-            }
+const STORAGE_KEY = "scolexVideoTutorials";
 
-            // Added explicit referrerpolicy and updated allow attributes
-            container.innerHTML = `
-                <iframe 
-                    src="${embedUrl}" 
-                    title="YouTube Video Player"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    referrerpolicy="strict-origin-when-cross-origin"
-                    allowfullscreen>
-                </iframe>
-            `;
+// Extract YouTube video ID from many URL formats
+function extractVideoId(input) {
+    if (!input) return null;
+    input = input.trim();
 
-            // Clean click event handler
-            container.style.cursor = "default";
-            container.removeAttribute("onclick");
-            container.onclick = null;
+    // Already a plain ID (11 chars typical)
+    if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input;
+
+    // Various YouTube URL patterns
+    const patterns = [
+        /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/v\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/,
+        /[?&]v=([a-zA-Z0-9_-]{11})/
+    ];
+    for (let i = 0; i < patterns.length; i++) {
+        const m = input.match(patterns[i]);
+        if (m) return m[1];
+    }
+    return null;
+}
+
+function getVideos() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            const list = JSON.parse(saved);
+            if (Array.isArray(list) && list.length > 0) return list;
         }
-    </script>
+    } catch (e) {}
+    return DEFAULT_VIDEOS.slice();
+}
+
+function saveVideos(list) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+}
+
+function isAdmin() {
+    return (localStorage.getItem("userRole") || "").toLowerCase() === "admin";
+}
+
+function renderVideos() {
+    const grid = document.getElementById("videoGrid");
+    const videos = getVideos();
+    const admin = isAdmin();
+
+    document.getElementById("videoCount").textContent = "(" + videos.length + ")";
+
+    if (admin) {
+        document.getElementById("adminControls").style.display = "block";
+        document.body.classList.add("admin-mode");
+    } else {
+        document.getElementById("adminControls").style.display = "none";
+        document.body.classList.remove("admin-mode");
+        document.getElementById("adminPanel").classList.remove("open");
+    }
+
+    if (!videos.length) {
+        grid.innerHTML = '<div class="empty-state">No videos yet. Admin can add YouTube links above.</div>';
+        return;
+    }
+
+    grid.innerHTML = videos.map(function (v, index) {
+        const thumb = "https://img.youtube.com/vi/" + v.id + "/hqdefault.jpg";
+        const start = v.start || 0;
+        return (
+            '<div class="video-card" data-index="' + index + '">' +
+                (admin ? '<button type="button" class="delete-video-btn" title="Delete" onclick="deleteVideo(' + index + ')"><i class="fa-solid fa-trash"></i></button>' : '') +
+                '<div class="video-player-box" onclick="playInWindow(this, \'' + v.id + '\', ' + start + ')">' +
+                    '<img src="' + thumb + '" alt="' + escapeHtml(v.title) + '">' +
+                    '<i class="fa-solid fa-circle-play play-btn"></i>' +
+                '</div>' +
+                '<div class="video-details">' +
+                    '<h4>' + escapeHtml(v.title) + '</h4>' +
+                    '<p>' + escapeHtml(v.desc || '') + '</p>' +
+                '</div>' +
+            '</div>'
+        );
+    }).join("");
+}
+
+function escapeHtml(str) {
+    if (!str) return "";
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+}
+
+function playInWindow(container, videoId, startTime) {
+    if (!container || !videoId) return;
+    let embedUrl = "https://www.youtube-nocookie.com/embed/" + videoId + "?autoplay=1&rel=0";
+    if (startTime) embedUrl += "&start=" + startTime;
+
+    container.innerHTML =
+        '<iframe src="' + embedUrl + '" title="YouTube Video Player" ' +
+        'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ' +
+        'referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>';
+
+    container.style.cursor = "default";
+    container.removeAttribute("onclick");
+    container.onclick = null;
+}
+
+function toggleAdminPanel() {
+    if (!isAdmin()) {
+        alert("Only Admin can add videos. Please login as Admin.");
+        return;
+    }
+    document.getElementById("adminPanel").classList.toggle("open");
+}
+
+function addVideo() {
+    if (!isAdmin()) {
+        alert("Only Admin can add videos.");
+        return;
+    }
+
+    const link = document.getElementById("ytLink").value.trim();
+    const title = document.getElementById("ytTitle").value.trim();
+    const desc = document.getElementById("ytDesc").value.trim();
+    const start = parseInt(document.getElementById("ytStart").value, 10) || 0;
+
+    const videoId = extractVideoId(link);
+    if (!videoId) {
+        alert("Please paste a valid YouTube link or 11-character Video ID.");
+        document.getElementById("ytLink").focus();
+        return;
+    }
+    if (!title) {
+        alert("Please enter a video title.");
+        document.getElementById("ytTitle").focus();
+        return;
+    }
+
+    const list = getVideos();
+    list.unshift({
+        id: videoId,
+        title: title,
+        desc: desc,
+        start: start
+    });
+    saveVideos(list);
+
+    // Clear form
+    document.getElementById("ytLink").value = "";
+    document.getElementById("ytTitle").value = "";
+    document.getElementById("ytDesc").value = "";
+    document.getElementById("ytStart").value = "0";
+    document.getElementById("adminPanel").classList.remove("open");
+
+    renderVideos();
+    alert("✅ Video added successfully!");
+}
+
+function deleteVideo(index) {
+    if (!isAdmin()) return;
+    if (!confirm("Delete this video?")) return;
+
+    const list = getVideos();
+    list.splice(index, 1);
+    saveVideos(list);
+    renderVideos();
+}
+
+// Init
+document.addEventListener("DOMContentLoaded", renderVideos);
+</script>
+
+<!-- Optional: auto logout after 30 min inactivity -->
+<script src="js/session.js"></script>
 
 </body>
 </html>
