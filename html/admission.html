@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Application Form - Scolex Computer Classes</title>
-    <!-- External CSS File Link -->
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -24,7 +23,7 @@
 
             <!-- Progress Indicator -->
             <div class="step-indicator">
-                <span id="stepIndicatorText">Step 1 of 5: Personal Information</span>
+                <span id="stepIndicatorText">Step 1 of 6: Personal Information</span>
             </div>
 
             <form id="applicationForm">
@@ -88,7 +87,8 @@
                         </div>
                         <div class="input-group">
                             <label>Aadhaar Number</label>
-                            <input type="text" name="aadharnumber" maxlength="12" placeholder="Enter Aadhaar Number">
+                            <input type="text" name="aadharnumber" id="aadharnumber" maxlength="12" placeholder="Enter Aadhaar Number" inputmode="numeric">
+                            <span id="aadhaar-error" class="field-error hidden">⚠ Aadhaar number is already registered</span>
                         </div>
                     </div>
                     <div class="btn-container right">
@@ -102,7 +102,7 @@
                     <div class="grid-row">
                         <div class="input-group">
                             <label>Highest Education *</label>
-                            <select name="education" required>
+                            <select name="education" id="education" required>
                                 <option value="">Select Education</option>
                                 <option>10th</option>
                                 <option>12th</option>
@@ -139,9 +139,9 @@
                                 <option>A+</option>
                             </select>
                         </div>      
-                        <div class="input-group">
+                        <div class="input-group" id="subjects-group">
                             <label>Subjects / Stream</label>
-                            <input type="text" name="subjects" placeholder="Enter Subjects / Stream">
+                            <input type="text" name="subjects" id="subjects" placeholder="Enter Subjects / Stream">
                         </div>
                     </div>
                     <div class="btn-container between">
@@ -279,7 +279,178 @@
                     </div>
                     <div class="btn-container between">
                         <button type="button" class="custom-btn secondary prev-btn">⬅ Back</button>
-                        <button type="submit" class="custom-btn submit-btn">Submit Application</button>
+                        <button type="button" class="custom-btn next-btn">Preview Application ➔</button>
+                    </div>
+                </div>
+
+                <!-- PART 6: Preview / Review before Submit -->
+                <div class="form-step hidden" id="step-6">
+                    <h5 class="section-title">👁️ Review Application (Preview before Submit)</h5>
+                    
+                    <div class="preview-layout">
+                        <div class="preview-main">
+                            <!-- Personal Details -->
+                            <div class="preview-section">
+                                <h6 class="preview-section-title">👤 Personal Details</h6>
+                                <div class="preview-grid">
+                                    <div class="preview-item">
+                                        <span class="preview-label">FULL NAME</span>
+                                        <span class="preview-value" id="pv-fullname">—</span>
+                                    </div>
+                                    <div class="preview-item">
+                                        <span class="preview-label">FATHER'S NAME</span>
+                                        <span class="preview-value" id="pv-fathername">—</span>
+                                    </div>
+                                    <div class="preview-item">
+                                        <span class="preview-label">MOBILE NUMBER</span>
+                                        <span class="preview-value" id="pv-mobile">—</span>
+                                    </div>
+                                    <div class="preview-item">
+                                        <span class="preview-label">EMAIL ADDRESS</span>
+                                        <span class="preview-value" id="pv-email">—</span>
+                                    </div>
+                                    <div class="preview-item">
+                                        <span class="preview-label">DATE OF BIRTH</span>
+                                        <span class="preview-value" id="pv-dob">—</span>
+                                    </div>
+                                    <div class="preview-item">
+                                        <span class="preview-label">GENDER</span>
+                                        <span class="preview-value" id="pv-gender">—</span>
+                                    </div>
+                                    <div class="preview-item">
+                                        <span class="preview-label">NATIONALITY</span>
+                                        <span class="preview-value" id="pv-nationality">—</span>
+                                    </div>
+                                    <div class="preview-item">
+                                        <span class="preview-label">CATEGORY</span>
+                                        <span class="preview-value" id="pv-category">—</span>
+                                    </div>
+                                    <div class="preview-item">
+                                        <span class="preview-label">AADHAAR NUMBER</span>
+                                        <span class="preview-value" id="pv-aadharnumber">—</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Educational Background -->
+                            <div class="preview-section">
+                                <h6 class="preview-section-title">🎓 Educational Background</h6>
+                                <div class="preview-grid">
+                                    <div class="preview-item">
+                                        <span class="preview-label">HIGHEST QUALIFICATION</span>
+                                        <span class="preview-value" id="pv-education">—</span>
+                                    </div>
+                                    <div class="preview-item">
+                                        <span class="preview-label">SCHOOL / COLLEGE</span>
+                                        <span class="preview-value" id="pv-college">—</span>
+                                    </div>
+                                    <div class="preview-item">
+                                        <span class="preview-label">BOARD / UNIVERSITY</span>
+                                        <span class="preview-value" id="pv-board">—</span>
+                                    </div>
+                                    <div class="preview-item">
+                                        <span class="preview-label">PASSING YEAR</span>
+                                        <span class="preview-value" id="pv-passingyear">—</span>
+                                    </div>
+                                    <div class="preview-item">
+                                        <span class="preview-label">PERCENTAGE / CGPA</span>
+                                        <span class="preview-value" id="pv-percentage">—</span>
+                                    </div>
+                                    <div class="preview-item">
+                                        <span class="preview-label">DIVISION / GRADE</span>
+                                        <span class="preview-value" id="pv-division">—</span>
+                                    </div>
+                                    <div class="preview-item" id="pv-subjects-item">
+                                        <span class="preview-label">SUBJECTS / STREAM</span>
+                                        <span class="preview-value" id="pv-subjects">—</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Course Enrollment -->
+                            <div class="preview-section">
+                                <h6 class="preview-section-title">💻 Course Enrollment & Preferences</h6>
+                                <div class="preview-grid">
+                                    <div class="preview-item">
+                                        <span class="preview-label">ENROLLED COURSE</span>
+                                        <span class="preview-value" id="pv-courses">—</span>
+                                    </div>
+                                    <div class="preview-item">
+                                        <span class="preview-label">BATCH TIMING</span>
+                                        <span class="preview-value" id="pv-batch">—</span>
+                                    </div>
+                                    <div class="preview-item">
+                                        <span class="preview-label">LEARNING MODE</span>
+                                        <span class="preview-value" id="pv-learningmode">—</span>
+                                    </div>
+                                    <div class="preview-item">
+                                        <span class="preview-label">PREFERRED CONTACT</span>
+                                        <span class="preview-value" id="pv-contact">—</span>
+                                    </div>
+                                    <div class="preview-item">
+                                        <span class="preview-label">REFERRAL SOURCE</span>
+                                        <span class="preview-value" id="pv-referral">—</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Address -->
+                            <div class="preview-section">
+                                <h6 class="preview-section-title">📍 Address Information</h6>
+                                <div class="preview-grid">
+                                    <div class="preview-item full">
+                                        <span class="preview-label">COMPLETE ADDRESS</span>
+                                        <span class="preview-value" id="pv-address">—</span>
+                                    </div>
+                                    <div class="preview-item">
+                                        <span class="preview-label">CITY / TOWN</span>
+                                        <span class="preview-value" id="pv-city">—</span>
+                                    </div>
+                                    <div class="preview-item">
+                                        <span class="preview-label">DISTRICT</span>
+                                        <span class="preview-value" id="pv-district">—</span>
+                                    </div>
+                                    <div class="preview-item">
+                                        <span class="preview-label">STATE</span>
+                                        <span class="preview-value" id="pv-state">—</span>
+                                    </div>
+                                    <div class="preview-item">
+                                        <span class="preview-label">PIN CODE</span>
+                                        <span class="preview-value" id="pv-pincode">—</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Documents status -->
+                            <div class="preview-section">
+                                <h6 class="preview-section-title">📁 Documents Status</h6>
+                                <div class="preview-docs-status">
+                                    <div class="doc-status-item" id="pv-photo-status">Photo: Not uploaded</div>
+                                    <div class="doc-status-item" id="pv-signature-status">Signature: Not uploaded</div>
+                                    <div class="doc-status-item" id="pv-marksheet-status">Marksheet: Not uploaded</div>
+                                    <div class="doc-status-item" id="pv-aadhaar-status">Aadhaar: Not uploaded</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right column: Photo + Signature -->
+                        <div class="preview-side">
+                            <div class="preview-photo-card">
+                                <div class="preview-photo-label">Profile Photo</div>
+                                <img id="pv-photo" class="preview-side-img" alt="Photo Preview" src="">
+                                <div class="no-img-placeholder" id="pv-photo-placeholder">No photo</div>
+                            </div>
+                            <div class="preview-photo-card">
+                                <div class="preview-photo-label">Student Signature</div>
+                                <img id="pv-signature" class="preview-side-img signature-img" alt="Signature Preview" src="">
+                                <div class="no-img-placeholder" id="pv-signature-placeholder">No signature</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-container between">
+                        <button type="button" class="custom-btn secondary prev-btn">⬅ Back to Edit</button>
+                        <button type="submit" class="custom-btn submit-btn">✅ Confirm & Submit Application</button>
                     </div>
                 </div>
 
