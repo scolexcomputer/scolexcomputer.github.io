@@ -1,8 +1,7 @@
 // ==========================================
 // Google Apps Script Web App Deployment URL
 // ==========================================
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx27B-YTlgr7S_1P5Eh06qjTj4eWQLZ3l4uCdCIOvjQtXz2goM5yasucD1Vhnn94-wM/exec"; 
-
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzGbaFLqUCoAFH0eTJRVhdnFNcJEUZHwVbWX_kkJbD0MMfyPGpcGbpFki8OI-jHr7zM/exec"; 
 
 let admissionsList = [];
 let currentSelectedInstallment = 0;
@@ -62,15 +61,70 @@ function scolexLogout() {
 // 2. Fetch Data (Google Sheets + LocalStorage Fallback)
 // ==========================================
 async function fetchAdmissionData() {
-    showTableLoading("⌛ Fetching live admission records from Google Sheets...");
+    showTableLoading("⌛ Fetching live admission and fee records from Google Sheets...");
 
     if (GOOGLE_SCRIPT_URL && !GOOGLE_SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT")) {
         try {
-            const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=read`);
-            const result = await response.json();
+            const [admissionRes, feesRes] = await Promise.all([
+                fetch(`${GOOGLE_SCRIPT_URL}?action=read`),
+                fetch(`${GOOGLE_SCRIPT_URL}?action=readFees`)
+            ]);
 
-            if (result.success && Array.isArray(result.data)) {
-                admissionsList = result.data.map(item => normalizeAdmissionRecord(item));
+            const admissionResult = await admissionRes.json();
+            const feesResult = await feesRes.json();
+
+            if (admissionResult.success && Array.isArray(admissionResult.data)) {
+                let feesData = (feesResult.success && Array.isArray(feesResult.data)) ? feesResult.data : [];
+
+                admissionsList = admissionResult.data.map(item => {
+                    const normalized = normalizeAdmissionRecord(item);
+                    const appId = normalized.appId || normalized.studentId;
+
+                    const studentFees = feesData.filter(f => f.appId === appId);
+
+                    if (studentFees.length > 0) {
+                        normalized.paymentHistory = studentFees.map(f => ({
+                            timestamp: f.timestamp,
+                            receiptNo: f.receiptNo,
+                            installmentName: `Installment ${f.installmentNo}`,
+                            amount: Number(f.amountPaid),
+                            method: f.paymentMode,
+                            txnId: f.transactionIdRef,
+                            date: f.paymentDate,
+                            remarks: f.remarks
+                        }));
+
+                        const baseFee = COURSE_FEE_STRUCTURE[normalized.courses] || Number(normalized.totalFee) || 5500;
+                        normalized.totalFee = Number(studentFees[0].totalCourseFee) || baseFee;
+                        const instCount = 5;
+                        const perInst = Math.round(normalized.totalFee / instCount);
+                        normalized.installments = [];
+
+                        for (let i = 1; i <= instCount; i++) {
+                            normalized.installments.push({
+                                no: i,
+                                name: `${i}${getOrdinalSuffix(i)} Installment`,
+                                scheduledAmount: (i === instCount) ? (normalized.totalFee - (perInst * (instCount - 1))) : perInst,
+                                paidAmount: 0,
+                                status: "Pending",
+                                dueDate: "30 Aug 2026"
+                            });
+                        }
+
+                        studentFees.forEach(f => {
+                            const inst = normalized.installments.find(i => i.no === Number(f.installmentNo));
+                            if (inst) {
+                                inst.paidAmount = Number(f.amountPaid);
+                                inst.status = inst.paidAmount >= inst.scheduledAmount ? "Paid" : "Partial";
+                                inst.paidDate = f.paymentDate;
+                                inst.txnId = f.transactionIdRef;
+                            }
+                        });
+                    }
+
+                    return normalized;
+                });
+
                 localStorage.setItem("scolexAdmissions", JSON.stringify(admissionsList));
                 renderTable(admissionsList);
                 updateStats();
