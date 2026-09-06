@@ -10,7 +10,7 @@
 </head>
 <body>
 
-    <!-- Site Header (matches homepage banner) -->
+    <!-- Site Header -->
     <header class="header">
         <h1>Scolex Computer Classes</h1>
         <h2>IACT (Institute for Advanced Computer Technology)</h2>
@@ -85,10 +85,9 @@
                 </table>
             </div>
         </div>
-        <!-- /studentListSection -->
 
         <!-- Single Page Detailed View & Edit ERP Panel -->
-        <div id="detailPanel" class="record-card detail-panel-hidden">
+        <div id="detailPanel" class="record-card detail-panel-hidden" style="display:none;">
             <div class="panel-title-row">
                 <h3 id="panelTitle">📋 Student One-Page ERP Details</h3>
                 <div>
@@ -105,7 +104,6 @@
             </div>
 
             <form id="erpRecordForm" onsubmit="event.preventDefault(); saveAdmissionRecord();">
-                <!-- Hidden Index Tracker -->
                 <input type="hidden" id="recordIndex">
 
                 <!-- TAB 1: Admission Details -->
@@ -113,7 +111,6 @@
                     <div class="erp-details-wrapper">
                         <!-- Left Column: Student Details Form -->
                         <div class="erp-form-content">
-                            <!-- 👤 Personal Information -->
                             <h4 style="color: #004085; margin-top: 10px;">👤 Personal Details</h4>
                             <div class="section-grid">
                                 <div class="form-field">
@@ -167,7 +164,6 @@
                                 </div>
                             </div>
 
-                            <!-- 🎓 Educational Details -->
                             <h4 style="color: #004085; margin-top: 15px;">🎓 Educational Background</h4>
                             <div class="section-grid">
                                 <div class="form-field">
@@ -200,7 +196,6 @@
                                 </div>
                             </div>
 
-                            <!-- 💻 Course & Preference Details -->
                             <h4 style="color: #004085; margin-top: 15px;">💻 Course Enrollment & Preferences</h4>
                             <div class="section-grid">
                                 <div class="form-field">
@@ -247,7 +242,6 @@
                                 </div>
                             </div>
 
-                            <!-- 📍 Address Details -->
                             <h4 style="color: #004085; margin-top: 15px;">📍 Address Information</h4>
                             <div class="section-grid">
                                 <div class="form-field" style="grid-column: span 2;">
@@ -288,7 +282,6 @@
                         </div>
                     </div>
 
-                    <!-- Bottom Documents Section -->
                     <div class="bottom-docs-section">
                         <h4 style="color: #004085; margin: 0 0 10px 0;">📑 Student Documents & Certificates</h4>
                         <div class="docs-grid">
@@ -304,7 +297,6 @@
                                     <span style="color:#94a3b8; font-size:12px;">Not Available</span>
                                 </div>
                             </div>
-
                             <div class="doc-card">
                                 <div class="doc-info">
                                     <div class="doc-icon">🪪</div>
@@ -324,8 +316,6 @@
                 <!-- TAB 2: Dynamic Fee Details & Live Receipt UI -->
                 <div id="tab-fee" class="tab-pane">
                     <div class="scolex-fee-wrapper">
-                        
-                        <!-- TOP BRANDING HEADER -->
                         <header class="scolex-brand-header">
                             <div class="scolex-brand-info">
                                 <div class="scolex-logo-badge">
@@ -344,56 +334,53 @@
                                 <div class="user-avatar">👤</div>
                                 <div class="user-details">
                                     <span class="u-label">Student Name</span>
-                                    <strong id="feeStudentName">MD SHAHNAWAZ</strong>
+                                    <strong id="feeStudentName">-</strong>
                                     <span class="u-label" style="margin-top: 4px;">Student ID</span>
-                                    <span class="u-id" id="feeStudentIdDisplay">SCC20260829125146</span>
+                                    <span class="u-id" id="feeStudentIdDisplay">-</span>
                                 </div>
                             </div>
                         </header>
 
-                        <!-- MAIN THREE-COLUMN ERP GRID -->
                         <div class="scolex-erp-grid">
-                            
-                            <!-- COLUMN 1: LEFT SUMMARY & OVERVIEW -->
+                            <!-- COLUMN 1 -->
                             <div class="scolex-col-left">
-                                <!-- Course & Fee Summary Card -->
                                 <div class="scolex-panel">
                                     <div class="panel-header dark-blue">COURSE & FEE SUMMARY</div>
                                     <div class="panel-body">
                                         <label class="lbl-small">Course</label>
-                                        <h3 id="feeCourseDisplay" class="txt-course-title">DTP</h3>
+                                        <h3 id="feeCourseDisplay" class="txt-course-title">-</h3>
 
                                         <div class="summary-line">
                                             <span>Total Course Fee</span>
-                                            <strong id="feeTotalAmount" class="txt-xl">₹ 5,500</strong>
+                                            <strong id="feeTotalAmount" class="txt-xl">₹ 0</strong>
                                         </div>
-                                        <div class="words-note" id="feeTotalWords">(Five Thousand Five Hundred Rupees Only)</div>
+                                        <div class="words-note" id="feeTotalWords">(Zero Rupees Only)</div>
 
                                         <hr class="divider">
 
                                         <div class="summary-line">
                                             <span>Total Installments</span>
-                                            <strong id="feeInstallmentsCount">5</strong>
+                                            <strong id="feeInstallmentsCount">0</strong>
                                         </div>
 
                                         <div class="metric-row green">
                                             <span>💵 Total Paid</span>
-                                            <strong id="feePaidAmount">₹ 2,200</strong>
+                                            <strong id="feePaidAmount">₹ 0</strong>
                                         </div>
 
                                         <div class="metric-row red">
                                             <span>🚫 Pending Amount</span>
-                                            <strong id="feeDueAmount">₹ 3,300</strong>
+                                            <strong id="feeDueAmount">₹ 0</strong>
                                         </div>
 
                                         <div class="metric-row orange">
                                             <span>⏳ Next Due</span>
-                                            <strong id="feeNextDue">₹ 1,100</strong>
+                                            <strong id="feeNextDue">₹ 0</strong>
                                         </div>
 
                                         <div class="summary-line margin-top">
                                             <span>📅 Last Date</span>
-                                            <strong id="feeLastDate">30 Sep 2026</strong>
+                                            <strong id="feeLastDate">-</strong>
                                         </div>
 
                                         <hr class="divider">
@@ -401,8 +388,7 @@
                                         <div class="course-fee-fixed-box">
                                             <label class="lbl-small course-fee-label">COURSE FEE (FIXED)</label>
                                             <div class="course-fee-row">
-                                                <input type="number" id="courseFeeFixedInput" value="5500" min="0" step="100"
-                                                       title="Change total course fee – pending installments will be redistributed">
+                                                <input type="number" id="courseFeeFixedInput" value="5500" min="0" step="100">
                                                 <button type="button" id="btnApplyCourseFee" class="btn-lock-fee" title="Apply & redistribute">🔒</button>
                                             </div>
                                             <p class="course-fee-hint">Set once. Installment amounts remain freely editable.</p>
@@ -410,12 +396,9 @@
                                     </div>
                                 </div>
 
-                                <!-- Installment Overview Card -->
                                 <div class="scolex-panel margin-top">
                                     <div class="panel-header dark-blue">INSTALLMENT OVERVIEW</div>
-                                    <div class="panel-body compact" id="installmentOverviewList">
-                                        <!-- Rendered Dynamically by JavaScript -->
-                                    </div>
+                                    <div class="panel-body compact" id="installmentOverviewList"></div>
                                 </div>
 
                                 <div class="info-footer-note">
@@ -423,28 +406,21 @@
                                 </div>
                             </div>
 
-                            <!-- COLUMN 2: CENTER PAYMENT ACTION -->
+                            <!-- COLUMN 2 -->
                             <div class="scolex-col-center">
-                                
-                                <!-- Installment Stepper Navigation Bar -->
                                 <div class="scolex-panel">
                                     <div class="panel-header text-center-header">INSTALLMENT PAYMENT</div>
                                     <div class="panel-body">
-                                        <div class="stepper-container" id="stepperTabsContainer">
-                                            <!-- Rendered Dynamically -->
-                                        </div>
+                                        <div class="stepper-container" id="stepperTabsContainer"></div>
                                     </div>
                                 </div>
 
-                                <!-- Selected Installment Title Bar -->
                                 <div class="install-sub-header">
-                                    <span id="activeInstallmentTitle">INSTALLMENT 2 OF 5</span>
-                                    <span class="due-badge">📅 Due Date: <span id="instDueDate">30 Sep 2026</span></span>
+                                    <span id="activeInstallmentTitle">INSTALLMENT 1 OF 1</span>
+                                    <span class="due-badge">📅 Due Date: <span id="instDueDate">-</span></span>
                                 </div>
 
-                                <!-- Side-by-Side Details Cards -->
                                 <div class="twin-cards-grid">
-                                    <!-- Left: Previous Payment Details -->
                                     <div class="scolex-panel light-green-bg">
                                         <div class="panel-subhead green-text">PREVIOUS PAYMENT DETAILS</div>
                                         <div class="panel-body compact">
@@ -457,32 +433,29 @@
                                                         <th>Status</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="prevPaymentTableBody">
-                                                    <!-- Rendered dynamically -->
-                                                </tbody>
+                                                <tbody id="prevPaymentTableBody"></tbody>
                                             </table>
                                             <div class="total-prev-bar">
                                                 <span>Total Previous Payment</span>
-                                                <strong id="totalPrevPaidText">₹ 1,100</strong>
+                                                <strong id="totalPrevPaidText">₹ 0</strong>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!-- Right: Current Installment Details -->
                                     <div class="scolex-panel light-blue-bg">
                                         <div class="panel-subhead blue-text">CURRENT INSTALLMENT DETAILS</div>
                                         <div class="panel-body">
                                             <div class="kv-line">
                                                 <span>Installment No.</span>
-                                                <strong id="curInstNo">2nd Installment</strong>
+                                                <strong id="curInstNo">-</strong>
                                             </div>
                                             <div class="kv-line">
                                                 <span>Installment Amount</span>
-                                                <strong id="curInstAmount">₹ 1,100</strong>
+                                                <strong id="curInstAmount">₹ 0</strong>
                                             </div>
                                             <div class="kv-line">
                                                 <span>Due Date</span>
-                                                <span id="curInstDueDate">30 Sep 2026</span>
+                                                <span id="curInstDueDate">-</span>
                                             </div>
                                             <div class="kv-line">
                                                 <span>Status</span>
@@ -490,30 +463,21 @@
                                             </div>
                                             <div class="highlight-pay-box">
                                                 <span>Amount to be Paid Now</span>
-                                                <strong id="curInstToPay">₹ 1,100</strong>
+                                                <strong id="curInstToPay">₹ 0</strong>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Payment Form Inputs Box -->
                                 <div class="scolex-panel margin-top">
                                     <div class="panel-subhead dark-blue-text">PAYMENT INFORMATION</div>
                                     <div class="panel-body">
                                         <label class="lbl-small">Payment Method</label>
                                         <div class="method-selector-grid">
-                                            <button type="button" class="method-btn active" data-method="Cash" onclick="selectPaymentMethod(this, 'Cash')">
-                                                💵 Cash
-                                            </button>
-                                            <button type="button" class="method-btn" data-method="UPI / QR Code" onclick="selectPaymentMethod(this, 'UPI / QR Code')">
-                                                📱 UPI / QR Code
-                                            </button>
-                                            <button type="button" class="method-btn" data-method="Bank Transfer" onclick="selectPaymentMethod(this, 'Bank Transfer')">
-                                                🏛️ Bank Transfer
-                                            </button>
-                                            <button type="button" class="method-btn" data-method="Other" onclick="selectPaymentMethod(this, 'Other')">
-                                                💳 Other
-                                            </button>
+                                            <button type="button" class="method-btn active" data-method="Cash" onclick="selectPaymentMethod(this, 'Cash')">💵 Cash</button>
+                                            <button type="button" class="method-btn" data-method="UPI / QR Code" onclick="selectPaymentMethod(this, 'UPI / QR Code')">📱 UPI / QR Code</button>
+                                            <button type="button" class="method-btn" data-method="Bank Transfer" onclick="selectPaymentMethod(this, 'Bank Transfer')">🏛️ Bank Transfer</button>
+                                            <button type="button" class="method-btn" data-method="Other" onclick="selectPaymentMethod(this, 'Other')">💳 Other</button>
                                         </div>
 
                                         <div class="form-inputs-row">
@@ -527,7 +491,7 @@
                                             </div>
                                             <div class="input-cell">
                                                 <label>Amount Paid (₹)</label>
-                                                <input type="number" id="payAmountInput" placeholder="1100">
+                                                <input type="number" id="payAmountInput" placeholder="0">
                                             </div>
                                         </div>
 
@@ -545,7 +509,7 @@
                                 </div>
                             </div>
 
-                            <!-- COLUMN 3: RIGHT PRINTABLE RECEIPT CARD -->
+                            <!-- COLUMN 3 -->
                             <div class="scolex-col-right">
                                 <div class="receipt-toolbar no-print">
                                     <span class="receipt-toolbar-label">Official Payment Receipt</span>
@@ -566,11 +530,11 @@
                                     <div class="receipt-meta-line">
                                         <div>
                                             <span class="meta-lbl">RECEIPT NO.</span>
-                                            <strong id="recReceiptNo" class="rec-red-text">SCC/REC/2026-27/00025</strong>
+                                            <strong id="recReceiptNo" class="rec-red-text">-</strong>
                                         </div>
                                         <div style="text-align: right;">
                                             <span class="meta-lbl">DATE:</span>
-                                            <strong id="recDate">29 Aug 2026</strong>
+                                            <strong id="recDate">-</strong>
                                         </div>
                                     </div>
 
@@ -578,27 +542,27 @@
                                     <div class="receipt-grid-2col">
                                         <div>
                                             <span class="rec-field-label">Student Name</span>
-                                            <div id="recStudentName" class="rec-field-val">MD SHAHNAWAZ</div>
+                                            <div id="recStudentName" class="rec-field-val">-</div>
                                         </div>
                                         <div>
                                             <span class="rec-field-label">Student ID</span>
-                                            <div id="recStudentId" class="rec-field-val">SCC20260829125146</div>
+                                            <div id="recStudentId" class="rec-field-val">-</div>
                                         </div>
                                         <div>
                                             <span class="rec-field-label">Father's Name</span>
-                                            <div id="recFatherName" class="rec-field-val">MD MERAJUDDIN</div>
+                                            <div id="recFatherName" class="rec-field-val">-</div>
                                         </div>
                                         <div>
                                             <span class="rec-field-label">Course</span>
-                                            <div id="recCourse" class="rec-field-val">DTP</div>
+                                            <div id="recCourse" class="rec-field-val">-</div>
                                         </div>
                                         <div>
                                             <span class="rec-field-label">Mobile No.</span>
-                                            <div id="recMobile" class="rec-field-val">8298952044</div>
+                                            <div id="recMobile" class="rec-field-val">-</div>
                                         </div>
                                         <div>
                                             <span class="rec-field-label">Address</span>
-                                            <div id="recAddress" class="rec-field-val">PREMI CHHARPA, BISHUNPUR MAHANAND, KANTI, MUZAFFARPUR, BIHAR</div>
+                                            <div id="recAddress" class="rec-field-val">-</div>
                                         </div>
                                     </div>
 
@@ -606,42 +570,40 @@
                                     <div class="receipt-kv-table">
                                         <div class="r-row">
                                             <span>Installment No.</span>
-                                            <span id="recInstNo">2nd Installment (of 5)</span>
+                                            <span id="recInstNo">-</span>
                                         </div>
                                         <div class="r-row">
                                             <span>Installment Amount</span>
-                                            <span id="recInstAmount">₹ 1,100</span>
+                                            <span id="recInstAmount">-</span>
                                         </div>
                                         <div class="r-row">
                                             <span>Previous Payment</span>
-                                            <span id="recPrevPayment">₹ 1,100</span>
+                                            <span id="recPrevPayment">-</span>
                                         </div>
                                         <div class="r-row highlight">
                                             <span>Total Paid Till Now</span>
-                                            <strong id="recTotalPaidNow">₹ 2,200</strong>
+                                            <strong id="recTotalPaidNow">-</strong>
                                         </div>
                                         <div class="r-row">
                                             <span>Payment Date</span>
-                                            <span id="recPayDate">29 Aug 2026</span>
+                                            <span id="recPayDate">-</span>
                                         </div>
                                         <div class="r-row">
                                             <span>Payment Mode</span>
-                                            <span id="recPayMode">CASH</span>
+                                            <span id="recPayMode">-</span>
                                         </div>
                                         <div class="r-row">
                                             <span>Transaction / Receipt No.</span>
-                                            <span id="recTxnNo">CASH/0829/025</span>
+                                            <span id="recTxnNo">-</span>
                                         </div>
                                     </div>
 
                                     <div class="receipt-amount-block">
                                         <div class="amount-words-left">
                                             <span class="rec-field-label">AMOUNT RECEIVED</span>
-                                            <div id="recAmountWords" class="words-italic">(Rupees One Thousand One Hundred Only)</div>
+                                            <div id="recAmountWords" class="words-italic">-</div>
                                         </div>
-                                        <div class="amount-box-right" id="recAmountPaidBox">
-                                            ₹ 1,100
-                                        </div>
+                                        <div class="amount-box-right" id="recAmountPaidBox">₹ 0</div>
                                     </div>
 
                                     <div class="receipt-signature-area">
@@ -661,10 +623,9 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                        </div> <!-- /scolex-erp-grid -->
-
-                        <!-- FULL-WIDTH TRANSACTION HISTORY TABLE AT THE VERY BOTTOM -->
+                        <!-- Full-width Transaction History Table -->
                         <div class="scolex-panel full-width-history" style="width: 100%; margin-top: 20px;">
                             <div class="panel-header dark-blue">📊 ALL TRANSACTION HISTORY (GOOGLE SHEET SYNCED)</div>
                             <div class="panel-body" style="overflow-x: auto;">
@@ -689,13 +650,10 @@
                                             <th>Remarks</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="paymentHistoryTableBody">
-                                        <!-- Populated dynamically via JavaScript matching sheet columns -->
-                                    </tbody>
+                                    <tbody id="paymentHistoryTableBody"></tbody>
                                 </table>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
@@ -719,7 +677,6 @@
                     </div>
                 </div>
 
-                <!-- Save Action Toolbar (Shown only in edit mode) -->
                 <div id="saveActions" style="display: none; margin-top: 20px; text-align: right;">
                     <button type="button" class="action-btn btn-cancel" onclick="cancelEditMode()">Cancel Edit</button>
                     <button type="submit" class="action-btn btn-save">💾 Save Changes (ERP Update)</button>

@@ -4,7 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Application Form - Scolex Computer Classes</title>
+    <!-- External CSS File Link -->
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* ERP Style Preview Box Styling */
+        .preview-field {
+            width: 100%;
+            padding: 10px 14px;
+            background-color: #f8fafc;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #1e293b;
+            font-weight: 500;
+            min-height: 42px;
+            display: flex;
+            align-items: center;
+        }
+        .sub-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0284c7;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-bottom: 1px solid #bae6fd;
+            padding-bottom: 6px;
+        }
+    </style>
 </head>
 
 <body>
@@ -34,19 +62,19 @@
                     <div class="grid-row">
                         <div class="input-group">
                             <label>Full Name *</label>
-                            <input type="text" placeholder="Enter Your Full Name" name="fullname" required>
+                            <input type="text" placeholder="Enter Your Full Name" name="fullname" id="fullname" required>
                         </div>
                         <div class="input-group">
                             <label>Father's Name *</label>
-                            <input type="text" placeholder="Enter Your Father's Name" name="fathername" required>
+                            <input type="text" placeholder="Enter Your Father's Name" name="fathername" id="fathername" required>
                         </div>
                         <div class="input-group">
                             <label>Mobile Number *</label>
-                            <input type="tel" placeholder="Enter your Mobile number" name="mobile" required>
+                            <input type="tel" placeholder="Enter your Mobile number" name="mobile" id="mobile" required>
                         </div>
                         <div class="input-group">
                             <label>Email Address</label>
-                            <input type="email" placeholder="Enter Your Email Address" name="email">
+                            <input type="email" placeholder="Enter Your Email Address" name="email" id="email">
                         </div>
                         <div class="input-group">
                             <label>Date of Birth * (DD / MM / YYYY)</label>
@@ -59,7 +87,7 @@
                         </div>
                         <div class="input-group">
                             <label>Gender *</label>
-                            <select name="gender" required>
+                            <select name="gender" id="gender" required>
                                 <option value="">Select Gender</option>
                                 <option>Male</option>
                                 <option>Female</option>
@@ -68,7 +96,7 @@
                         </div>
                         <div class="input-group">
                             <label>Nationality</label>
-                            <select name="nationality">
+                            <select name="nationality" id="nationality">
                                 <option value="">Select Nationality</option>
                                 <option>Indian</option>
                                 <option>Other</option>
@@ -76,7 +104,7 @@
                         </div>
                         <div class="input-group">
                             <label>Category</label>
-                            <select name="category">
+                            <select name="category" id="category">
                                 <option value="">Select Category</option>
                                 <option>General</option>
                                 <option>OBC</option>
@@ -87,8 +115,8 @@
                         </div>
                         <div class="input-group">
                             <label>Aadhaar Number</label>
-                            <input type="text" name="aadharnumber" id="aadharnumber" maxlength="12" placeholder="Enter Aadhaar Number" inputmode="numeric">
-                            <span id="aadhaar-error" class="field-error hidden">⚠ Aadhaar number is already registered</span>
+                            <input type="text" name="aadharnumber" id="aadharnumber" maxlength="12" placeholder="Enter Aadhaar Number">
+                            <span id="aadhaar-error" class="pdf-text hidden" style="color: #dc2626; font-size: 12px; margin-top: 4px;">⚠️ Aadhaar already registered in Google Sheet!</span>
                         </div>
                     </div>
                     <div class="btn-container right">
@@ -114,23 +142,23 @@
                         </div>
                         <div class="input-group">
                             <label>School / College Name *</label>
-                            <input type="text" name="college" placeholder="Enter School / College Name" required>
+                            <input type="text" name="college" id="college" placeholder="Enter School / College Name" required>
                         </div>
                         <div class="input-group">
                             <label>Board / University *</label>
-                            <input type="text" name="board" placeholder="Enter Board / University" required>
+                            <input type="text" name="board" id="board" placeholder="Enter Board / University" required>
                         </div>
                         <div class="input-group">
                             <label>Passing Year *</label>
-                            <input type="number" name="passingyear" placeholder="2026" required>
+                            <input type="number" name="passingyear" id="passingyear" placeholder="2026" required>
                         </div>
                         <div class="input-group">
                             <label>Percentage / CGPA *</label>
-                            <input type="text" name="percentage" placeholder="Enter Percentage or CGPA" required>
+                            <input type="text" name="percentage" id="percentage" placeholder="Enter Percentage or CGPA" required>
                         </div>
                         <div class="input-group">
                             <label>Division / Grade</label>
-                            <select name="division">
+                            <select name="division" id="division">
                                 <option value="">Select Division / Grade</option>
                                 <option>First Division</option>
                                 <option>Second Division</option>
@@ -139,7 +167,7 @@
                                 <option>A+</option>
                             </select>
                         </div>      
-                        <div class="input-group" id="subjects-group">
+                        <div class="input-group">
                             <label>Subjects / Stream</label>
                             <input type="text" name="subjects" id="subjects" placeholder="Enter Subjects / Stream">
                         </div>
@@ -156,7 +184,7 @@
                     <div class="grid-row">
                         <div class="input-group">
                             <label>Course Interested In *</label>
-                            <select name="courses" required>
+                            <select name="courses" id="courses" required>
                                 <option value="">Select Course</option>
                                 <option>DCA</option>
                                 <option>ADCA</option>
@@ -169,7 +197,7 @@
                         </div>
                         <div class="input-group">
                             <label>Batch Timing *</label>
-                            <select name="batch" required>
+                            <select name="batch" id="batch" required>
                                 <option value="">Select Batch</option>
                                 <option>Morning (7 AM - 9 AM)</option>
                                 <option>Morning (9 AM - 11 AM)</option>
@@ -179,7 +207,7 @@
                         </div>
                         <div class="input-group">
                             <label>Learning Mode *</label>
-                            <select name="learningmode" required>
+                            <select name="learningmode" id="learningmode" required>
                                 <option value="">Select Mode</option>
                                 <option>Offline</option>
                                 <option>Online</option>
@@ -187,7 +215,7 @@
                         </div>
                         <div class="input-group">
                             <label>Preferred Contact</label>
-                            <select name="contact">
+                            <select name="contact" id="contact">
                                 <option>Email</option>
                                 <option>Phone</option>
                                 <option>WhatsApp</option>
@@ -206,23 +234,23 @@
                     <div class="grid-row">
                         <div class="input-group full-width">
                             <label>Complete Address *</label>
-                            <textarea rows="3" name="address" placeholder="Enter Your Complete Address" required></textarea>
+                            <textarea rows="3" name="address" id="address" placeholder="Enter Your Complete Address" required></textarea>
                         </div>
                         <div class="input-group">
                             <label>Pin Code *</label>
-                            <input type="text" name="pincode" maxlength="6" placeholder="Enter Pin Code" required>
+                            <input type="text" name="pincode" id="pincode" maxlength="6" placeholder="Enter Pin Code" required>
                         </div>
                         <div class="input-group">
                             <label>District *</label>
-                            <input type="text" name="district" placeholder="Enter District" required>
+                            <input type="text" name="district" id="district" placeholder="Enter District" required>
                         </div>
                         <div class="input-group">
                             <label>State *</label>
-                            <input type="text" name="state" placeholder="Enter State" required>
+                            <input type="text" name="state" id="state" placeholder="Enter State" required>
                         </div>
                         <div class="input-group">
                             <label>City / Town *</label>
-                            <input type="text" name="city" placeholder="Enter City / Town" required>
+                            <input type="text" name="city" id="city" placeholder="Enter City / Town" required>
                         </div>
                     </div>
                     <div class="btn-container between">
@@ -254,7 +282,7 @@
                             </div>
                         </div>
                         <div class="input-group">
-                            <label>Aadhaar</label>
+                            <label>Aadhaar Document</label>
                             <input type="file" name="certificate" id="certificate" accept="image/*,.pdf">
                             <div class="preview-box">
                                 <img id="aadhaar-img-preview" class="preview-img hidden" alt="Preview">
@@ -263,7 +291,7 @@
                         </div>
                         <div class="input-group full-width">
                             <label>How did you hear about us? *</label>
-                            <select name="referral" required>
+                            <select name="referral" id="referral" required>
                                 <option value="">Select Option</option>
                                 <option>Social Media</option>
                                 <option>Friend / Family</option>
@@ -283,177 +311,119 @@
                     </div>
                 </div>
 
-                <!-- PART 6: Preview / Review before Submit -->
+<!-- PART 6: Review Application (ERP Style Preview Layout) -->
                 <div class="form-step hidden" id="step-6">
-                    <h5 class="section-title">👁️ Review Application (Preview before Submit)</h5>
+                    <h5 class="section-title">📋 Review Application Details (ERP Preview)</h5>
                     
-                    <div class="preview-layout">
-                        <div class="preview-main">
+                    <div style="display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap;">
+                        <!-- Main Column -->
+                        <div style="flex: 1; min-width: 300px;">
+                            
                             <!-- Personal Details -->
-                            <div class="preview-section">
-                                <h6 class="preview-section-title">👤 Personal Details</h6>
-                                <div class="preview-grid">
-                                    <div class="preview-item">
-                                        <span class="preview-label">FULL NAME</span>
-                                        <span class="preview-value" id="pv-fullname">—</span>
-                                    </div>
-                                    <div class="preview-item">
-                                        <span class="preview-label">FATHER'S NAME</span>
-                                        <span class="preview-value" id="pv-fathername">—</span>
-                                    </div>
-                                    <div class="preview-item">
-                                        <span class="preview-label">MOBILE NUMBER</span>
-                                        <span class="preview-value" id="pv-mobile">—</span>
-                                    </div>
-                                    <div class="preview-item">
-                                        <span class="preview-label">EMAIL ADDRESS</span>
-                                        <span class="preview-value" id="pv-email">—</span>
-                                    </div>
-                                    <div class="preview-item">
-                                        <span class="preview-label">DATE OF BIRTH</span>
-                                        <span class="preview-value" id="pv-dob">—</span>
-                                    </div>
-                                    <div class="preview-item">
-                                        <span class="preview-label">GENDER</span>
-                                        <span class="preview-value" id="pv-gender">—</span>
-                                    </div>
-                                    <div class="preview-item">
-                                        <span class="preview-label">NATIONALITY</span>
-                                        <span class="preview-value" id="pv-nationality">—</span>
-                                    </div>
-                                    <div class="preview-item">
-                                        <span class="preview-label">CATEGORY</span>
-                                        <span class="preview-value" id="pv-category">—</span>
-                                    </div>
-                                    <div class="preview-item">
-                                        <span class="preview-label">AADHAAR NUMBER</span>
-                                        <span class="preview-value" id="pv-aadharnumber">—</span>
-                                    </div>
-                                </div>
+                            <h6 class="sub-section-title">👤 Personal Details</h6>
+                            <div class="grid-row">
+                                <div class="input-group"><label>Full Name</label><div class="preview-field" id="pv-fullname">—</div></div>
+                                <div class="input-group"><label>Father's Name</label><div class="preview-field" id="pv-fathername">—</div></div>
+                                <div class="input-group"><label>Mobile Number</label><div class="preview-field" id="pv-mobile">—</div></div>
+                                <div class="input-group"><label>Email Address</label><div class="preview-field" id="pv-email">—</div></div>
+                                <div class="input-group"><label>Date of Birth</label><div class="preview-field" id="pv-dob">—</div></div>
+                                <div class="input-group"><label>Gender</label><div class="preview-field" id="pv-gender">—</div></div>
+                                <div class="input-group"><label>Nationality</label><div class="preview-field" id="pv-nationality">—</div></div>
+                                <div class="input-group"><label>Category</label><div class="preview-field" id="pv-category">—</div></div>
+                                <div class="input-group"><label>Aadhaar Number</label><div class="preview-field" id="pv-aadharnumber">—</div></div>
                             </div>
 
-                            <!-- Educational Background -->
-                            <div class="preview-section">
-                                <h6 class="preview-section-title">🎓 Educational Background</h6>
-                                <div class="preview-grid">
-                                    <div class="preview-item">
-                                        <span class="preview-label">HIGHEST QUALIFICATION</span>
-                                        <span class="preview-value" id="pv-education">—</span>
-                                    </div>
-                                    <div class="preview-item">
-                                        <span class="preview-label">SCHOOL / COLLEGE</span>
-                                        <span class="preview-value" id="pv-college">—</span>
-                                    </div>
-                                    <div class="preview-item">
-                                        <span class="preview-label">BOARD / UNIVERSITY</span>
-                                        <span class="preview-value" id="pv-board">—</span>
-                                    </div>
-                                    <div class="preview-item">
-                                        <span class="preview-label">PASSING YEAR</span>
-                                        <span class="preview-value" id="pv-passingyear">—</span>
-                                    </div>
-                                    <div class="preview-item">
-                                        <span class="preview-label">PERCENTAGE / CGPA</span>
-                                        <span class="preview-value" id="pv-percentage">—</span>
-                                    </div>
-                                    <div class="preview-item">
-                                        <span class="preview-label">DIVISION / GRADE</span>
-                                        <span class="preview-value" id="pv-division">—</span>
-                                    </div>
-                                    <div class="preview-item" id="pv-subjects-item">
-                                        <span class="preview-label">SUBJECTS / STREAM</span>
-                                        <span class="preview-value" id="pv-subjects">—</span>
-                                    </div>
-                                </div>
+                            <!-- Educational Details -->
+                            <h6 class="sub-section-title" style="margin-top: 20px;">🎓 Educational Background</h6>
+                            <div class="grid-row">
+                                <div class="input-group"><label>Highest Education</label><div class="preview-field" id="pv-education">—</div></div>
+                                <div class="input-group"><label>School / College</label><div class="preview-field" id="pv-college">—</div></div>
+                                <div class="input-group"><label>Board / University</label><div class="preview-field" id="pv-board">—</div></div>
+                                <div class="input-group"><label>Passing Year</label><div class="preview-field" id="pv-passingyear">—</div></div>
+                                <div class="input-group"><label>Percentage / CGPA</label><div class="preview-field" id="pv-percentage">—</div></div>
+                                <div class="input-group"><label>Division / Grade</label><div class="preview-field" id="pv-division">—</div></div>
+                                <div class="input-group" id="pv-subjects-item"><label>Subjects / Stream</label><div class="preview-field" id="pv-subjects">—</div></div>
                             </div>
 
-                            <!-- Course Enrollment -->
-                            <div class="preview-section">
-                                <h6 class="preview-section-title">💻 Course Enrollment & Preferences</h6>
-                                <div class="preview-grid">
-                                    <div class="preview-item">
-                                        <span class="preview-label">ENROLLED COURSE</span>
-                                        <span class="preview-value" id="pv-courses">—</span>
-                                    </div>
-                                    <div class="preview-item">
-                                        <span class="preview-label">BATCH TIMING</span>
-                                        <span class="preview-value" id="pv-batch">—</span>
-                                    </div>
-                                    <div class="preview-item">
-                                        <span class="preview-label">LEARNING MODE</span>
-                                        <span class="preview-value" id="pv-learningmode">—</span>
-                                    </div>
-                                    <div class="preview-item">
-                                        <span class="preview-label">PREFERRED CONTACT</span>
-                                        <span class="preview-value" id="pv-contact">—</span>
-                                    </div>
-                                    <div class="preview-item">
-                                        <span class="preview-label">REFERRAL SOURCE</span>
-                                        <span class="preview-value" id="pv-referral">—</span>
-                                    </div>
-                                </div>
+                            <!-- Course Details -->
+                            <h6 class="sub-section-title" style="margin-top: 20px;">💻 Course Enrollment & Preferences</h6>
+                            <div class="grid-row">
+                                <div class="input-group"><label>Course Interested In</label><div class="preview-field" id="pv-courses">—</div></div>
+                                <div class="input-group"><label>Batch Timing</label><div class="preview-field" id="pv-batch">—</div></div>
+                                <div class="input-group"><label>Learning Mode</label><div class="preview-field" id="pv-learningmode">—</div></div>
+                                <div class="input-group"><label>Preferred Contact</label><div class="preview-field" id="pv-contact">—</div></div>
+                                <div class="input-group full-width"><label>Referral Source</label><div class="preview-field" id="pv-referral">—</div></div>
                             </div>
 
-                            <!-- Address -->
-                            <div class="preview-section">
-                                <h6 class="preview-section-title">📍 Address Information</h6>
-                                <div class="preview-grid">
-                                    <div class="preview-item full">
-                                        <span class="preview-label">COMPLETE ADDRESS</span>
-                                        <span class="preview-value" id="pv-address">—</span>
-                                    </div>
-                                    <div class="preview-item">
-                                        <span class="preview-label">CITY / TOWN</span>
-                                        <span class="preview-value" id="pv-city">—</span>
-                                    </div>
-                                    <div class="preview-item">
-                                        <span class="preview-label">DISTRICT</span>
-                                        <span class="preview-value" id="pv-district">—</span>
-                                    </div>
-                                    <div class="preview-item">
-                                        <span class="preview-label">STATE</span>
-                                        <span class="preview-value" id="pv-state">—</span>
-                                    </div>
-                                    <div class="preview-item">
-                                        <span class="preview-label">PIN CODE</span>
-                                        <span class="preview-value" id="pv-pincode">—</span>
-                                    </div>
-                                </div>
+                            <!-- Address Details -->
+                            <h6 class="sub-section-title" style="margin-top: 20px;">📍 Address Information</h6>
+                            <div class="grid-row">
+                                <div class="input-group full-width"><label>Complete Address</label><div class="preview-field" id="pv-address">—</div></div>
+                                <div class="input-group"><label>City / Town</label><div class="preview-field" id="pv-city">—</div></div>
+                                <div class="input-group"><label>District</label><div class="preview-field" id="pv-district">—</div></div>
+                                <div class="input-group"><label>State</label><div class="preview-field" id="pv-state">—</div></div>
+                                <div class="input-group"><label>Pin Code</label><div class="preview-field" id="pv-pincode">—</div></div>
                             </div>
 
-                            <!-- Documents status -->
-                            <div class="preview-section">
-                                <h6 class="preview-section-title">📁 Documents Status</h6>
-                                <div class="preview-docs-status">
-                                    <div class="doc-status-item" id="pv-photo-status">Photo: Not uploaded</div>
-                                    <div class="doc-status-item" id="pv-signature-status">Signature: Not uploaded</div>
-                                    <div class="doc-status-item" id="pv-marksheet-status">Marksheet: Not uploaded</div>
-                                    <div class="doc-status-item" id="pv-aadhaar-status">Aadhaar: Not uploaded</div>
-                                </div>
-                            </div>
                         </div>
 
-                        <!-- Right column: Photo + Signature -->
-                        <div class="preview-side">
-                            <div class="preview-photo-card">
-                                <div class="preview-photo-label">Profile Photo</div>
-                                <img id="pv-photo" class="preview-side-img" alt="Photo Preview" src="">
-                                <div class="no-img-placeholder" id="pv-photo-placeholder">No photo</div>
+                        <!-- Right Sidebar (Photo & Signature Sidebar Boxes) -->
+                        <div style="width: 240px; display: flex; flex-direction: column; gap: 15px; flex-shrink: 0;">
+                            <!-- Profile Photo Box -->
+                            <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 12px; text-align: center;">
+                                <label style="display: block; margin-bottom: 8px; font-size: 12px; font-weight: 600;">📷 Profile Photo</label>
+                                <div style="height: 140px; display: flex; align-items: center; justify-content: center; background: #f1f5f9; border-radius: 6px; overflow: hidden; border: 1px dashed #94a3b8;">
+                                    <img id="pv-photo" src="" alt="Photo" style="max-height: 100%; max-width: 100%; object-fit: contain; display: none;">
+                                    <span id="pv-photo-placeholder" style="font-size: 12px; color: #64748b;">No Photo</span>
+                                </div>
+                                <div id="pv-photo-status" style="font-size: 11px; margin-top: 6px; color: #64748b;">Not uploaded</div>
                             </div>
-                            <div class="preview-photo-card">
-                                <div class="preview-photo-label">Student Signature</div>
-                                <img id="pv-signature" class="preview-side-img signature-img" alt="Signature Preview" src="">
-                                <div class="no-img-placeholder" id="pv-signature-placeholder">No signature</div>
+
+                            <!-- Signature Box -->
+                            <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 12px; text-align: center;">
+                                <label style="display: block; margin-bottom: 8px; font-size: 12px; font-weight: 600;">✍️ Student Signature</label>
+                                <div style="height: 80px; display: flex; align-items: center; justify-content: center; background: #f1f5f9; border-radius: 6px; overflow: hidden; border: 1px dashed #94a3b8;">
+                                    <img id="pv-signature" src="" alt="Signature" style="max-height: 100%; max-width: 100%; object-fit: contain; display: none;">
+                                    <span id="pv-signature-placeholder" style="font-size: 12px; color: #64748b;">No Signature</span>
+                                </div>
+                                <div id="pv-signature-status" style="font-size: 11px; margin-top: 6px; color: #64748b;">Not uploaded</div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="btn-container between">
+                    <!-- Documents Verification Box (Marksheet & Aadhaar Previews) -->
+                    <div style="margin-top: 25px; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 15px;">
+                        <h6 style="font-size: 14px; font-weight: 600; color: #1e293b; margin-bottom: 12px;">📁 Uploaded Documents Preview</h6>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
+                            
+                            <!-- Marksheet Preview Box -->
+                            <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px; text-align: center;">
+                                <label style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px;">📄 Marksheet Document</label>
+                                <div style="height: 100px; display: flex; align-items: center; justify-content: center; background: #fff; border: 1px dashed #cbd5e1; border-radius: 4px; overflow: hidden;">
+                                    <img id="pv-marksheet-img" src="" alt="Marksheet" style="max-height: 100%; max-width: 100%; object-fit: contain; display: none;">
+                                    <span id="pv-marksheet-text" style="font-size: 12px; color: #64748b;">No Marksheet Uploaded</span>
+                                </div>
+                                <div id="pv-marksheet-status" style="font-size: 11px; margin-top: 6px; color: #64748b;">Not uploaded</div>
+                            </div>
+
+                            <!-- Aadhaar Document Preview Box -->
+                            <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; text-align: center;">
+                                <label style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px;">🆔 Aadhaar Document</label>
+                                <div style="height: 100px; display: flex; align-items: center; justify-content: center; background: #fff; border: 1px dashed #cbd5e1; border-radius: 4px; overflow: hidden;">
+                                    <img id="pv-aadhaar-img" src="" alt="Aadhaar" style="max-height: 100%; max-width: 100%; object-fit: contain; display: none;">
+                                    <span id="pv-aadhaar-text" style="font-size: 12px; color: #64748b;">No Aadhaar Uploaded</span>
+                                </div>
+                                <div id="pv-aadhaar-status" style="font-size: 11px; margin-top: 6px; color: #64748b;">Not uploaded</div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="btn-container between" style="margin-top: 25px;">
                         <button type="button" class="custom-btn secondary prev-btn">⬅ Back to Edit</button>
                         <button type="submit" class="custom-btn submit-btn">✅ Confirm & Submit Application</button>
                     </div>
                 </div>
-
             </form>
         </div>
     </div>

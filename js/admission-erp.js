@@ -1,7 +1,8 @@
 // ==========================================
 // Google Apps Script Web App Deployment URL
 // ==========================================
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySTUe1nxJUiUYCVoBOFkupC2GfZiQRh9kTOh4pKbR_iqa595brY4uRxpgSc4KWA4pW/exec"; 
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx27B-YTlgr7S_1P5Eh06qjTj4eWQLZ3l4uCdCIOvjQtXz2goM5yasucD1Vhnn94-wM/exec"; 
+
 
 let admissionsList = [];
 let currentSelectedInstallment = 0;
@@ -22,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
     checkRolePermissions();
     initializeProfileBar();
     fetchAdmissionData();
-    // Bind live receipt / course-fee inputs after DOM is ready
     setTimeout(bindLiveReceiptSync, 400);
 });
 
@@ -95,13 +95,9 @@ function normalizeAdmissionRecord(item) {
     const source = (item.source || "").toLowerCase();
 
     if (
-        role === "admin" || 
-        role === "teacher" || 
-        role === "staff" ||
-        source.includes("admin") || 
-        source.includes("teacher") || 
-        source.includes("staff") ||
-        source.includes("offline")
+        role === "admin" || role === "teacher" || role === "staff" ||
+        source.includes("admin") || source.includes("teacher") || 
+        source.includes("staff") || source.includes("offline")
     ) {
         computedAdmissionMode = "Offline";
     } else if (!computedAdmissionMode) {
@@ -158,10 +154,10 @@ function loadLocalFallbackData() {
                 state: "BIHAR",
                 city: "MUZAFFARPUR",
                 referral: "Friend / Family",
-                photoURL: "https://drive.google.com/file/d/1WSQh3hZTpxPNjg8gC_Gi1lZmozanpgfp/view?usp=drivesdk",
-                signURL: "https://drive.google.com/file/d/1ItRVOVD1CxU1MLTVywwF0UbGV8uPZWG5/view?usp=drivesdk",
-                marksheetURL: "https://drive.google.com/file/d/1dQS_xSYrmdrwl7nwZl_QHCUtASGSNojk/view?usp=drivesdk",
-                aadhaarURL: "https://drive.google.com/file/d/1vJVSC7_7rGTIyMvzvAj3Oe0Slk8ettqd/view?usp=drivesdk",
+                photoURL: "",
+                signURL: "",
+                marksheetURL: "",
+                aadhaarURL: "",
                 status: "Pending",
                 feePaid: "2000",
                 totalFee: "5000",
@@ -222,7 +218,6 @@ function renderTable(data) {
     }
 
     data.forEach((student) => {
-        // Use real index in admissionsList (correct even when table is filtered)
         const realIndex = admissionsList.indexOf(student);
         const index = realIndex >= 0 ? realIndex : 0;
         const tr = document.createElement("tr");
@@ -238,9 +233,7 @@ function renderTable(data) {
             <td>${student.batch || ''}</td>
             <td>
                 <button class="action-btn btn-view" onclick="viewStudentDetails(${index})">👁️ View</button>
-                ${userRole === "admin" ? `
-                    <button class="action-btn btn-edit" onclick="editStudentDetails(${index})">✏️ Edit</button>
-                ` : ''}
+                ${userRole === "admin" ? `<button class="action-btn btn-edit" onclick="editStudentDetails(${index})">✏️ Edit</button>` : ''}
                 <select class="action-select" style="margin-left:5px; padding:4px;" onchange="updateApplicationStatus(${index}, this.value)">
                     <option value="Pending" ${(student.status || 'Pending') === 'Pending' ? 'selected' : ''}>Pending</option>
                     <option value="Approved" ${student.status === 'Approved' ? 'selected' : ''}>Approved</option>
@@ -272,11 +265,7 @@ function filterRecords() {
         const nameStr = (item.fullname || "").toLowerCase();
         const mobileStr = (item.mobile || "").toString();
 
-        const matchesSearch = searchVal === "" || 
-            nameStr.includes(searchVal) || 
-            idStr.includes(searchVal) || 
-            mobileStr.includes(searchVal);
-
+        const matchesSearch = searchVal === "" || nameStr.includes(searchVal) || idStr.includes(searchVal) || mobileStr.includes(searchVal);
         const matchesCourse = courseVal === "" || item.courses === courseVal;
         const matchesMode = modeVal === "" || (item.admissionMode || "").toLowerCase() === modeVal.toLowerCase();
 
@@ -363,11 +352,6 @@ function populateForm(student, index) {
     setFieldValue("district", student.district);
     setFieldValue("state", student.state);
 
-    setFieldValue("feePaid", student.feePaid);
-    setFieldValue("totalFee", student.totalFee);
-    setFieldValue("dueFee", student.dueFee);
-    setFieldValue("paymentStatus", student.paymentStatus);
-
     renderBottomDocuments(student);
 }
 
@@ -382,16 +366,12 @@ function renderRightSideMedia(student) {
 
     if (photoImg) photoImg.src = photoSrc || "https://via.placeholder.com/150?text=No+Photo";
     if (photoLinkBox) {
-        photoLinkBox.innerHTML = student.photoURL 
-            ? `<a href="${student.photoURL}" target="_blank" class="btn-doc-link" style="display:inline-block; font-size:11px; padding:4px 8px;">Open Full Photo</a>` 
-            : '<span style="color:#94a3b8; font-size:11px;">Not Uploaded</span>';
+        photoLinkBox.innerHTML = student.photoURL ? `<a href="${student.photoURL}" target="_blank" class="btn-doc-link" style="display:inline-block; font-size:11px; padding:4px 8px;">Open Full Photo</a>` : '<span style="color:#94a3b8; font-size:11px;">Not Uploaded</span>';
     }
 
     if (signImg) signImg.src = signSrc || "https://via.placeholder.com/150?text=No+Signature";
     if (signLinkBox) {
-        signLinkBox.innerHTML = student.signURL 
-            ? `<a href="${student.signURL}" target="_blank" class="btn-doc-link" style="display:inline-block; font-size:11px; padding:4px 8px;">Open Full Sign</a>` 
-            : '<span style="color:#94a3b8; font-size:11px;">Not Uploaded</span>';
+        signLinkBox.innerHTML = student.signURL ? `<a href="${student.signURL}" target="_blank" class="btn-doc-link" style="display:inline-block; font-size:11px; padding:4px 8px;">Open Full Sign</a>` : '<span style="color:#94a3b8; font-size:11px;">Not Uploaded</span>';
     }
 }
 
@@ -400,16 +380,12 @@ function renderBottomDocuments(student) {
     const aadhaarBox = document.getElementById("aadhaarActionBox");
 
     if (marksheetBox) {
-        marksheetBox.innerHTML = student.marksheetURL 
-            ? `<a href="${student.marksheetURL}" target="_blank" class="btn-doc-link">👁️ View Marksheet</a>` 
-            : '<span style="color:#94a3b8; font-size:12px;">Not Uploaded</span>';
+        marksheetBox.innerHTML = student.marksheetURL ? `<a href="${student.marksheetURL}" target="_blank" class="btn-doc-link">👁️ View Marksheet</a>` : '<span style="color:#94a3b8; font-size:12px;">Not Uploaded</span>';
     }
 
     if (aadhaarBox) {
         const docUrl = student.aadhaarURL;
-        aadhaarBox.innerHTML = (docUrl && docUrl.startsWith("http")) 
-            ? `<a href="${docUrl}" target="_blank" class="btn-doc-link">👁️ View ID Document</a>` 
-            : '<span style="color:#94a3b8; font-size:12px;">Not Uploaded</span>';
+        aadhaarBox.innerHTML = (docUrl && docUrl.startsWith("http")) ? `<a href="${docUrl}" target="_blank" class="btn-doc-link">👁️ View ID Document</a>` : '<span style="color:#94a3b8; font-size:12px;">Not Uploaded</span>';
     }
 }
 
@@ -517,7 +493,6 @@ function populateFeeDetails(student) {
 }
 
 function refreshScolexUI(student) {
-    // Keep totalFee in sync with sum of installments
     const sumInst = student.installments.reduce((s, i) => s + Number(i.scheduledAmount || 0), 0);
     if (sumInst > 0) student.totalFee = sumInst;
 
@@ -570,9 +545,6 @@ function renderInstallmentOverviewList(student) {
     });
 }
 
-// ==========================================
-// Google Sheet Synced Payment History Renderer
-// ==========================================
 function renderPaymentHistoryTable(student) {
     const tbody = document.getElementById("paymentHistoryTableBody");
     if (!tbody) return;
@@ -635,11 +607,7 @@ function renderStepperTabs(student) {
             <div class="step-circle">${inst.no}</div>
             <span class="step-name">${inst.name}</span>
             <div class="step-amount-edit">
-                <input type="number" class="inst-amount-input"
-                       data-idx="${idx}"
-                       value="${inst.scheduledAmount}"
-                       min="0" step="50"
-                       title="Edit installment amount – updates receipt live">
+                <input type="number" class="inst-amount-input" data-idx="${idx}" value="${inst.scheduledAmount}" min="0" step="50" title="Edit installment amount">
                 <span class="amount-label">Amount</span>
             </div>
             <span class="badge-pill ${inst.status.toLowerCase()}" style="margin-top:3px;">${inst.status.toUpperCase()}</span>
@@ -685,7 +653,6 @@ function renderStepperTabs(student) {
     });
 }
 
-/** Edit one installment amount → total fee + receipt update */
 function updateInstallmentAmount(student, idx, newAmount) {
     if (!student || !student.installments[idx]) return;
 
@@ -706,14 +673,9 @@ function updateInstallmentAmount(student, idx, newAmount) {
     }
 
     localStorage.setItem("scolexAdmissions", JSON.stringify(admissionsList));
-
-    const feeInput = document.getElementById("courseFeeFixedInput");
-    if (feeInput) feeInput.value = student.totalFee;
-
     refreshScolexUI(student);
 }
 
-/** Set overall course fee and redistribute among pending installments */
 function updateCourseFeeFixed(student, newFee) {
     if (!student) return;
     const fee = Math.max(0, Math.round(Number(newFee) || 0));
@@ -730,9 +692,7 @@ function updateCourseFeeFixed(student, newFee) {
     const per = Math.round(remaining / count);
 
     pendingList.forEach((inst, i) => {
-        inst.scheduledAmount = (i === pendingList.length - 1)
-            ? remaining - (per * (count - 1))
-            : per;
+        inst.scheduledAmount = (i === pendingList.length - 1) ? remaining - (per * (count - 1)) : per;
         if (inst.paidAmount >= inst.scheduledAmount && inst.scheduledAmount > 0) {
             inst.status = "Paid";
         } else if (inst.paidAmount > 0) {
@@ -809,7 +769,6 @@ function selectStepperStep(index, student) {
     setElementText("curInstToPay", `₹ ${dueAmount.toLocaleString('en-IN')}`);
 
     const payInput = document.getElementById("payAmountInput");
-    // Don't overwrite while user is typing in Amount Paid
     if (payInput && document.activeElement !== payInput) {
         payInput.value = dueAmount;
     }
@@ -916,14 +875,9 @@ async function processInstallmentPayment() {
 
     localStorage.setItem("scolexAdmissions", JSON.stringify(admissionsList));
 
-    // Sync payment data to Google Sheets "fees" sheet
-    // Apps Script + browser: form-urlencoded is most reliable with no-cors
-    // (JSON + application/json often never reaches doPost / e.postData)
     let sheetSynced = false;
     if (GOOGLE_SCRIPT_URL && !GOOGLE_SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT")) {
         try {
-            // Convert payload to application/x-www-form-urlencoded
-            // Backend storeFeePayment() already reads e.parameter as fallback
             const formBody = new URLSearchParams();
             Object.keys(paymentPayload).forEach(key => {
                 const val = paymentPayload[key];
@@ -933,14 +887,10 @@ async function processInstallmentPayment() {
             await fetch(GOOGLE_SCRIPT_URL, {
                 method: "POST",
                 mode: "no-cors",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: formBody.toString()
             });
-            // no-cors = opaque response; request still reaches Apps Script if deployment is correct
             sheetSynced = true;
-            console.log("Fee payload sent to Google Apps Script (fees sheet):", paymentPayload);
         } catch (err) {
             console.error("Failed to sync fee data with Google Sheets:", err);
             sheetSynced = false;
@@ -948,9 +898,9 @@ async function processInstallmentPayment() {
     }
 
     if (sheetSynced) {
-        alert(`✅ Success! Marked ${inst.name} as Paid.\nReceipt: ${receiptNo}\nSynced to Google Sheets (fees).`);
+        alert(`✅ Success! Marked ${inst.name} as Paid.\nReceipt: ${receiptNo}\nSynced to Google Sheets.`);
     } else {
-        alert(`✅ Payment saved locally (Receipt: ${receiptNo}).\n⚠️ Could not reach Google Sheets – check Web App deployment.`);
+        alert(`✅ Payment saved locally (Receipt: ${receiptNo}).`);
     }
     refreshScolexUI(student);
 }
@@ -959,10 +909,9 @@ function updateReceiptPreview(student, activeInst, totalPrev) {
     if (!activeInst) return;
 
     const lastPayment = student.paymentHistory[student.paymentHistory.length - 1] || {};
-
-    // Prefer live "Amount Paid" input if user is editing it
     const payInputEl = document.getElementById("payAmountInput");
     let amountPaidNow = 0;
+
     if (payInputEl && document.activeElement === payInputEl) {
         amountPaidNow = Number(payInputEl.value) || 0;
     } else {
@@ -1007,7 +956,6 @@ function updateReceiptPreview(student, activeInst, totalPrev) {
     setElementText("recAmountWords", `(Rupees ${numberToWords(amountPaidNow) || 'Zero'} Only)`);
 }
 
-/** Live-sync receipt when Amount Paid / Date / Txn / Course Fee change */
 function bindLiveReceiptSync() {
     const amountInput = document.getElementById("payAmountInput");
     const dateInput = document.getElementById("payDateInput");
@@ -1035,7 +983,6 @@ function bindLiveReceiptSync() {
     if (dateInput) dateInput.addEventListener("change", sync);
     if (txnInput) txnInput.addEventListener("input", sync);
 
-    // COURSE FEE (FIXED) apply
     const feeInput = document.getElementById("courseFeeFixedInput");
     const applyBtn = document.getElementById("btnApplyCourseFee");
 
@@ -1116,15 +1063,7 @@ function toggleFormInputs(readOnlyState) {
     selects.forEach(select => select.disabled = readOnlyState);
 }
 
-// ==========================================
-// 8. Save Record Updates
-// ==========================================
-function getFieldValue(id) {
-    const el = document.getElementById(id);
-    return el ? el.value : "";
-}
-
-async function saveAdmissionRecord() {
+function saveAdmissionRecord() {
     const index = getFieldValue("recordIndex");
     if (index === "" || index === undefined) return;
 
@@ -1155,15 +1094,11 @@ async function saveAdmissionRecord() {
         pincode: getFieldValue("pincode"),
         city: getFieldValue("city"),
         district: getFieldValue("district"),
-        state: getFieldValue("state"),
-        feePaid: getFieldValue("feePaid"),
-        totalFee: getFieldValue("totalFee"),
-        dueFee: getFieldValue("dueFee"),
-        paymentStatus: getFieldValue("paymentStatus")
+        state: getFieldValue("state")
     };
 
     localStorage.setItem("scolexAdmissions", JSON.stringify(admissionsList));
-    alert("✅ ERP Student Record & Fee details updated successfully!");
+    alert("✅ ERP Student Record updated successfully!");
 
     renderTable(admissionsList);
     updateStats();
@@ -1186,9 +1121,7 @@ async function updateApplicationStatus(index, newStatus) {
         }
     }
 }
-// ==========================================
-// Print Fee Receipt on A4 (single page, no blank page)
-// ==========================================
+
 function printFeeReceipt() {
     const receipt = document.getElementById("feeReceiptCard");
     if (!receipt) {
@@ -1196,7 +1129,6 @@ function printFeeReceipt() {
         return;
     }
 
-    // Prefer isolated print window so only 1 A4 page prints
     const html = `<!DOCTYPE html>
 <html>
 <head>
@@ -1205,101 +1137,34 @@ function printFeeReceipt() {
 <style>
   @page { size: A4 portrait; margin: 12mm; }
   * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
-    color: #0f172a;
-    background: #fff;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-  .receipt-paper {
-    width: 100%;
-    max-width: 186mm;
-    margin: 0 auto;
-    border: 2px solid #0b2545;
-    padding: 14px 16px;
-    font-size: 11pt;
-  }
-  .receipt-top-banner {
-    background: #0b2545;
-    color: #fff;
-    text-align: center;
-    font-weight: 800;
-    letter-spacing: 2px;
-    padding: 8px;
-    margin: -14px -16px 12px -16px;
-    font-size: 13pt;
-  }
+  body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Arial, sans-serif; color: #0f172a; background: #fff; -webkit-print-color-adjust: exact; }
+  .receipt-paper { width: 100%; max-width: 186mm; margin: 0 auto; border: 2px solid #0b2545; padding: 14px 16px; font-size: 11pt; }
+  .receipt-top-banner { background: #0b2545; color: #fff; text-align: center; font-weight: 800; letter-spacing: 2px; padding: 8px; margin: -14px -16px 12px -16px; font-size: 13pt; }
   .receipt-header-center { text-align: center; margin-bottom: 10px; }
-  .receipt-logo {
-    width: 44px; height: 44px; border-radius: 50%;
-    border: 2px dashed #0b2545; margin: 0 auto;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 9px; font-weight: 800;
-  }
+  .receipt-logo { width: 44px; height: 44px; border-radius: 50%; border: 2px dashed #0b2545; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; }
   .receipt-header-center h3 { margin: 6px 0 2px; font-size: 14pt; color: #0b2545; }
   .receipt-sub { margin: 0; font-size: 9pt; color: #475569; }
-  .receipt-meta-line {
-    display: flex; justify-content: space-between;
-    border-top: 1px solid #cbd5e1; border-bottom: 1px solid #cbd5e1;
-    padding: 6px 0; margin-bottom: 10px; font-size: 10pt;
-  }
+  .receipt-meta-line { display: flex; justify-content: space-between; border-top: 1px solid #cbd5e1; border-bottom: 1px solid #cbd5e1; padding: 6px 0; margin-bottom: 10px; font-size: 10pt; }
   .meta-lbl { font-size: 8pt; color: #64748b; display: block; }
   .rec-red-text { color: #b91c1c; font-family: monospace; }
-  .receipt-sec-header {
-    background: #0b2545; color: #fff; font-size: 9pt;
-    font-weight: 700; padding: 5px 8px; letter-spacing: 0.5px;
-  }
-  .receipt-grid-2col {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
-    padding: 8px; border: 1px solid #e2e8f0; border-top: none;
-  }
+  .receipt-sec-header { background: #0b2545; color: #fff; font-size: 9pt; font-weight: 700; padding: 5px 8px; }
+  .receipt-grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 8px; border: 1px solid #e2e8f0; border-top: none; }
   .rec-field-label { font-size: 8pt; color: #64748b; }
   .rec-field-val { font-size: 10pt; font-weight: 600; }
   .receipt-kv-table { border: 1px solid #e2e8f0; border-top: none; }
-  .r-row {
-    display: flex; justify-content: space-between;
-    padding: 5px 8px; border-bottom: 1px solid #f1f5f9; font-size: 10pt;
-  }
+  .r-row { display: flex; justify-content: space-between; padding: 5px 8px; border-bottom: 1px solid #f1f5f9; font-size: 10pt; }
   .r-row.highlight { background: #f8fafc; font-weight: bold; }
-  .receipt-amount-block {
-    display: flex; justify-content: space-between; align-items: center; margin-top: 12px;
-  }
+  .receipt-amount-block { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
   .words-italic { font-style: italic; font-size: 9pt; color: #475569; }
-  .amount-box-right {
-    border: 2px solid #0b2545; border-radius: 6px;
-    padding: 8px 16px; font-size: 16pt; font-weight: 900; color: #0b2545;
-  }
-  .receipt-signature-area {
-    display: flex; justify-content: space-between; align-items: flex-end; margin-top: 18px;
-  }
-  .seal-circle {
-    width: 48px; height: 48px; border: 2px solid #0284c7; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    color: #0284c7; font-size: 8px; transform: rotate(-15deg);
-  }
+  .amount-box-right { border: 2px solid #0b2545; border-radius: 6px; padding: 8px 16px; font-size: 16pt; font-weight: 900; color: #0b2545; }
+  .receipt-signature-area { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 18px; }
+  .seal-circle { width: 48px; height: 48px; border: 2px solid #0284c7; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #0284c7; font-size: 8px; transform: rotate(-15deg); }
   .sig-block { text-align: right; min-width: 160px; }
-  .sig-line {
-    height: 42px; border-bottom: 1.5px solid #000;
-    width: 160px; margin-left: auto; margin-bottom: 4px;
-  }
+  .sig-line { height: 42px; border-bottom: 1.5px solid #000; width: 160px; margin-left: auto; margin-bottom: 4px; }
   .sig-title { font-size: 9pt; font-weight: bold; }
   .sig-company { font-size: 8pt; color: #64748b; }
-  .receipt-footer-bar {
-    background: #0b2545; color: #fff; text-align: center;
-    font-size: 9pt; padding: 8px; margin: 14px -16px -14px -16px;
-  }
+  .receipt-footer-bar { background: #0b2545; color: #fff; text-align: center; font-size: 9pt; padding: 8px; margin: 14px -16px -14px -16px; }
   .receipt-footer-bar p { margin: 0 0 2px; }
-  @media print {
-    body { margin: 0; }
-    .receipt-paper {
-      border: 2px solid #0b2545;
-      page-break-after: avoid;
-      page-break-inside: avoid;
-    }
-  }
 </style>
 </head>
 <body>
@@ -1318,7 +1183,6 @@ function printFeeReceipt() {
 
     const win = window.open("", "_blank", "width=800,height=1000");
     if (!win) {
-        // Popup blocked – fallback to page print
         window.print();
         return;
     }
