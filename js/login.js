@@ -2,9 +2,10 @@
 // SCOLEX STUDENT & PORTAL LOGIN
 //================================
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzqumYANoor1bpTJnx9DEoy1WzYn-Ve10Pilrc5QPrL2f5X67LkL39pNKwX1Vn75fPnYA/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnFgP5vnoD2CiRCnUDwwa7AOxgbZEUlFDzZs3GseuX1gDEidcbZ5DqiPFTzPHykF5mJQ/exec";
 
 let currentLoginRole = "student";
+let recoveryStep = 1; // Step 1: 4-Field Auth, Step 2: Save New Password
 
 // Credentials Mapping & Validation Database for Admin & Teachers
 const USERS_DB = {
@@ -200,4 +201,107 @@ async function handleLogin() {
 // Legacy global support helper
 function login() {
   handleLogin();
+}
+
+// ====================================================
+// SECURE 4-FIELD FORGOT PASSWORD PROCESS HANDLER
+// ====================================================
+async function handleForgotPasswordProcess() {
+  const authStudentIdInput = document.getElementById("authStudentId");
+  const authMobileInput = document.getElementById("authMobile");
+  const authNameInput = document.getElementById("authName");
+  const authCourseInput = document.getElementById("authCourse");
+  const newPasswordInput = document.getElementById("newPassword");
+  const recoveryBtn = document.getElementById("recoveryBtn");
+  const newPasswordGroup = document.getElementById("newPasswordGroup");
+
+  const studentId = authStudentIdInput.value.trim();
+  const mobile = authMobileInput.value.trim();
+  const name = authNameInput.value.trim();
+  const course = authCourseInput.value.trim();
+
+  if (recoveryStep === 1) {
+    if (!studentId || !mobile || !name || !course) {
+      alert("Please fill in all verification fields (Student ID, Mobile, Name, and Course).");
+      return;
+    }
+
+    try {
+      recoveryBtn.innerText = "Authenticating...";
+      recoveryBtn.disabled = true;
+
+      const response = await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({
+          action: "forgotPassword",
+          studentId: studentId,
+          mobile: mobile,
+          name: name,
+          course: course
+        })
+      });
+      const result = await response.json();
+
+      recoveryBtn.disabled = false;
+
+      if (result.status === "success" || result.success) {
+        alert("✅ Authentication successful! Please set your new password.");
+        authStudentIdInput.readOnly = true;
+        authMobileInput.readOnly = true;
+        authNameInput.readOnly = true;
+        authCourseInput.readOnly = true;
+        
+        newPasswordGroup.style.display = "block";
+        newPasswordInput.required = true;
+        recoveryBtn.innerText = "Update Password";
+        recoveryStep = 2;
+      } else {
+        alert(result.message || "❌ Authentication failed. Details do not match our records.");
+        recoveryBtn.innerText = "Authenticate & Verify";
+      }
+    } catch (error) {
+      console.error("Server connection error:", error);
+      alert("❌ Error connecting to the server.");
+      recoveryBtn.disabled = false;
+      recoveryBtn.innerText = "Authenticate & Verify";
+    }
+
+  } else if (recoveryStep === 2) {
+    const newPassword = newPasswordInput.value.trim();
+    
+    if (!newPassword || newPassword.length < 6) {
+      alert("Password must be at least 6 characters long.");
+      return;
+    }
+
+    try {
+      recoveryBtn.innerText = "Updating...";
+      recoveryBtn.disabled = true;
+
+      const response = await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({
+          action: "updatePassword",
+          studentId: studentId,
+          newPassword: newPassword
+        })
+      });
+      const result = await response.json();
+
+      recoveryBtn.disabled = false;
+
+      if (result.status === "success" || result.success) {
+        alert("✅ Password updated successfully! Please log in with your new credentials.");
+        toggleForgotForm(false); 
+      } else {
+        alert(result.message || "❌ Failed to update password.");
+        recoveryBtn.innerText = "Update Password";
+      }
+    } catch (error) {
+      console.error("Server connection error:", error);
+      alert("❌ Error connecting to the server.");
+      recoveryBtn.disabled = false;
+      recoveryBtn.innerText = "Update Password";
+    }
+  }
 }
