@@ -700,7 +700,8 @@ nav ul li:hover .dropdown {
     margin-right: -70px;
     bottom: 28px;
     width: 600px;
-    height: 125px;
+    height: auto;
+    min-height: 125px;
     max-width: 52%;
     background: #111827;
     border: 2px solid var(--cyan);
@@ -711,7 +712,7 @@ nav ul li:hover .dropdown {
         0 15px 40px rgba(0, 0, 0, 0.5),
         0 0 25px rgba(0, 229, 255, 0.15),
         0 6px 0 #00a0b8;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .hero-stat {
@@ -1635,7 +1636,20 @@ button.link.call-btn:hover { background: #f57c00; }
         bottom: auto;
         width: 100%;
         max-width: 100%;
-        margin-top: 30px;
+        margin: 30px 0 0 0;
+        height: auto;
+        min-height: 0;
+        overflow: visible;
+        grid-template-columns: repeat(5, 1fr);
+    }
+    .hero-stat {
+        padding: 14px 8px;
+    }
+    .hero-stat strong {
+        font-size: 1.05rem;
+    }
+    .hero-stat span {
+        font-size: 0.68rem;
     }
     .years-badge {
         top: 18px;
@@ -1710,6 +1724,14 @@ button.link.call-btn:hover { background: #f57c00; }
     .hero-image::after {
         background: linear-gradient(180deg, #0a0f1c 0%, rgba(10,15,28,0.85) 100%);
     }
+
+    /* Tablet: 3 columns for stats */
+    .hero-stats {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .hero-stat:nth-child(3) {
+        border-right: none;
+    }
 }
 
 @media (max-width: 768px) {
@@ -1720,18 +1742,26 @@ button.link.call-btn:hover { background: #f57c00; }
 
     .hero-stats {
         grid-template-columns: repeat(2, 1fr);
+        height: auto;
+        min-height: 0;
+        overflow: visible;
+        margin: 24px 0 0 0;
     }
 
     .hero-stat {
         border-right: none;
         border-bottom: 1px solid rgba(0, 229, 255, 0.2);
+        padding: 16px 10px;
     }
 
     .hero-stat:nth-child(odd) {
         border-right: 1px solid rgba(0, 229, 255, 0.2);
     }
 
-    .hero-stat:nth-last-child(-n+2) {
+    /* Last item (5th) spans full width */
+    .hero-stat:nth-child(5) {
+        grid-column: 1 / -1;
+        border-right: none;
         border-bottom: none;
     }
 
@@ -1758,11 +1788,8 @@ button.link.call-btn:hover { background: #f57c00; }
         display: none;
     }
 
-    
-    
     .prev { left: 10px; width: 44px; height: 44px; font-size: 1.2rem; }
     .next { right: 10px; width: 44px; height: 44px; font-size: 1.2rem; }
-
 
     .contact {
         margin: 40px 14px 30px;
