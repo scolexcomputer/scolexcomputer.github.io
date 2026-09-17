@@ -421,10 +421,9 @@ nav ul li:hover .dropdown {
 
 .hero-image {
     position: absolute;
-    inset: 0 0 0 55%;
+    inset: 0 0 0 48%;
     z-index: 0;
-    opacity: 0.35;
-    pointer-events: none;
+    opacity: 0.4;
 }
 
 .hero-image img {
@@ -541,7 +540,7 @@ nav ul li:hover .dropdown {
 .hero-content {
     position: relative;
     z-index: 2;
-    width: min(1400px, calc(100% - 24px));
+    width: min(1320px, calc(100% - 40px));
     margin: 0 auto;
     min-height: 450px;
     display: flex;
@@ -701,8 +700,7 @@ nav ul li:hover .dropdown {
     margin-right: -70px;
     bottom: 28px;
     width: 600px;
-    height: auto;
-    min-height: 125px;
+    height: 125px;
     max-width: 52%;
     background: #111827;
     border: 2px solid var(--cyan);
@@ -713,7 +711,7 @@ nav ul li:hover .dropdown {
         0 15px 40px rgba(0, 0, 0, 0.5),
         0 0 25px rgba(0, 229, 255, 0.15),
         0 6px 0 #00a0b8;
-    overflow: visible;
+    overflow: hidden;
 }
 
 .hero-stat {
@@ -1627,67 +1625,26 @@ button.link.call-btn:hover { background: #f57c00; }
 }
 
 /* =========================================================
-   RESPONSIVE — Full-width friendly
+   RESPONSIVE
 ========================================================= */
-
-/* Force full-width layout earlier so no empty right strip */
-@media (max-width: 1280px) {
-    .hero-left {
-        width: 100%;
-    }
-    .hero-image {
-        inset: 0;
-        opacity: 0.18;
-    }
-    .hero-image::after {
-        background: linear-gradient(180deg, #0a0f1c 0%, rgba(10,15,28,0.9) 100%);
-    }
-    .hero-content {
-        flex-direction: column;
-        align-items: flex-start;
-        width: calc(100% - 20px);
-        max-width: 100%;
-        padding: 20px 10px 40px;
-    }
+@media (max-width: 1100px) {
+    .hero-left { width: 100%; }
     .hero-stats {
         position: relative;
         right: auto;
         bottom: auto;
         width: 100%;
         max-width: 100%;
-        margin: 28px 0 0 0;
-        height: auto;
-        min-height: 0;
-        overflow: visible;
-        grid-template-columns: repeat(5, 1fr);
+        margin-top: 30px;
     }
-    .hero-stat {
-        padding: 14px 6px;
-    }
-    .hero-stat strong {
-        font-size: 1rem;
-    }
-    .hero-stat span {
-        font-size: 0.65rem;
-    }
-    .home,
-    .features,
-    .courses,
-    .contact {
-        max-width: 100%;
-        margin-left: 12px;
-        margin-right: 12px;
-    }
-    .nav-container {
-        max-width: 100%;
-    }
-}
-
-@media (max-width: 1100px) {
     .years-badge {
         top: 18px;
         right: 16px;
         transform: scale(0.85);
+    }
+    .hero-content {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }
 
@@ -1745,43 +1702,36 @@ button.link.call-btn:hover { background: #f57c00; }
         padding-left: 46px;
     }
 
-    /* Tablet: 3 columns for stats */
-    .hero-stats {
-        grid-template-columns: repeat(3, 1fr);
+    .hero-image {
+        inset: 0;
+        opacity: 0.2;
     }
-    .hero-stat:nth-child(3) {
-        border-right: none;
+
+    .hero-image::after {
+        background: linear-gradient(180deg, #0a0f1c 0%, rgba(10,15,28,0.85) 100%);
     }
 }
 
 @media (max-width: 768px) {
     .home {
-        margin: 28px 12px;
-        padding: 28px 16px;
+        margin: 28px 14px;
+        padding: 28px 18px;
     }
 
     .hero-stats {
         grid-template-columns: repeat(2, 1fr);
-        height: auto;
-        min-height: 0;
-        overflow: visible;
-        margin: 24px 0 0 0;
     }
 
     .hero-stat {
         border-right: none;
         border-bottom: 1px solid rgba(0, 229, 255, 0.2);
-        padding: 16px 10px;
     }
 
     .hero-stat:nth-child(odd) {
         border-right: 1px solid rgba(0, 229, 255, 0.2);
     }
 
-    /* Last item (5th) spans full width */
-    .hero-stat:nth-child(5) {
-        grid-column: 1 / -1;
-        border-right: none;
+    .hero-stat:nth-last-child(-n+2) {
         border-bottom: none;
     }
 
@@ -1808,18 +1758,15 @@ button.link.call-btn:hover { background: #f57c00; }
         display: none;
     }
 
+    
+    
     .prev { left: 10px; width: 44px; height: 44px; font-size: 1.2rem; }
     .next { right: 10px; width: 44px; height: 44px; font-size: 1.2rem; }
 
-    .contact {
-        margin: 40px 12px 30px;
-        padding: 28px 16px;
-    }
 
-    .features,
-    .courses {
-        margin-left: 12px;
-        margin-right: 12px;
+    .contact {
+        margin: 40px 14px 30px;
+        padding: 28px 18px;
     }
 }
 
