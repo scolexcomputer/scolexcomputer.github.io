@@ -10,8 +10,11 @@
     <meta property="og:description" content="Professional Computer Training Institute in Motipur, Muzaffarpur">
     <link rel="icon" type="image/png" href="Icon.png" sizes="1044x1044">
     <link rel="apple-touch-icon" href="Icon.png">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="gallery.css">
 
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
@@ -86,7 +89,6 @@
         <hr>
     </header>
 
-    <!-- Navigation -->
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
@@ -180,6 +182,7 @@
             </ul>
         </div>
     </nav>
+
     <!-- Dynamic Logged-in Profile & Logout Bar -->
     <div id="homeProfileBar" class="scolex-session-bar" style="display: none;">
         <div class="session-info">
@@ -188,6 +191,149 @@
         </div>
         <button onclick="scolexLogout()" class="session-logout-btn">Logout 🚪</button>
     </div>
+
+    <!-- =======================================================
+     HERO SECTION
+======================================================= -->
+
+<main id="home">
+
+<section class="hero-wrapper">
+
+    <div class="hero">
+
+        <div class="hero-image">
+            <img
+                src="images/hero.png"
+                alt="Students learning computers">
+        </div>
+
+        <!-- Quick Portal Login Bar -->
+        <section class="quick-portal-banner">
+            <div class="home-portal-box">
+                <h3>🔐 Quick Portals</h3>
+                <p>Select your portal to login:</p>
+                <div class="portal-buttons-inline">
+                    <a href="login.html?role=admin" class="portal-btn admin-portal">
+                        🛡️ Admin Login
+                    </a>
+                    <a href="login.html?role=teacher" class="portal-btn teacher-portal">
+                        👨‍🏫 Teacher Login
+                    </a>
+                    <a href="login.html?role=student" class="portal-btn student-portal">
+                        🎓 Student Login
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <div class="hero-content">
+
+            <div class="hero-left">
+
+                <div class="trust-badge">
+                    <i class="fa-solid fa-star"></i>
+                    Trusted Computer Education Since 10 Years
+                </div>
+
+                <h1 class="hero-title">
+                    Your Success
+                    <br>
+                    Is <span>Our Mission</span>
+                </h1>
+
+                <p class="hero-description">
+                    Scolex Computer Classes provides quality education,
+                    practical knowledge and career-oriented courses to
+                    build your bright future.
+                </p>
+
+                <div class="hero-features">
+
+                    <div class="hero-feature">
+                        <div class="hero-feature-icon">
+                            <i class="fa-solid fa-chalkboard-user"></i>
+                        </div>
+                        <div>
+                            <strong>Smart Class</strong>
+                            <small>Modern Learning</small>
+                        </div>
+                    </div>
+
+                    <div class="hero-feature">
+                        <div class="hero-feature-icon">
+                            <i class="fa-regular fa-clipboard"></i>
+                        </div>
+                        <div>
+                            <strong>Mock Test</strong>
+                            <small>Regular Practice</small>
+                        </div>
+                    </div>
+
+                    <div class="hero-feature">
+                        <div class="hero-feature-icon">
+                            <i class="fa-regular fa-circle-check"></i>
+                        </div>
+                        <div>
+                            <strong>Certification</strong>
+                            <small>100% Valid</small>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="hero-buttons">
+                    <a href="#courses" class="primary-btn">
+                        Explore Courses
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <a href="#brochure" class="secondary-btn">
+                        Download Brochure
+                        <i class="fa-solid fa-download"></i>
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- HERO STATISTICS -->
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <strong>10 year+</strong>
+                    <span>Legacy of Trust</span>
+                </div>
+
+                <div class="hero-stat">
+                    <i class="fa-solid fa-users"></i>
+                    <strong>1000+</strong>
+                    <span>Students Trained</span>
+                </div>
+
+                <div class="hero-stat">
+                    <i class="fa-solid fa-user-tie"></i>
+                    <strong>Expert</strong>
+                    <span>Faculty</span>
+                </div>
+
+                <div class="hero-stat">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <strong>100%</strong>
+                    <span>Placement Support</span>
+                </div>
+
+                <div class="hero-stat">
+                    <i class="fa-solid fa-person-chalkboard"></i>
+                    <strong>Practical</strong>
+                    <span>Live Projects</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 
     <!-- ================= HOME SECTION ================= -->
     <section class="home">
@@ -203,50 +349,36 @@
             <br>
             </p>
             <div class="buttons">
-                <a href="html/page.html" class="btn">Apply Now</a>
-                <a href="#courses" class="btn btn2">View Courses</a>
-            </div>
-        </div>
-
-        <!-- Quick Portal Login Box -->
-        <div class="home-portal-box">
-            <h3>🔐 Quick Portals</h3>
-            <p>Select your portal to login:</p>
-            <div class="portal-buttons">
-                <a href="login.html?role=admin" class="portal-btn admin-portal">
-                    🛡️ Admin Login
-                </a>
-                <a href="login.html?role=teacher" class="portal-btn teacher-portal">
-                    👨‍🏫 Teacher Login
-                </a>
-                <a href="login.html?role=student" class="portal-btn student-portal">
-                    🎓 Student Login
-                </a>
+                <a href="html/admission.html" class="btn">Apply Now</a>
+                <a href="course.html" class="btn btn2">View Courses</a>
             </div>
         </div>
     </section>
 
     <!-- ================= GALLERY SECTION ================= -->
     <section id="gallery">
-        <h2 class="hg">Our Gallery</h2>
-        <p class="subtitle">
-            Glimpses of Scolex Computer Classes, Smart Lab, Students and Learning Environment.
-        </p>
-        <div class="slideshow-container">
-            <div class="slide">
-                <img src="images/gallery/banner.jpeg" alt="Lab">
+        <div class="gallery-inner">
+            <h2 class="hg">Our Gallery</h2>
+            <p class="subtitle">
+                Glimpses of Scolex Computer Classes, Smart Lab, Students and Learning Environment.
+            </p>
+            <div class="slideshow-container">
+                <div class="slide">
+                    <img src="images/gallery/banner.jpeg" alt="Lab">
+                </div>
+                <div class="slide">
+                    <img src="images/gallery/classroom.jpeg" alt="Lights">
+                </div>
+                <div class="slide">
+                    <img src="images/gallery/lab.jpeg" alt="Mountains">
+                </div>
+                <div class="slide">
+                    <img src="images/gallery/smartboard.jpeg" alt="Forest">
+                </div>
+                <button class="prev" onclick="changeSlide(-1)" aria-label="Previous">❮</button>
+                <button class="next" onclick="changeSlide(1)" aria-label="Next">❯</button>
             </div>
-            <div class="slide">
-                <img src="images/gallery/classroom.jpeg" alt="Lights">
-            </div>
-            <div class="slide">
-                <img src="images/gallery/lab.jpeg" alt="Mountains">
-            </div>
-            <div class="slide">
-                <img src="images/gallery/smartboard.jpeg" alt="Forest">
-            </div>
-            <button class="prev" onclick="changeSlide(-1)">❮</button>
-            <button class="next" onclick="changeSlide(1)">❯</button>
+            <div class="gallery-dots"></div>
         </div>
     </section>
 
@@ -400,10 +532,13 @@
     <script src="script.js"></script> 
     <script src="js/gallery.js"></script>
     <script src="js/contact.js"></script>
-</body>
+    <script src="js/session.js"></script>
+</main>
+
 <footer>
     <div class="footer-bottom">
         <marquee>© 2026 Scolex Computer Classes | Founded by <strong>Sarfaraz Faijee</strong> | All Rights Reserved.</marquee>
     </div>
 </footer>
+</body>
 </html>

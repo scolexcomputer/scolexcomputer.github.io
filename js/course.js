@@ -54,10 +54,10 @@ const coursesData = {
             { title: "Computer Fundamentals", topics: ["Introduction to Computer", "History & Generations of Computer", "Types of Computer", "Hardware & Software", "Input & Output Devices", "Memory Units", "CPU & Storage Devices"] },
             { title: "Windows Operating System", topics: ["Desktop & Taskbar", "Start Menu", "File & Folder Management", "Control Panel", "Personalization", "Shortcut Keys"] },
             { title: "Microsoft Word", topics: ["Creating Documents", "Text Formatting", "Tables & Borders", "Pictures & Shapes", "Header & Footer", "Mail Merge"] },
-            { title: "Microsoft Excel", topics: ["Workbook & Worksheet", "Cell Formatting", "Formulas & Functions", "Charts", "Sorting & Filtering", "Conditional Formatting"] }
+            { title: "Microsoft Excel", topics: ["Workbook & Worksheet", "Cell Formatting", "Formulas & Functions", "Charts", "Sorting & Filtering", "Conditional Formatting"] },
+             { title: "Microsoft PowerPoint", topics: ["Creating Presentation", "Slide Design", "Animations", "Transitions", "Slide Show"] },
         ],
         col2: [
-            { title: "Microsoft PowerPoint", topics: ["Creating Presentation", "Slide Design", "Animations", "Transitions", "Slide Show"] },
             { title: "Internet & Email", topics: ["Internet Basics", "Web Browser", "Search Engine", "Email Creation", "Email Attachment"] },
             { title: "DOS (Disk Operating System)", topics: ["Internal Commands", "External Commands", "Directory Commands", "File Management"] },
             { title: "Tally Prime with GST", topics: ["Introduction to Tally Prime", "Company Creation", "Groups & Ledgers", "Voucher Entry", "Inventory Management", "GST Configuration", "Purchase & Sales Entry", "Bank Reconciliation", "Profit & Loss Account", "Balance Sheet", "GST Reports"] },
@@ -207,9 +207,9 @@ function renderCourse(courseKey, element) {
     history.pushState(null, '', `course.html?course=${courseKey}`);
     document.title = `${data.title} | Scolex Computer Classes`;
 
-    // Build structural DOM layout
+    // Build structural DOM layout (matches homepage style)
     displayArea.innerHTML = `
-        <div class="header">
+        <div class="course-header">
             <h1>${data.title}</h1>
             <h2>${data.subtitle}</h2>
         </div>
@@ -245,8 +245,8 @@ function renderCourse(courseKey, element) {
             </div>
         </div>
 
-        <div class="footer">
-            <a href="../html/admission.html" class="btn">Apply for Admission</a>
+        <div class="course-footer">
+            <a href="html/admission.html" class="btn">Apply for Admission</a>
         </div>
     `;
 }
