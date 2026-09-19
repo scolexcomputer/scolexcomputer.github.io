@@ -1,4 +1,4 @@
-const scriptURL = "https://script.google.com/macros/s/AKfycbxquEKPFaTf467S_YwRWu2pA1SEgTrdPQr-s66MqjFZm6zr85ASIGsny0cJPuMpeONCkw/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbyKzZGiq9URbo209sqs-pkaUTeHrey0r4NXExkIOpbHHL2H3SEKKPMTSCLcEUKOZ1db/exec";
 
 const contactForm = document.getElementById("contactForm");
 const submitBtn = document.getElementById("submitBtn");

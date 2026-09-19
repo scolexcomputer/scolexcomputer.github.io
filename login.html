@@ -18,15 +18,15 @@
       <p class="location-text">📍 Shanti Market, Main Road, Motipur</p>
     </header>
 
-    <!-- Role Switcher Tabs (Hidden during recovery mode) -->
-    <div class="role-tabs" id="roleTabsContainer">
+    <!-- Role Switcher Tabs -->
+    <div class="role-tabs">
       <button type="button" class="role-tab active" data-role="student" id="studentTabBtn">Student Login</button>
       <button type="button" class="role-tab" data-role="teacher" id="teacherTabBtn">Teacher Login</button>
       <button type="button" class="role-tab" data-role="admin" id="adminTabBtn">Admin Login</button>
     </div>
 
-    <!-- ==================== LOGIN FORM ==================== -->
-    <form id="loginFormSection" onsubmit="event.preventDefault(); login();">
+    <!-- Login Form -->
+    <form onsubmit="event.preventDefault(); login();">
       <div class="input-group">
         <input type="text" id="loginId" placeholder="Mobile Number or Student ID" required autocomplete="username">
       </div>
@@ -37,44 +37,10 @@
       <button type="submit" id="loginBtn">Login as Student</button>
     </form>
 
-    <!-- ==================== FORGOT PASSWORD FORM (Secure 4-Field Auth) ==================== -->
-    <form id="forgotPasswordSection" style="display: none;" onsubmit="event.preventDefault(); handleForgotPasswordProcess();">
-      <div style="margin-bottom: 15px; font-size: 13px; color: #64748b; text-align: center; line-height: 1.5;">
-        Enter your <strong>Student ID</strong>, <strong>Mobile Number</strong>, <strong>Name</strong>, and <strong>Course</strong> to securely verify your account.
-      </div>
-      
-      <div class="input-group" style="margin-bottom: 10px;">
-        <input type="text" id="authStudentId" placeholder="Student ID (e.g., STD2026...)" autocomplete="username">
-      </div>
-
-      <div class="input-group" style="margin-bottom: 10px;">
-        <input type="text" id="authMobile" placeholder="Registered Mobile Number" autocomplete="tel">
-      </div>
-
-      <div class="input-group" style="margin-bottom: 10px;">
-        <input type="text" id="authName" placeholder="Full Name (as per records)" autocomplete="name">
-      </div>
-
-      <div class="input-group" style="margin-bottom: 12px;">
-        <input type="text" id="authCourse" placeholder="Course Name (e.g., ADCA, DCA)">
-      </div>
-
-      <!-- Shown after successful authentication in Step 2 -->
-      <div class="input-group" id="newPasswordGroup" style="display: none; margin-bottom: 12px;">
-        <input type="password" id="newPassword" placeholder="Enter New Password (min 6 chars)" autocomplete="new-password">
-      </div>
-
-      <button type="submit" id="recoveryBtn" class="custom-btn" style="width: 100%; margin-top: 5px; background: #0284c7; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer;">Authenticate & Verify</button>
-      
-      <div style="text-align: center; margin-top: 15px;">
-        <button type="button" onclick="toggleForgotForm(false)" style="background: none; border: none; color: #64748b; font-size: 13px; cursor: pointer; text-decoration: underline;">← Back to Login</button>
-      </div>
-    </form>
-
     <!-- Footer Actions (Hidden for Admin/Teacher) -->
     <div class="footer-actions" id="footerActions">
       <a href="signup.html">Register Here</a>
-      <a href="#" onclick="toggleForgotForm(true); return false;">Forgot Password?</a>
+      <a href="forgot-password.html">Forgot Password?</a>
     </div>
 
   </div>
@@ -93,42 +59,6 @@
       }
     });
   });
-
-  // Toggle between Login Form and Forgot Password Form smoothly on the same page
-  function toggleForgotForm(showForgot) {
-    const loginForm = document.getElementById("loginFormSection");
-    const forgotForm = document.getElementById("forgotPasswordSection");
-    const roleTabs = document.getElementById("roleTabsContainer");
-    const footerActions = document.getElementById("footerActions");
-
-    if (showForgot) {
-      loginForm.style.display = "none";
-      roleTabs.style.display = "none";
-      footerActions.style.display = "none";
-      forgotForm.style.display = "block";
-    } else {
-      forgotForm.style.display = "none";
-      loginForm.style.display = "block";
-      roleTabs.style.display = "flex";
-      footerActions.style.display = "flex";
-      
-      // Reset recovery states
-      document.getElementById("authStudentId").readOnly = false;
-      document.getElementById("authStudentId").value = "";
-      document.getElementById("authMobile").readOnly = false;
-      document.getElementById("authMobile").value = "";
-      document.getElementById("authName").readOnly = false;
-      document.getElementById("authName").value = "";
-      document.getElementById("authCourse").readOnly = false;
-      document.getElementById("authCourse").value = "";
-      document.getElementById("newPassword").value = "";
-      document.getElementById("newPasswordGroup").style.display = "none";
-      document.getElementById("recoveryBtn").innerText = "Authenticate & Verify";
-      if (typeof window.recoveryStep !== 'undefined') {
-        window.recoveryStep = 1;
-      }
-    }
-  }
 </script>
 <script src="js/login.js"></script>
 </body>
