@@ -229,3 +229,43 @@ button[type="submit"]:active {
   .box h2 { font-size: 1.15rem; }
   .box h3 { font-size: 0.95rem; }
 }
+/* =========================================================
+   Extra styles: field errors for duplicate mobile / email
+   ========================================================= */
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.field-error {
+  display: block;
+  text-align: left;
+  color: #dc2626;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 10px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  margin-top: 2px;
+}
+
+.field-error.hidden {
+  display: none !important;
+}
+
+input.input-error,
+select.input-error {
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.18) !important;
+  background: #fff5f5 !important;
+}
+
+button[type="submit"]:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none !important;
+}

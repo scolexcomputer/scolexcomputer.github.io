@@ -1,7 +1,7 @@
 // ==========================================
 // Google Apps Script Web App Deployment URL
 // ==========================================
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwT6dSqY6Cynsmvb5v8nj6RUI9RB8YziEdeElyCW9jf9AOBK_QYkftO6QXbIuwqGnF-cA/exec"; 
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyTJ5hPgzqJg6FqI7pJHEjyIIMSHQ1UaNX6NNnvwXjb2YmvWsTz8Zjhzsyhak4V7BUW/exec"; 
 
 let admissionsList = [];
 let currentSelectedInstallment = 0;

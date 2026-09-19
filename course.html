@@ -4,30 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Courses | Scolex Computer Classes</title>
+    <meta name="description" content="Explore professional computer courses - DCA, ADCA, DCA-T, DTP, C, C++, Java, Python at Scolex Computer Classes, Motipur.">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Same fonts as homepage -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="css/course.css">
 </head>
 <body>
-        <header class="main-header">
-            <h1 class="heading-main">Scolex Computer Classes</h1>
-            <h2 class="heading-sub">IACT (Institute for Advanced Computer Technology)</h2>
-            <h3 class="heading-location">Shanti Market, Main Road, Motipur</h3>
-            <h4 class="heading-page">Course Page</h4>
 
-            <nav class="tabs-container">
-                <a href="index.html" class="tab-btn home-tab">🏠 Home</a>
-                <button class="tab-btn" onclick="renderCourse('adca', this)">ADCA</button>
-                <button class="tab-btn" onclick="renderCourse('dca', this)">DCA</button>
-                <button class="tab-btn" onclick="renderCourse('dca-t', this)">DCA-T</button>
-                <button class="tab-btn" onclick="renderCourse('dtp', this)">DTP</button>
-                <button class="tab-btn" onclick="renderCourse('clanguage', this)">C Language</button>
-                <button class="tab-btn" onclick="renderCourse('c++', this)">C++</button>
-                <button class="tab-btn" onclick="renderCourse('java', this)">Java</button>
-                <button class="tab-btn" onclick="renderCourse('python', this)">Python</button>
-            </nav>
-        </header>
+    <!-- Header - Same style as homepage -->
+    <header class="header">
+        <h1>Scolex Computer Classes</h1>
+        <h2>IACT (Institute for Advanced Computer Technology)</h2>
+        <address>Shanti Market, Main Road, Motipur</address>
+        <hr>
+    </header>
 
-    <!-- Dynamic Container Body -->
-    <main class="container" id="course-display-area"></main>
+    <!-- Course Tabs Navigation -->
+    <nav class="course-nav">
+        <div class="course-nav-inner">
+            <a href="index.html" class="tab-btn home-tab">
+                <i class="fa-solid fa-house"></i> Home
+            </a>
+            <button class="tab-btn" onclick="renderCourse('adca', this)">ADCA</button>
+            <button class="tab-btn" onclick="renderCourse('dca', this)">DCA</button>
+            <button class="tab-btn" onclick="renderCourse('dca-t', this)">DCA-T</button>
+            <button class="tab-btn" onclick="renderCourse('dtp', this)">DTP</button>
+            <button class="tab-btn" onclick="renderCourse('clanguage', this)">C Language</button>
+            <button class="tab-btn" onclick="renderCourse('c++', this)">C++</button>
+            <button class="tab-btn" onclick="renderCourse('java', this)">Java</button>
+            <button class="tab-btn" onclick="renderCourse('python', this)">Python</button>
+        </div>
+    </nav>
+
+    <!-- Dynamic Course Content -->
+    <main class="container" id="course-display-area">
+        <!-- Content injected by course.js -->
+    </main>
+
+    <footer>
+        <div class="footer-bottom">
+            <marquee>© 2026 Scolex Computer Classes | Founded by <strong>Sarfaraz Faijee</strong> | All Rights Reserved.</marquee>
+        </div>
+    </footer>
 
     <script src="js/course.js"></script>
 </body>
