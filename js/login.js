@@ -44,8 +44,9 @@ const USERS_DB = {
 // AUTO-REDIRECT & INITIAL ROLE SETUP FROM URL
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
-  const existingRole = localStorage.getItem("userRole");
-  const existingUser = localStorage.getItem("student");
+  // Updated to sessionStorage so it automatically clears when tab/browser closes
+  const existingRole = sessionStorage.getItem("userRole");
+  const existingUser = sessionStorage.getItem("student");
 
   if (existingRole && existingUser) {
     window.location.href = "index.html";
@@ -104,8 +105,8 @@ function handlePortalLogin(loginId, password, selectedRole) {
        loginId === USERS_DB.admin.mobile) &&
       password === USERS_DB.admin.password
     ) {
-      localStorage.setItem("userRole", "admin");
-      localStorage.setItem("student", JSON.stringify(USERS_DB.admin));
+      sessionStorage.setItem("userRole", "admin");
+      sessionStorage.setItem("student", JSON.stringify(USERS_DB.admin));
       alert("✅ Admin Login Successful!");
       window.location.href = "index.html";
       return true;
@@ -123,8 +124,8 @@ function handlePortalLogin(loginId, password, selectedRole) {
     );
 
     if (matchedTeacher) {
-      localStorage.setItem("userRole", "teacher");
-      localStorage.setItem("student", JSON.stringify(matchedTeacher));
+      sessionStorage.setItem("userRole", "teacher");
+      sessionStorage.setItem("student", JSON.stringify(matchedTeacher));
       alert(`✅ Welcome, ${matchedTeacher.name}! Teacher Login Successful.`);
       window.location.href = "index.html";
       return true;
@@ -184,8 +185,8 @@ async function handleLogin() {
         course: raw["Course"] || raw.course || raw.selectedCourse || "ADCA"
       };
 
-      localStorage.setItem("userRole", "student");
-      localStorage.setItem("student", JSON.stringify(studentObj));
+      sessionStorage.setItem("userRole", "student");
+      sessionStorage.setItem("student", JSON.stringify(studentObj));
       
       alert("✅ Student Login Successful!");
       window.location.href = "index.html";
