@@ -11,7 +11,7 @@
   var INACTIVITY_MS = 10 * 60 * 1000; // 10 minutes
   var WARNING_MS    = 8 * 60 * 1000;  // warning at 8 min (2 min before)
   var CHECK_EVERY   = 30 * 1000;      // check every 30 seconds
-  var LOGIN_PAGE    = "login.html";
+  var LOGIN_PAGE    = "index.html";
   var STORAGE_KEY   = "scolex_last_activity";
 
   var warningShown = false;
