@@ -1,15 +1,16 @@
 //================================
 // SCOLEX AUTO LOGOUT (Inactivity)
-// Logs out after 30 minutes of no activity
-// Include this file on ALL protected pages (index, dashboard, etc.)
+// Logs out after 10 minutes of no activity
+// Session remains if user closes tab and reopens within 10 minutes
+// Include this file on ALL protected pages
 // <script src="js/session.js"></script>
 //================================
 
 (function () {
   // ---- Settings ----
-  var INACTIVITY_MS = 30 * 60 * 1000; // 30 minutes
-  var WARNING_MS    = 28 * 60 * 1000; // optional warning at 28 min (2 min before)
-  var CHECK_EVERY   = 30 * 1000;      // check every 30 seconds
+  var INACTIVITY_MS = 10 * 60 * 1000; // 10 minutes
+  var WARNING_MS    =  8 * 60 * 1000; // warning at 8 minutes (2 min before logout)
+  var CHECK_EVERY   = 15 * 1000;      // check every 15 seconds
   var LOGIN_PAGE    = "login.html";
   var STORAGE_KEY   = "scolex_last_activity";
 
@@ -31,12 +32,11 @@
     localStorage.removeItem("student");
     localStorage.removeItem("ScolexStudentSavedData");
     localStorage.removeItem(STORAGE_KEY);
-    // keep other non-auth data (admissions list etc.) if needed
   }
 
   function doLogout(reason) {
     clearSession();
-    alert(reason || "You have been logged out due to 30 minutes of inactivity.\nPlease login again.");
+    alert(reason || "You have been logged out due to 10 minutes of inactivity.\nPlease login again.");
     window.location.href = LOGIN_PAGE;
   }
 
@@ -51,39 +51,49 @@
 
     var idle = Date.now() - last;
 
-    // Warning 2 minutes before logout
+    // Soft warning 2 minutes before logout
     if (idle >= WARNING_MS && idle < INACTIVITY_MS && !warningShown) {
       warningShown = true;
-      // Non-blocking soft warning (optional)
       console.log("Session will expire in about 2 minutes due to inactivity.");
     }
 
+    // Logout after 10 minutes of inactivity
     if (idle >= INACTIVITY_MS) {
-      doLogout("⏱ Session expired!\n\nYou were inactive for 30 minutes.\nPlease login again.");
+      doLogout("⏱ Session expired!\n\nYou were inactive for 10 minutes.\nPlease login again.");
     }
   }
 
   function startWatching() {
     if (!isLoggedIn()) return;
 
-    // Record activity now
-    updateActivity();
+    // Check if already expired (important when reopening closed tab)
+    checkInactivity();
+
+    // If still logged in, record activity
+    if (isLoggedIn()) {
+      updateActivity();
+    }
 
     // Reset timer on any user interaction
-    var events = ["mousemove", "mousedown", "mouseup", "keydown", "keypress", "scroll", "touchstart", "touchmove", "click", "wheel"];
+    var events = [
+      "mousemove", "mousedown", "mouseup", "keydown", "keypress",
+      "scroll", "touchstart", "touchmove", "click", "wheel"
+    ];
     events.forEach(function (evt) {
       document.addEventListener(evt, updateActivity, { passive: true, capture: true });
     });
 
-    // Also when tab becomes visible again
+    // When user comes back to the tab
     document.addEventListener("visibilitychange", function () {
       if (document.visibilityState === "visible") {
-        checkInactivity();
-        updateActivity();
+        checkInactivity();          // check if expired while away
+        if (isLoggedIn()) {
+          updateActivity();         // reset timer if still valid
+        }
       }
     });
 
-    // Periodic check (handles case when user leaves tab open without events)
+    // Periodic check
     timerId = setInterval(checkInactivity, CHECK_EVERY);
   }
 
@@ -94,7 +104,7 @@
     startWatching();
   }
 
-  // Expose manual logout helper if needed elsewhere
+  // Manual logout helper
   window.scolexLogout = function () {
     clearSession();
     window.location.href = LOGIN_PAGE;
