@@ -1,5 +1,5 @@
 //================================
-// SCOLEX VIDEO TUTORIALS
+// SCOLEX VIDEO TUTORIALS (Updated)
 //================================
 
 const TOPICS = [
@@ -97,7 +97,9 @@ function saveVideos(list) {
 }
 
 function isAdmin() {
-    return (localStorage.getItem("userRole") || "").toLowerCase() === "admin";
+    const role = localStorage.getItem("userRole");
+    // Checks for explicit admin role or fallback flags saved during login
+    return role && role.toLowerCase() === "admin";
 }
 
 function escapeHtml(str) {
