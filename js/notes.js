@@ -1,9 +1,13 @@
 // Function to display topics when a course card is clicked
 function showNotes(courseId) {
-    // 1. Get all notes sections
-    const allNotes = document.querySelectorAll('.notes-content');
+    // 1. Hide the course selection list (cards)
+    const courseList = document.querySelector('.course-list');
+    if (courseList) {
+        courseList.style.display = 'none';
+    }
 
-    // 2. Hide all sections and remove active class
+    // 2. Hide all notes content sections first
+    const allNotes = document.querySelectorAll('.notes-content');
     allNotes.forEach(note => {
         note.classList.remove('active');
         note.style.display = 'none';
@@ -12,17 +16,67 @@ function showNotes(courseId) {
     // 3. Find and display the selected course section
     const selectedCourse = document.getElementById(courseId);
     if (selectedCourse) {
-        selectedCourse.style.display = 'block'; // Fallback display
-        selectedCourse.classList.add('active'); // Applies CSS animation and styling
+        selectedCourse.style.display = 'block'; 
+        selectedCourse.classList.add('active'); 
 
-        // 4. Smooth scroll to the course section header
-        selectedCourse.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
+        // 4. Create or update the "Back to Courses" button and place it INSIDE or right above the selected course notes
+        let backBtn = document.getElementById('back-to-courses-btn');
+        if (!backBtn) {
+            backBtn = document.createElement('div');
+            backBtn.id = 'back-to-courses-btn';
+            backBtn.style.cssText = 'margin: 0 0 20px 0; text-align: left;';
+            backBtn.innerHTML = `
+                <button onclick="showCourseList()" style="
+                    background: var(--cyan, #00e5ff); 
+                    color: #0a0f1c; 
+                    border: none; 
+                    padding: 10px 18px; 
+                    font-weight: bold; 
+                    font-size: 0.95rem;
+                    border-radius: 8px; 
+                    cursor: pointer; 
+                    box-shadow: 0 4px 10px rgba(0,229,255,0.3);
+                ">⬅ Back to Courses</button>`;
+        }
+        
+        // Insert the back button right at the very top of the selected notes section so it's the first thing seen
+        selectedCourse.prepend(backBtn);
+        backBtn.style.display = 'block';
+
+        // 5. Precise scrolling: scroll directly to the top of the selected course container
+        setTimeout(() => {
+            const elementPosition = selectedCourse.getBoundingClientRect().top + window.pageYOffset;
+            const headerOffset = 20; // Small padding from the top of the screen
+            window.scrollTo({
+                top: elementPosition - headerOffset,
+                behavior: 'smooth'
+            });
+        }, 50);
     }
 }
 
+// Function to return to the main course selection grid
+function showCourseList() {
+    const courseList = document.querySelector('.course-list');
+    if (courseList) {
+        courseList.style.display = 'grid'; // Restores the grid layout
+    }
+
+    // Hide all open course sections
+    const allNotes = document.querySelectorAll('.notes-content');
+    allNotes.forEach(note => {
+        note.classList.remove('active');
+        note.style.display = 'none';
+    });
+
+    // Hide back button
+    const backBtn = document.getElementById('back-to-courses-btn');
+    if (backBtn) {
+        backBtn.style.display = 'none';
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 // Initialization, Admin Controls Display, and Live Search Filter
 document.addEventListener('DOMContentLoaded', () => {
     const userRole = localStorage.getItem("userRole");
