@@ -432,3 +432,29 @@ footer strong, footer p {
         margin: 28px auto 40px;
     }
 }
+/* Make navigation horizontal on mobile devices */
+@media (max-width: 768px) {
+    /* Target your navigation container (adjust class/tag name if yours differs, e.g., nav, .navbar, .nav-links) */
+    nav, .nav-links, .menu {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding: 10px;
+        background: #0a0f1c; /* Match your dark theme background */
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Style individual nav items so they look like horizontal tabs */
+    nav a, .nav-links a, .menu a {
+        padding: 8px 14px;
+        font-size: 0.9rem;
+        margin-right: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 6px;
+        flex-shrink: 0;
+    }
+}

@@ -1,6 +1,11 @@
+/**
+ * Notes & Project Page Script
+ * Handles showing individual course notes/projects, mobile tabs, and accurate scrolling.
+ */
+
 // Function to display topics when a course card is clicked
 function showNotes(courseId) {
-    // 1. Hide the course selection list (cards)
+    // 1. Hide the course selection list (grid)
     const courseList = document.querySelector('.course-list');
     if (courseList) {
         courseList.style.display = 'none';
@@ -19,7 +24,7 @@ function showNotes(courseId) {
         selectedCourse.style.display = 'block'; 
         selectedCourse.classList.add('active'); 
 
-        // 4. Create or update the "Back to Courses" button and place it INSIDE or right above the selected course notes
+        // 4. Create or update the "Back to Courses" button
         let backBtn = document.getElementById('back-to-courses-btn');
         if (!backBtn) {
             backBtn = document.createElement('div');
@@ -39,22 +44,50 @@ function showNotes(courseId) {
                 ">⬅ Back to Courses</button>`;
         }
         
-        // Insert the back button right at the very top of the selected notes section so it's the first thing seen
+        // Prepend the back button right at the top of the selected notes section
         selectedCourse.prepend(backBtn);
         backBtn.style.display = 'block';
 
-        // 5. Precise scrolling: scroll directly to the top of the selected course container
+        // 5. Smart Mobile Scroll Offset (Prevents title from hiding under sticky menu)
         setTimeout(() => {
             const elementPosition = selectedCourse.getBoundingClientRect().top + window.pageYOffset;
-            const headerOffset = 20; // Small padding from the top of the screen
+            
+            // Dynamically calculate navigation/header height if sticky, default to 70px on mobile
+            const navElement = document.querySelector('nav') || document.querySelector('header');
+            const navHeight = navElement ? navElement.offsetHeight : 70;
+            
             window.scrollTo({
-                top: elementPosition - headerOffset,
+                top: elementPosition - navHeight - 15, // Leaves a clean margin below the menu bar
                 behavior: 'smooth'
             });
         }, 50);
     }
 }
 
+// Function to return to the main course selection grid
+function showCourseList() {
+    // Restore the course selection grid
+    const courseList = document.querySelector('.course-list');
+    if (courseList) {
+        courseList.style.display = 'grid'; 
+    }
+
+    // Hide all open course sections
+    const allNotes = document.querySelectorAll('.notes-content');
+    allNotes.forEach(note => {
+        note.classList.remove('active');
+        note.style.display = 'none';
+    });
+
+    // Hide the back button
+    const backBtn = document.getElementById('back-to-courses-btn');
+    if (backBtn) {
+        backBtn.style.display = 'none';
+    }
+
+    // Scroll back to the top of the page smoothly
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 // Function to return to the main course selection grid
 function showCourseList() {
     const courseList = document.querySelector('.course-list');
