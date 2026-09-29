@@ -1,15 +1,17 @@
 // Google Apps Script Web App URL
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyn1cQq2-qhqKvwgfkDa4FxM0Wq9VCY_KWxIcyFqgiDEdiar2GQI0TLxIX_xFbwu0jJ/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhPrEPYvVJRriHd2WrJu161dgtNhVRjZ72gIEnaZM_PfFyjCVMLp723ntWTFcBWUIp5A/exec";
 
 let mockQuestions = [];
 let currentQuestionIndex = 0;
 let selectedAnswers = [];
 let markedForReview = [];
-let timeInSeconds = 60 * 60; // 60 Minutes
 let timerInterval = null;
 
 // Get Test ID from localStorage (defaults to FUND01)
 const currentTestId = localStorage.getItem("testId") || "FUND01"; 
+
+// Dynamic Timer: 90 Minutes for Full Tests (starts with "FULL"), 45 Minutes for Topic-wise Tests
+let timeInSeconds = currentTestId.startsWith("FULL") ? 90 * 60 : 45 * 60;
 
 // DOM Load Event
 document.addEventListener("DOMContentLoaded", () => {
