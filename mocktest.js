@@ -1,5 +1,5 @@
 // Google Apps Script Web App URL
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhPrEPYvVJRriHd2WrJu161dgtNhVRjZ72gIEnaZM_PfFyjCVMLp723ntWTFcBWUIp5A/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwq9aNfQDeVWLCBf89ZfwtFkJHL8SLk2RpJmFlTQ95v1lRAMKlrHZ3E-gBV4aPIuFut8g/exec";
 
 let mockQuestions = [];
 let currentQuestionIndex = 0;
