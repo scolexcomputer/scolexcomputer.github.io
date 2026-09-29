@@ -133,9 +133,10 @@
   </div>
 
   <script src="js/dashboard.js"></script>
-    <script src="js/session.js"></script>
-  
   <script>
+    // ⚠️ Replace with your deployed Google Apps Script Web App URL
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzhPrEPYvVJRriHd2WrJu161dgtNhVRjZ72gIEnaZM_PfFyjCVMLp723ntWTFcBWUIp5A/exec";
+
     const topics = [
       { key: 'fund', title: 'Computer Fundamentals', desc: 'Practice specific module questions', count: 5, icon: 'fa-desktop', color: 'blue' },
       { key: 'win', title: 'Windows OS', desc: 'Practice specific module questions', count: 5, icon: 'fa-windows', color: 'green' },
@@ -189,7 +190,6 @@
       `).join('');
     }
 
-    /* Renders all 10 Full Mock Tests from fullMockTests array in dashboard.js */
     function renderFullTests() {
       const container = document.getElementById("fullTestListContainer");
       if (typeof fullMockTests !== 'undefined' && container) {
@@ -251,33 +251,51 @@
       }
     }
 
+    // Updated function to fetch history directly from Google Sheet via Apps Script
     function loadHistory() {
-      const history = JSON.parse(localStorage.getItem("testHistory") || "[]");
+      const stored = localStorage.getItem("student");
+      if (!stored) return;
+      
+      const s = JSON.parse(stored);
+      const mobile = s.mobile;
+      
       const empty = document.getElementById("historyEmpty");
       const list = document.getElementById("historyList");
 
-      if (history.length === 0) {
+      if (!mobile) {
         empty.style.display = "block";
         list.style.display = "none";
         return;
       }
-      empty.style.display = "none";
-      list.style.display = "grid";
-      list.innerHTML = history.map((item, i) => `
-        <div class="test-item">
-          <h4>${item.testName || item.testId || "Test"}</h4>
-          <p>Score: <strong>${item.score || 0}</strong> | ✅ ${item.correct || 0} | ❌ ${item.wrong || 0}</p>
-          <button class="start-btn" style="background:#0f766e;" onclick="viewReview(${i})">🔍 Review Test</button>
-        </div>
-      `).join('');
-    }
 
-    function viewReview(index) {
-      const history = JSON.parse(localStorage.getItem("testHistory") || "[]");
-      if (history[index]) {
-        sessionStorage.setItem("lastTestResult", JSON.stringify(history[index]));
-        window.location.href = "result.html";
-      }
+      empty.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Loading your past results from Google Sheet...`;
+      empty.style.display = "block";
+      list.style.display = "none";
+
+      fetch(`${WEB_APP_URL}?action=getResults&mobile=${mobile}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === "success" && data.results && data.results.length > 0) {
+            empty.style.display = "none";
+            list.style.display = "grid";
+            
+            list.innerHTML = data.results.map((item) => `
+              <div class="test-item" style="background:#fff; padding:15px; border-radius:8px; border:1px solid #ddd; margin-bottom:10px;">
+                <h4 style="margin-bottom:5px; color:#0f766e;">Test ID/Name: ${item.testId}</h4>
+                <p style="margin:3px 0; font-size:13px; color:#666;">Date: ${new Date(item.date).toLocaleString()}</p>
+                <p style="margin:5px 0;">Score: <strong>${item.score} Marks</strong> | ✅ Correct: ${item.correct} | ❌ Wrong: ${item.wrong} | ⏭️ Unattempted: ${item.unattempted}</p>
+              </div>
+            `).join('');
+          } else {
+            empty.innerHTML = "No test attempts found yet.<br>Complete a test to see your performance here.";
+            empty.style.display = "block";
+            list.style.display = "none";
+          }
+        })
+        .catch(err => {
+          console.error("Error fetching results:", err);
+          empty.innerHTML = "Failed to load history. Please check your network or Web App URL.";
+        });
     }
   </script>
 </body>
