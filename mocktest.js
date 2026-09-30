@@ -1,5 +1,5 @@
 // Google Apps Script Web App URL
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwq9aNfQDeVWLCBf89ZfwtFkJHL8SLk2RpJmFlTQ95v1lRAMKlrHZ3E-gBV4aPIuFut8g/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyPaNkOZF-bisO2tQXnBv3ZxTg8AzIO-JtuMOGLWqD7d7NC_SaM4jOdu9AVGJQnZjbQpg/exec";
 
 let mockQuestions = [];
 let currentQuestionIndex = 0;
@@ -247,6 +247,7 @@ function submitTest() {
     const studentId = student.studentId || student.id || "N/A";
     const courseName = student.course || "N/A";
 
+    // ===== UPDATED: Now includes full reviews =====
     const payload = {
       action: "saveResult",
       studentName: studentName,
@@ -257,7 +258,8 @@ function submitTest() {
       correct: correctCount,
       wrong: wrongCount,
       unattempted: unattemptedCount,
-      score: score
+      score: score,
+      reviews: detailedReview          // <-- Full question-by-question review
     };
 
     let reviewBodyHtml = "";
@@ -280,6 +282,8 @@ function submitTest() {
       correct: correctCount,
       wrong: wrongCount,
       unattempted: unattemptedCount,
+      total: mockQuestions.length,
+      reviews: detailedReview,
       reviewHtmlBody: reviewBodyHtml
     };
 
@@ -299,12 +303,14 @@ function submitTest() {
     };
     sessionStorage.setItem("lastTestResult", JSON.stringify(resultData));
 
+    // Save summary + full review to Google Sheet
     fetch(SCRIPT_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify(payload)
     }).catch(err => console.error("Error saving result:", err));
 
+    // Also generate PDF
     fetch(SCRIPT_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },

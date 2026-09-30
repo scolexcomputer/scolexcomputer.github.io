@@ -7,6 +7,98 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="css/dashboard.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* ========== Review Modal Styles ========== */
+    .review-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .review-modal.hidden { display: none !important; }
+
+    .review-modal-content {
+      background: #fff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 780px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+
+    .review-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 22px;
+      background: #0f172a;
+      color: white;
+    }
+    .review-modal-header h3 {
+      margin: 0;
+      font-size: 17px;
+    }
+    .close-review-btn {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .review-modal-body {
+      padding: 20px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .review-q-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      background: #f8fafc;
+    }
+    .review-q-card.correct { border-left: 5px solid #22c55e; }
+    .review-q-card.incorrect { border-left: 5px solid #ef4444; }
+    .review-q-card.unattempted { border-left: 5px solid #94a3b8; }
+
+    .review-q-card h4 {
+      margin: 0 0 10px 0;
+      font-size: 15px;
+      color: #0f172a;
+    }
+    .review-option {
+      padding: 7px 12px;
+      margin: 4px 0;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .review-option.correct-ans {
+      background: #dcfce7;
+      color: #166534;
+      font-weight: 600;
+    }
+    .review-option.wrong-ans {
+      background: #fee2e2;
+      color: #991b1b;
+      font-weight: 600;
+    }
+    .review-status {
+      margin-top: 10px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+  </style>
 </head>
 <body>
 
@@ -132,10 +224,23 @@
 
   </div>
 
+  <!-- ========== REVIEW MODAL ========== -->
+  <div id="reviewModal" class="review-modal hidden">
+    <div class="review-modal-content">
+      <div class="review-modal-header">
+        <h3 id="reviewModalTitle">Test Review</h3>
+        <button class="close-review-btn" onclick="closeReviewModal()">✕ Close</button>
+      </div>
+      <div id="reviewModalBody" class="review-modal-body">
+        <!-- Questions will be injected here -->
+      </div>
+    </div>
+  </div>
+
   <script src="js/dashboard.js"></script>
   <script>
     // ⚠️ Replace with your deployed Google Apps Script Web App URL
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzhPrEPYvVJRriHd2WrJu161dgtNhVRjZ72gIEnaZM_PfFyjCVMLp723ntWTFcBWUIp5A/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyPaNkOZF-bisO2tQXnBv3ZxTg8AzIO-JtuMOGLWqD7d7NC_SaM4jOdu9AVGJQnZjbQpg/exec";
 
     const topics = [
       { key: 'fund', title: 'Computer Fundamentals', desc: 'Practice specific module questions', count: 5, icon: 'fa-desktop', color: 'blue' },
@@ -251,7 +356,7 @@
       }
     }
 
-    // Updated function to fetch history directly from Google Sheet via Apps Script
+    // ========== UPDATED loadHistory with Review Button ==========
     function loadHistory() {
       const stored = localStorage.getItem("student");
       if (!stored) return;
@@ -280,10 +385,19 @@
             list.style.display = "grid";
             
             list.innerHTML = data.results.map((item) => `
-              <div class="test-item" style="background:#fff; padding:15px; border-radius:8px; border:1px solid #ddd; margin-bottom:10px;">
-                <h4 style="margin-bottom:5px; color:#0f766e;">Test ID/Name: ${item.testId}</h4>
-                <p style="margin:3px 0; font-size:13px; color:#666;">Date: ${new Date(item.date).toLocaleString()}</p>
-                <p style="margin:5px 0;">Score: <strong>${item.score} Marks</strong> | ✅ Correct: ${item.correct} | ❌ Wrong: ${item.wrong} | ⏭️ Unattempted: ${item.unattempted}</p>
+              <div class="test-item" style="background:#fff; padding:16px; border-radius:10px; border:1px solid #e2e8f0; border-left:4px solid #0f766e;">
+                <h4 style="margin-bottom:6px; color:#0f766e;">${item.testId}</h4>
+                <p style="margin:3px 0; font-size:13px; color:#64748b;">
+                  <i class="fa-regular fa-calendar"></i> ${new Date(item.date).toLocaleString()}
+                </p>
+                <p style="margin:8px 0; font-size:14px;">
+                  Score: <strong>${item.score} Marks</strong> &nbsp;|&nbsp;
+                  ✅ ${item.correct} &nbsp; ❌ ${item.wrong} &nbsp; ⏭️ ${item.unattempted}
+                </p>
+                <button class="start-btn" style="margin-top:10px; background:#0f766e;"
+                  onclick='openReviewModal(${JSON.stringify(item).replace(/'/g, "&#39;")})'>
+                  📄 View Question-by-Question Review
+                </button>
               </div>
             `).join('');
           } else {
@@ -297,6 +411,61 @@
           empty.innerHTML = "Failed to load history. Please check your network or Web App URL.";
         });
     }
+
+    // ========== Review Modal Functions ==========
+    function openReviewModal(item) {
+      const modal = document.getElementById("reviewModal");
+      const title = document.getElementById("reviewModalTitle");
+      const body = document.getElementById("reviewModalBody");
+
+      title.innerText = `${item.testId}  •  Score: ${item.score} Marks`;
+
+      if (!item.reviews || item.reviews.length === 0) {
+        body.innerHTML = `<div class="empty-state">No detailed review available for this attempt.<br>Only new tests (after this update) will have full review.</div>`;
+      } else {
+        body.innerHTML = item.reviews.map((q, idx) => {
+          const statusClass = q.status === "correct" ? "correct" :
+                              q.status === "incorrect" ? "incorrect" : "unattempted";
+
+          let optionsHtml = "";
+          if (q.options && Array.isArray(q.options)) {
+            q.options.forEach((opt, optIdx) => {
+              let cls = "review-option";
+              if (Number(q.correctAnswer) === optIdx) cls += " correct-ans";
+              if (q.userAnswer !== null && Number(q.userAnswer) === optIdx && q.status === "incorrect") {
+                cls += " wrong-ans";
+              }
+              optionsHtml += `<div class="${cls}">${String.fromCharCode(65 + optIdx)}. ${opt}</div>`;
+            });
+          }
+
+          const statusText = q.status === "correct" ? "✅ Correct" :
+                             q.status === "incorrect" ? "❌ Incorrect" : "⏭️ Unattempted";
+
+          return `
+            <div class="review-q-card ${statusClass}">
+              <h4>Q${idx + 1}. ${q.question}</h4>
+              ${optionsHtml}
+              <div class="review-status">${statusText}</div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      modal.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeReviewModal() {
+      document.getElementById("reviewModal").classList.add("hidden");
+      document.body.style.overflow = "";
+    }
+
+    // Close modal when clicking outside
+    document.addEventListener("click", function(e) {
+      const modal = document.getElementById("reviewModal");
+      if (e.target === modal) closeReviewModal();
+    });
   </script>
 </body>
 </html>
