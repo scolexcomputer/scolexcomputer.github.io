@@ -1,5 +1,8 @@
 /**
- * Notes & Project Page Script - Fixed (GitHub synced)
+ * Notes & Project Page Script - Fixed Version
+ * - Admin controls only visible for admin/teacher
+ * - Cards synced to GitHub
+ * - Fixed emoji & visibility issues
  */
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxf0pp2PMdd4F5Nyz3Ct01WTs4fIeZW9mmt_dawKR8gWh_7Z0va2IQrZjVtz8zCl0H_/exec";
@@ -10,6 +13,7 @@ const ALL_COURSES = [
   'dca-projects', 'dcat-projects', 'adca-projects', 'dtp-projects', 'programming-projects'
 ];
 
+// ========== SHOW / HIDE COURSES ==========
 function showNotes(courseId) {
   const courseList = document.querySelector('.course-list');
   if (courseList) courseList.style.display = 'none';
@@ -35,7 +39,7 @@ function showNotes(courseId) {
           padding: 10px 18px; font-weight: bold; font-size: 0.95rem;
           border-radius: 8px; cursor: pointer;
           box-shadow: 0 4px 10px rgba(0,229,255,0.3);">
-          ⬅ Back to Courses
+          ← Back to Courses
         </button>`;
     }
     selectedCourse.prepend(backBtn);
@@ -65,20 +69,37 @@ function showCourseList() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
+// ========== FORCE CORRECT VISIBILITY (MOST IMPORTANT FIX) ==========
+function applyAdminVisibility() {
   const userRole = localStorage.getItem("userRole");
+  const isAdmin = (userRole === "admin" || userRole === "teacher");
 
-  if (userRole === "admin" || userRole === "teacher") {
-    document.querySelectorAll(".card-upload-box").forEach(el => el.style.display = "block");
-    document.querySelectorAll(".admin-controls").forEach(el => el.style.display = "flex");
-    document.querySelectorAll(".add-topic-container").forEach(el => el.style.display = "block");
-  }
+  // Upload boxes
+  document.querySelectorAll(".card-upload-box").forEach(el => {
+    el.style.display = isAdmin ? "block" : "none";
+  });
 
-  // Load from GitHub first (shared for everyone)
+  // Edit / Delete buttons
+  document.querySelectorAll(".admin-controls").forEach(el => {
+    el.style.display = isAdmin ? "flex" : "none";
+  });
+
+  // Add New Topic buttons
+  document.querySelectorAll(".add-topic-container").forEach(el => {
+    el.style.display = isAdmin ? "block" : "none";
+  });
+}
+
+// ========== PAGE LOAD ==========
+document.addEventListener('DOMContentLoaded', async () => {
+  // 1. Load cards from GitHub (shared)
   await loadCardsFromGitHub();
 
-  // Fallback to localStorage
+  // 2. Fallback to localStorage
   loadSavedNotesData();
+
+  // 3. CRITICAL: Force correct visibility based on current user
+  applyAdminVisibility();
 
   // Search
   const searchInput = document.getElementById('search');
@@ -100,6 +121,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
+// ========== LOAD FROM GITHUB ==========
 async function loadCardsFromGitHub() {
   try {
     const res = await fetch(CARDS_JSON_URL + "?t=" + Date.now());
@@ -113,19 +135,13 @@ async function loadCardsFromGitHub() {
       }
     });
 
-    // Re-apply admin controls after HTML replacement
-    const userRole = localStorage.getItem("userRole");
-    if (userRole === "admin" || userRole === "teacher") {
-      document.querySelectorAll(".card-upload-box").forEach(el => el.style.display = "block");
-      document.querySelectorAll(".admin-controls").forEach(el => el.style.display = "flex");
-    }
-
     localStorage.setItem("scolex_notes_data", JSON.stringify(data));
   } catch (err) {
     console.warn("Could not load from GitHub:", err);
   }
 }
 
+// ========== SAVE TO GITHUB + localStorage ==========
 async function saveAllNotesToStorage() {
   const data = {};
   ALL_COURSES.forEach(course => {
@@ -146,11 +162,13 @@ async function saveAllNotesToStorage() {
     const result = await response.json();
     if (result.status !== "success") {
       console.error("GitHub save failed:", result.message);
-      alert("⚠️ Saved locally, but GitHub update failed.");
     }
   } catch (err) {
     console.error(err);
   }
+
+  // Always re-apply visibility after save
+  applyAdminVisibility();
 }
 
 function loadSavedNotesData() {
@@ -167,6 +185,7 @@ function loadSavedNotesData() {
   }
 }
 
+// ========== ADMIN ACTIONS ==========
 function addNewTopicCard(courseKey) {
   const title = prompt("Enter Topic Title:");
   if (!title) return;
@@ -188,22 +207,22 @@ function addNewTopicCard(courseKey) {
       <h3>${title}</h3>
       <p>${desc}</p>
       <a href="${folder}/${fileName}" class="download" target="_blank">Download PDF</a>
-      <div class="card-upload-box" style="display: block;">
+      <div class="card-upload-box">
         <input type="file" class="card-file-input" accept=".pdf,.zip" style="font-size: 11px; width: 100%; margin-bottom: 5px;">
         <button type="button" onclick="uploadCardFile(this, '${folder}', '${fileName}')"
           style="background: #28a745; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: bold;">
           Upload / Replace File
         </button>
       </div>
-      <div class="admin-controls" style="display: flex;">
-        <button class="btn-edit" onclick="enableEditCard(this)">✏️ Edit</button>
-        <button class="btn-delete" onclick="deleteCard(this)">🗑️ Delete</button>
+      <div class="admin-controls">
+        <button class="btn-edit" onclick="enableEditCard(this)">Edit</button>
+        <button class="btn-delete" onclick="deleteCard(this)">Delete</button>
       </div>
     </div>`;
 
   box.insertAdjacentHTML('beforeend', cardHTML);
   saveAllNotesToStorage();
-  alert("✅ New topic added & saved to GitHub!");
+  alert("✅ New topic added & saved!");
 }
 
 function enableEditCard(btn) {
@@ -211,20 +230,20 @@ function enableEditCard(btn) {
   const h3 = card.querySelector('h3');
   const p = card.querySelector('p');
 
-  if (btn.textContent.includes("Edit")) {
+  if (btn.textContent.trim() === "Edit") {
     h3.innerHTML = `<input type="text" class="edit-title" value="${h3.textContent}" style="width:100%; padding:4px;">`;
     p.innerHTML = `<textarea class="edit-desc" style="width:100%; padding:4px; height:60px;">${p.textContent}</textarea>`;
-    btn.innerHTML = "💾 Save";
+    btn.textContent = "Save";
     btn.style.background = "#28a745";
     btn.style.color = "#fff";
   } else {
     h3.textContent = card.querySelector('.edit-title').value;
     p.textContent = card.querySelector('.edit-desc').value;
-    btn.innerHTML = "✏️ Edit";
+    btn.textContent = "Edit";
     btn.style.background = "#ffc107";
     btn.style.color = "#000";
     saveAllNotesToStorage();
-    alert("✅ Changes saved to GitHub!");
+    alert("✅ Changes saved!");
   }
 }
 
@@ -232,10 +251,11 @@ function deleteCard(btn) {
   if (confirm("⚠️ Are you sure you want to delete this topic?")) {
     btn.closest('.card').remove();
     saveAllNotesToStorage();
-    alert("🗑️ Topic deleted & saved to GitHub!");
+    alert("🗑️ Topic deleted!");
   }
 }
 
+// ========== FILE UPLOADER ==========
 async function uploadCardFile(btn, folder, targetFilename) {
   const card = btn.closest('.card');
   const fileInput = card.querySelector('.card-file-input');
