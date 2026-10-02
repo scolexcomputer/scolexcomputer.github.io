@@ -5,7 +5,7 @@
  * - Fixed emoji & visibility issues
  */
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxf0pp2PMdd4F5Nyz3Ct01WTs4fIeZW9mmt_dawKR8gWh_7Z0va2IQrZjVtz8zCl0H_/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxeYocKoENnlVzcEssHrUBzFq5W0dMlY48hgiaeNJI8NeS5HQMv5cabOeIKY4B7DHs/exec";
 const CARDS_JSON_URL = "https://scolexcomputer.github.io/data/cards-data.json";
 
 const ALL_COURSES = [

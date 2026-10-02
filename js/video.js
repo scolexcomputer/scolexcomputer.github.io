@@ -1,6 +1,9 @@
 //================================
-// SCOLEX VIDEO TUTORIALS (Updated)
+// SCOLEX VIDEO TUTORIALS - Permanent Version (GitHub synced)
 //================================
+
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxeYocKoENnlVzcEssHrUBzFq5W0dMlY48hgiaeNJI8NeS5HQMv5cabOeIKY4B7DHs/exec";
+const VIDEOS_JSON_URL = "https://scolexcomputer.github.io/data/videos-data.json";
 
 const TOPICS = [
     "Fundamental",
@@ -60,6 +63,7 @@ const DEFAULT_VIDEOS = [
 
 const STORAGE_KEY = "scolexVideoTutorials";
 let currentFilter = "All";
+let videosCache = null; // in-memory cache
 
 function extractVideoId(input) {
     if (!input) return null;
@@ -76,30 +80,9 @@ function extractVideoId(input) {
     return null;
 }
 
-function getVideos() {
-    try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-            const list = JSON.parse(saved);
-            if (Array.isArray(list) && list.length > 0) {
-                return list.map(function (v) {
-                    if (!v.topic) v.topic = "Fundamental";
-                    return v;
-                });
-            }
-        }
-    } catch (e) {}
-    return DEFAULT_VIDEOS.slice();
-}
-
-function saveVideos(list) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-}
-
-function isAdmin() {
-    const role = localStorage.getItem("userRole");
-    // Checks for explicit admin role or fallback flags saved during login
-    return role && role.toLowerCase() === "admin";
+function isAdminOrTeacher() {
+    const role = (localStorage.getItem("userRole") || "").toLowerCase();
+    return role === "admin" || role === "teacher";
 }
 
 function escapeHtml(str) {
@@ -111,10 +94,73 @@ function escapeHtml(str) {
         .replace(/"/g, "&quot;");
 }
 
+// ========== LOAD VIDEOS (GitHub → localStorage → Default) ==========
+async function loadVideosFromGitHub() {
+    try {
+        const res = await fetch(VIDEOS_JSON_URL + "?t=" + Date.now());
+        if (res.ok) {
+            const list = await res.json();
+            if (Array.isArray(list) && list.length > 0) {
+                videosCache = list;
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+                return list;
+            }
+        }
+    } catch (err) {
+        console.warn("Could not load videos from GitHub:", err);
+    }
+    return null;
+}
+
+function getVideos() {
+    if (videosCache && Array.isArray(videosCache)) {
+        return videosCache;
+    }
+
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            const list = JSON.parse(saved);
+            if (Array.isArray(list) && list.length > 0) {
+                videosCache = list;
+                return list;
+            }
+        }
+    } catch (e) {}
+
+    videosCache = DEFAULT_VIDEOS.slice();
+    return videosCache;
+}
+
+// ========== SAVE VIDEOS (localStorage + GitHub) ==========
+async function saveVideos(list) {
+    videosCache = list;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+
+    // Save permanently to GitHub
+    try {
+        const response = await fetch(SCRIPT_URL, {
+            method: "POST",
+            body: JSON.stringify({
+                action: "saveVideos",
+                videosData: list
+            })
+        });
+        const result = await response.json();
+        if (result.status !== "success") {
+            console.error("GitHub save failed:", result.message);
+            alert("⚠️ Saved locally, but GitHub update failed. Check Apps Script.");
+        }
+    } catch (err) {
+        console.error("Network error while saving videos:", err);
+    }
+}
+
 function videoCardHtml(v, index) {
     const thumb = "https://img.youtube.com/vi/" + v.id + "/hqdefault.jpg";
     const start = v.start || 0;
-    const admin = isAdmin();
+    const admin = isAdminOrTeacher();
+
     return (
         '<div class="video-card" data-index="' + index + '">' +
             (admin ? '<button type="button" class="delete-video-btn" title="Delete" onclick="deleteVideo(' + index + ')"><i class="fa-solid fa-trash"></i></button>' : '') +
@@ -134,7 +180,9 @@ function videoCardHtml(v, index) {
 function renderTopicTabs(videos) {
     const tabs = document.getElementById("topicTabs");
     if (!tabs) return;
+
     let html = '<button type="button" class="topic-tab' + (currentFilter === "All" ? " active" : "") + '" onclick="setFilter(\'All\')">All</button>';
+
     TOPICS.forEach(function (t) {
         const count = videos.filter(function (v) { return v.topic === t; }).length;
         html += '<button type="button" class="topic-tab' + (currentFilter === t ? " active" : "") + '" onclick="setFilter(\'' + t.replace(/'/g, "\\'") + '\')">' +
@@ -154,12 +202,12 @@ function renderVideos() {
     if (!container) return;
 
     const videos = getVideos();
-    const admin = isAdmin();
+    const admin = isAdminOrTeacher();
 
     const countEl = document.getElementById("videoCount");
     if (countEl) countEl.textContent = "(" + videos.length + ")";
 
-    // Admin-only controls: Add Video + Logout
+    // Admin / Teacher only controls
     const adminControls = document.getElementById("adminControls");
     const logoutBtn = document.getElementById("logoutBtn");
 
@@ -233,16 +281,16 @@ function playInWindow(container, videoId, startTime) {
 }
 
 function toggleAdminPanel() {
-    if (!isAdmin()) {
-        alert("Only Admin can add videos. Please login as Admin.");
+    if (!isAdminOrTeacher()) {
+        alert("Only Admin or Teacher can add videos.");
         return;
     }
     document.getElementById("adminPanel").classList.toggle("open");
 }
 
-function addVideo() {
-    if (!isAdmin()) {
-        alert("Only Admin can add videos.");
+async function addVideo() {
+    if (!isAdminOrTeacher()) {
+        alert("Only Admin or Teacher can add videos.");
         return;
     }
 
@@ -272,7 +320,8 @@ function addVideo() {
         start: start,
         topic: topic
     });
-    saveVideos(list);
+
+    await saveVideos(list);
 
     document.getElementById("ytLink").value = "";
     document.getElementById("ytTitle").value = "";
@@ -281,16 +330,18 @@ function addVideo() {
     document.getElementById("adminPanel").classList.remove("open");
 
     renderVideos();
-    alert("✅ Video added under \"" + topic + "\"!");
+    alert("✅ Video added under \"" + topic + "\" and saved permanently!");
 }
 
-function deleteVideo(index) {
-    if (!isAdmin()) return;
-    if (!confirm("Delete this video?")) return;
+async function deleteVideo(index) {
+    if (!isAdminOrTeacher()) return;
+    if (!confirm("Delete this video permanently?")) return;
+
     const list = getVideos();
     list.splice(index, 1);
-    saveVideos(list);
+    await saveVideos(list);
     renderVideos();
+    alert("🗑️ Video deleted permanently!");
 }
 
 function doLogout() {
@@ -299,6 +350,7 @@ function doLogout() {
     localStorage.removeItem("student");
     localStorage.removeItem("ScolexStudentSavedData");
     localStorage.removeItem("scolex_last_activity");
+    // Note: We do NOT remove the videos data
     if (typeof window.scolexLogout === "function") {
         window.scolexLogout();
         return;
@@ -306,4 +358,9 @@ function doLogout() {
     window.location.href = "login.html";
 }
 
-document.addEventListener("DOMContentLoaded", renderVideos);
+// ========== INIT ==========
+document.addEventListener("DOMContentLoaded", async function () {
+    // Load from GitHub first (permanent source)
+    await loadVideosFromGitHub();
+    renderVideos();
+});
