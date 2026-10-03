@@ -1,0 +1,30 @@
+[
+  {
+    "id": "a-7cXh1MEPI",
+    "title": "Computer Fundamental_01 || What is Computer? || History of computer",
+    "desc": "Learn computer basics, origin, definitions, and classification starting from 8:58.",
+    "start": 538,
+    "topic": "Fundamental"
+  },
+  {
+    "id": "a-7cXh1MEPI",
+    "title": "Computer Fundamental_02 || Components & Hardware",
+    "desc": "Introduction to core components, CPU, memory units, and peripheral devices.",
+    "start": 0,
+    "topic": "Fundamental"
+  },
+  {
+    "id": "a-7cXh1MEPI",
+    "title": "Computer Fundamental_04 || Networking & Internet Basics",
+    "desc": "Learn LAN, WAN, IP addresses, Web Browsers, and Search Engines.",
+    "start": 0,
+    "topic": "Internet & E-mail"
+  },
+  {
+    "id": "a-7cXh1MEPI",
+    "title": "Computer Fundamental_05 || Cybersecurity & Safety",
+    "desc": "Overview of malware, antivirus tools, password safety, and online privacy.",
+    "start": 0,
+    "topic": "Internet & E-mail"
+  }
+]
